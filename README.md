@@ -1,0 +1,1 @@
+Welcome to Adventures in Data Visualization workshop
