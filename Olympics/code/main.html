@@ -1,15 +1,15 @@
 <html>
     <head>
-        <script src="d3.js"></script>
+        <script src="libs/d3.js"></script>
     </head>
     
     <body>
         <svg></svg>
         
         <script>
-        d3.csv('../data/olympics_2012.csv',loaded);//loading dataset and calling function loaded
-            
-            function loaded(data){
+        d3.csv('../data/olympics_2012.csv',OlympicsLoaded);//loading dataset and calling function loaded
+        d3.csv('../data/GDP.csv',GDP_Loaded);
+            function OlympicsLoaded(data){
             
                 console.log("data loaded:");
                 console.log(data);
@@ -36,7 +36,7 @@
                 .attr('width', function(d,i){
                     return d.values.length;
                 })
-                .attr('y', function(d,i){
+                .attr('x', function(d,i){
                 return i*5;
                 })
                 .on('click', function(d,i){//handles onClick() event
@@ -49,9 +49,11 @@
                 d3.select('svg')
                         .attr('height', 5*countries.length)
                         .style('fill', 'black')
-            }
+            }//endOlympicsLoaded()
             
-            
+            function GDP_Loaded(data){
+                console.log("GDP loaded");
+            }//endGDP_loaded()
             
                                 
         </script>
