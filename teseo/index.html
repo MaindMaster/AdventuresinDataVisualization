@@ -4,31 +4,79 @@
 </head>
 
 <body>
-<svg/>
+	<svg/>
 
-<script type="text/javascript">
+	asd
+
+	<script type="text/javascript">
 	d3.csv('../data/olympics_2012.csv', loaded);
-
 
 	function loaded(data)
 	{
-		console.log(data);
-		var selection=d3.nest()
-		.key( function(d) { return d.team; })
+
+		var gender=d3.nest()
+		.key( function(d) { return d.gender; })
 		.sortKeys(d3.ascending)
 		.entries(data);
 
-		console.log(selection);
+		var males=gender[1].values;
+		var female=gender[0].values;
 
-		d3.select('svg').selectAll('rect').data(selection).enter().append('rect')
+
+		var sex=female;
+
+		var categories=d3.nest()
+		.key( function(d) { return d.event; })
+		.sortKeys(d3.ascending)
+		.entries(sex);
+
+		categoriesMap={};
+
+		for (var i = categories.length - 1; i >= 0; i--) {
+			categoriesMap[categories[i].key]=0;
+		}
+
+
+
+		var perName=d3.nest()
+		.key( function(d) { return d.name; })
+		.entries(sex);
+
+		var num=0;
+		for (var i = perName.length - 1; i >= 0; i--) {
+			if(perName[i].values.length>1){
+				var lll=perName[i].values.length;
+				for(var j=lll-1; j>=0; j--){
+					categoriesMap[perName[i].values[j].event]+=1;
+				}
+				num++;
+			}
+
+			if(perName[i].values.length==7)
+				console.log(perName[i].key);
+		}
+
+		console.log(num);
+		console.log(categoriesMap);
+
+
+		var asd=new Array(categoriesMap.length);
+
+
+
+
+		d3.select('svg').selectAll('rect').data(categoriesMap).enter().append('rect')
 		.attr('height',4)
-		.attr('width', function(d,i) {
-			return d.values.length;
+		.attr('width', function(data,i) {
+			console.log(data);
+			return data;
 		})
 		.attr('y', function(d,i){ return i*5;});
 
-		d3.select('svg').attr('height',5*selection.length);
-	}
+		d3.select('svg').attr('height',5*categoriesMap.length);
+
+}
+
 
 </script>
 
