@@ -10,18 +10,30 @@
             
             function loaded (data){
                 
-                var team =  d3.nest()
+                var medal =  d3.nest()
                                 .key(function(d) {
-                                    return d.team;
+                                    return d.medal;
                                 })
                                 .sortKeys(d3.ascending)
                                 .entries(data);
                 
-                team.sort(function(a,b) {
+                var zodiac =  d3.nest()
+                                .key(function(d) {
+                                    return d.birth;
+                                })
+                                .sortKeys(d3.ascending)
+                                .entries(data);
+                
+                medal.sort(function(a,b) {
                     return d3.ascending(b.values.length, a.values.length)
                 })
                 
-                console.log(team);
+                zodiac.sort(function(a,b) {
+                    return d3.ascending(b.values.length, a.values.length)
+                })
+                
+                console.log(medal);
+                console.log(zodiac);
                  
             }
         </script>
