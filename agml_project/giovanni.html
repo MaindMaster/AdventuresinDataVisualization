@@ -32,14 +32,54 @@
                     return d3.ascending(b.values.length, a.values.length)
                 })
                 
-                var ariete = d3.nest()
-                                .key(function(d) {
-                                    d3.time.friday
-                                    //d3.time.scale([2000-01-13, 2000-07-14])
-                                    return d;
+                var zod = d3.nest()
+                                .key(function(d){
+                                    var mydata = d.birth.split('-');
+                                    mydata = mydata[1] + '' + mydata[2];
+                                    if(mydata > '0120' && mydata < '0218'){
+                                        return 'acquario'; //Acquario - segno di Leo   
+                                    }
+                                    if(mydata > '0219' && mydata < '0320'){
+                                        return 'pesci';
+                                    }
+                                    if(mydata > '0321' && mydata < '0420'){
+                                        return 'ariete'; 
+                                    }
+                                    if(mydata > '0421' && mydata < '0520'){
+                                        return 'toro'; 
+                                    }
+                                    if(mydata > '0521' && mydata < '0621'){
+                                        return 'gemelli'; 
+                                    }
+                                    if(mydata > '0622' && mydata < '0722'){
+                                        return 'cancro'; //Cancro - segno di Lorenzo
+                                    }
+                                    if(mydata > '0723' && mydata < '0822'){
+                                        return 'leone';
+                                    }
+                                    if(mydata > '0823' && mydata < '0922'){
+                                        return 'vergine';
+                                    }
+                                    if(mydata > '0923' && mydata < '1022'){
+                                        return 'bilancia';//Bilancia - segno di Marta
+                                    }
+                                    if(mydata > '1023' && mydata < '1121'){
+                                        return 'scorpione';
+                                    }
+                                    if(mydata > '1122' && mydata < '1220'){
+                                        return 'sagittario'; //Sagittario - segno di Giovanni 
+                                    }
+                                    if(mydata > '0120' && mydata > '1224'){
+                                        return 'capricorno';
+                                    }
+                                    //else{
+                                    //    return 'capricorno';
+                                    //}
                                 })
-                                .sortKeys(d3.ascending)
-                                .entries(data);
+                 .sortKeys(d3.ascending)
+                                .entries(data)
+                
+                console.log(zod);
                 
                 d3.select('svg')
                     .selectAll('rect')
@@ -54,7 +94,7 @@
                         return i*5
                     })
                 
-                d3.select('svg')
+                /*d3.select('svg')
                     .append('g')
                     .selectAll('rect')
                     .data(zodiac)
@@ -66,11 +106,11 @@
                     })
                     .attr('y', function (d,i) {
                         return i+30*5
-                    })
+                    })*/
                 
-                console.log(medal);
+                /*console.log(medal);
                 console.log(zodiac);
-                console.log(ariete);
+                console.log(ariete);*/
                  
             }
         </script>
