@@ -25,38 +25,31 @@
 
 			console.log(field)
 
-			var rects = d3.select('svg')
-				.selectAll('rect')
-				.data(field)
-				.enter()
-				.append('rect')
-				.attr('height', 4)
-				.attr('width', function(d, i){
-				  return 0;
-				})
-				
-			rects.transition()
-			    .ease('elastic-in')
-				.duration(1000)
-				.delay(function(d, i){
-				  return i*250
-				})
-				.attr('width', function(d, i){
-				  return d.values.length
-				})
+			d3.select('svg')
+			.selectAll('rect')
+			.data(field)
+			.enter()
+			.append('rect')
+			.attr('height', 4)
+			.attr('width', function(d, i){
+			  return 0;
+			})
+			.transition()
+		     .ease('elastic-in')
+			.duration(1000)
+			.delay(function(d, i){
+			  return i*250
+			})
+			.attr('width', function(d, i){
+			  return d.values.length
+			})
 
-				.attr('y', function(d,i){
-					return i*5
-				})
-
-			rects.on('click', function() {
-				 d3.select(this)
-					.attr('fill', 'yellow')
-			})		
+			.attr('y', function(d,i){
+				return i*5
+			})
 
 			d3.select('svg')
-				.attr('height', 100*field.length)	
-
+				.attr('height', 100*field.length)			
 		}
 		
 
