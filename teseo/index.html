@@ -1,0 +1,37 @@
+<html>
+<head>
+	<script type="text/javascript" src="d3/d3.min.js"></script>
+</head>
+
+<body>
+<svg/>
+
+<script type="text/javascript">
+	d3.csv('../data/olympics_2012.csv', loaded);
+
+
+	function loaded(data)
+	{
+		console.log(data);
+		var selection=d3.nest()
+		.key( function(d) { return d.team; })
+		.sortKeys(d3.ascending)
+		.entries(data);
+
+		console.log(selection);
+
+		d3.select('svg').selectAll('rect').data(selection).enter().append('rect')
+		.attr('height',4)
+		.attr('width', function(d,i) {
+			return d.values.length;
+		})
+		.attr('y', function(d,i){ return i*5;});
+
+		d3.select('svg').attr('height',5*selection.length);
+	}
+
+</script>
+
+</body>
+
+</html>
