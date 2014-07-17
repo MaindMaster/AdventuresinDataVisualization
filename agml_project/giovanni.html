@@ -10,17 +10,6 @@
             
             function loaded (data){
                 
-                var medal =  d3.nest()
-                                .key(function(d) {
-                                    return d.medal;
-                                })
-                                .sortKeys(d3.ascending)
-                                .entries(data);
-                
-                medal.sort(function(a,b) {
-                    return d3.ascending(b.values.length, a.values.length)
-                })
-                
                 var zod = d3.nest()
                                 .key(function(d){
                                     var mydata = d.birth.split('-');
@@ -65,6 +54,9 @@
                                         return 'capricorno';
                                     }
                                 })
+                                .key(function(d){
+                                    return d.medal;
+                                })
                 
                 .sortKeys(d3.ascending)
                                 .entries(data);
@@ -72,8 +64,19 @@
                 zod.sort(function(a,b) {
                     return d3.ascending(b.values.length, a.values.length)
                 })
-                                     
-                console.log(medal);    
+                
+//                var medal =  d3.nest()
+//                                .key(function(d) {
+//                                    return d.medal;
+//                                })
+//                                .sortKeys(d3.ascending)
+//                                .entries(data);
+//                
+//                medal.sort(function(a,b) {
+//                    return d3.ascending(b.values.length, a.values.length)
+//                })
+//                
+//                console.log(medal);    
                 console.log(zod);
                 
                 /* barre medagliati
