@@ -13,7 +13,7 @@
                 
                 var countries =  d3.nest()
                                 .key(function(d) {
-                                    return d.team;
+                                    return d.age;
                                 })
                                 .sortKeys(d3.ascending)
                                 .entries(data);
@@ -21,8 +21,8 @@
                 countries.sort(function(a,b) {
                     return d3.ascending(b.values.length, a.values.length)
                 })
-                               
                 
+                console.log(countries);
                 
                 d3.select('svg')
                     .selectAll('rect')
@@ -31,27 +31,35 @@
                     .append('rect')
                     .attr('height',4)
                     .attr('width', function(d,i) {
+                        return 0
+                    })
+                    .transition()
+                    .duration(600)
+                    .ease('elastic-in')
+                    .delay(function (d,i){
+                        return i*200
+                    })
+                    .attr('width', function(d,i) {
                         return d.values.length
                     })
                     .attr('y', function (d,i) {
                         return i*5
                     })
                 
-                console.log(countries);
-                
                 d3.select('svg')
-                    .attr('height', 1*countries.length)
+                    //.attr('height', 20*countries.length)
                     .attr('fill', 'red')
                     .transition ()
-                    .duration(2000)
-                    //.delay(1000) 
+                    .duration(100)
                     .attr('fill', '#a1f')
                     .transition ()
                     .duration(2000)
                     .attr('fill', 'red')
                     
-                        
-                    
+                .on('click') (function(){
+                    d3.select('this')
+                    .attr('fill','blue')
+                })   
             }
         </script>
     </body>
