@@ -12,6 +12,9 @@
                 
                 var zod = d3.nest()
                                 .key(function(d){
+                                    return d.medal;
+                                })
+                                .key(function(d){
                                     var mydata = d.birth.split('-');
                                     mydata = mydata[1] + '' + mydata[2];
                                     if(mydata > '0120' && mydata < '0218'){
@@ -54,10 +57,9 @@
                                         return 'capricorno';
                                     }
                                 })
-                                .key(function(d){
-                                    return d.medal;
-                                })
-                
+                                //.key(function(d){
+                                //    return d.age;
+                                //})
                 .sortKeys(d3.ascending)
                                 .entries(data);
                 
@@ -65,33 +67,7 @@
                     return d3.ascending(b.values.length, a.values.length)
                 })
                 
-//                var medal =  d3.nest()
-//                                .key(function(d) {
-//                                    return d.medal;
-//                                })
-//                                .sortKeys(d3.ascending)
-//                                .entries(data);
-//                
-//                medal.sort(function(a,b) {
-//                    return d3.ascending(b.values.length, a.values.length)
-//                })
-//                
-//                console.log(medal);    
                 console.log(zod);
-                
-                /* barre medagliati
-                d3.select('svg')
-                    .selectAll('rect')
-                    .data(medal)
-                    .enter()
-                    .append('rect')
-                    .attr('height',4)
-                    .attr('width', function(d,i) {
-                        return d.values.length
-                    })
-                    .attr('y', function (d,i) {
-                        return i*5
-                    })*/
                 
                 d3.select('svg')
                     .selectAll('rect')
@@ -106,6 +82,20 @@
                         return i*10
                     })
                 
+                /* barre medagliati
+                d3.select('svg')
+                    .selectAll('rect')
+                    .data(medal)
+                    .enter()
+                    .append('rect')
+                    .attr('height',4)
+                    .attr('width', function(d,i) {
+                        return d.values.length
+                    })
+                    .attr('y', function (d,i) {
+                        return i*5
+                    })*/
+        
                 /*d3.select('svg')
                     .append('g')
                     .selectAll('rect')
