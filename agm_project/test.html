@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <script src="library/d3.min.js" charset="utf-8"></script>
+        <title>Test D3.js</title>
+    </head>
+    <body>
+        <svg></svg>
+        <script>
+            d3.csv('../data/olympics_2012.csv',loaded);
+            
+            function loaded (data){
+                console.log(data)
+                
+                var countries =  d3.nest()
+                                .key(function(d) {
+                                    return d.age;
+                                })
+                                .sortKeys(d3.ascending)
+                                .entries(data);
+                
+                countries.sort(function(a,b) {
+                    return d3.ascending(b.values.length, a.values.length)
+                })
+                
+                console.log(countries);
+                 
+            }
+        </script>
+    </body>
+</html>
