@@ -32,6 +32,15 @@
                     return d3.ascending(b.values.length, a.values.length)
                 })
                 
+                var ariete = d3.nest()
+                                .key(function(d) {
+                                    d3.time.friday
+                                    //d3.time.scale([2000-01-13, 2000-07-14])
+                                    return d;
+                                })
+                                .sortKeys(d3.ascending)
+                                .entries(data);
+                
                 d3.select('svg')
                     .selectAll('rect')
                     .data(medal)
@@ -45,8 +54,23 @@
                         return i*5
                     })
                 
+                d3.select('svg')
+                    .append('g')
+                    .selectAll('rect')
+                    .data(zodiac)
+                    .enter()
+                    .append('rect')
+                    .attr('height',4)
+                    .attr('width', function(d,i) {
+                        return d.values.length
+                    })
+                    .attr('y', function (d,i) {
+                        return i+30*5
+                    })
+                
                 console.log(medal);
                 console.log(zodiac);
+                console.log(ariete);
                  
             }
         </script>
