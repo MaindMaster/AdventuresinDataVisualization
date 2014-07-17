@@ -56,10 +56,17 @@
                     .duration(2000)
                     .attr('fill', 'red')
                     
-                .on('click') (function(){
-                    d3.select('this')
-                    .attr('fill','blue')
-                })   
+                .on('click', function (){
+                    d3.select(this)
+                      .attr('fill', function () {
+                        if(d3.select(this).attr('fill') == 'black') {
+                          return 'yellow';
+                        }
+                       else {
+                         return 'black';
+                       }
+                    })
+                  }) 
             }
         </script>
     </body>
