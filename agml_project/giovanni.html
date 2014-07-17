@@ -17,18 +17,7 @@
                                 .sortKeys(d3.ascending)
                                 .entries(data);
                 
-                var zodiac =  d3.nest()
-                                .key(function(d) {
-                                    return d.birth;
-                                })
-                                .sortKeys(d3.ascending)
-                                .entries(data);
-                
                 medal.sort(function(a,b) {
-                    return d3.ascending(b.values.length, a.values.length)
-                })
-                
-                zodiac.sort(function(a,b) {
                     return d3.ascending(b.values.length, a.values.length)
                 })
                 
@@ -66,21 +55,27 @@
                                     if(mydata > '1023' && mydata < '1121'){
                                         return 'scorpione';
                                     }
-                                    if(mydata > '1122' && mydata < '1220'){
+                                    if(mydata > '1122' && mydata < '1221'){
                                         return 'sagittario'; //Sagittario - segno di Giovanni 
                                     }
-                                    if(mydata > '0120' && mydata > '1224'){
-                                        return 'capricorno';
-                                    }
-                                    //else{
+                                    //if(mydata > '1221' && mydata < '0119'){
                                     //    return 'capricorno';
                                     //}
+                                    else {
+                                        return 'capricorno';
+                                    }
                                 })
-                 .sortKeys(d3.ascending)
-                                .entries(data)
                 
+                .sortKeys(d3.ascending)
+                                .entries(data);
+                
+                zod.sort(function(a,b) {
+                    return d3.ascending(b.values.length, a.values.length)
+                })
+                                     
                 console.log(zod);
                 
+                /* barre medagliati
                 d3.select('svg')
                     .selectAll('rect')
                     .data(medal)
@@ -92,6 +87,19 @@
                     })
                     .attr('y', function (d,i) {
                         return i*5
+                    })*/
+                
+                d3.select('svg')
+                    .selectAll('rect')
+                    .data(zod)
+                    .enter()
+                    .append('rect')
+                    .attr('height',4)
+                    .attr('width', function(d,i){
+                        return d.values.length
+                    })
+                    .attr('y', function (d,i) {
+                        return i*10
                     })
                 
                 /*d3.select('svg')
