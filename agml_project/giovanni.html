@@ -10,18 +10,18 @@
             
             function loaded (data){
                 
-                var ages =  d3.nest()
+                var team =  d3.nest()
                                 .key(function(d) {
-                                    return d.age;
+                                    return d.team;
                                 })
                                 .sortKeys(d3.ascending)
                                 .entries(data);
                 
-                ages.sort(function(a,b) {
+                team.sort(function(a,b) {
                     return d3.ascending(b.values.length, a.values.length)
                 })
                 
-                console.log(ages);
+                console.log(team);
                  
             }
         </script>
