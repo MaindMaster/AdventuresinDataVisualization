@@ -32,6 +32,19 @@
                     return d3.ascending(b.values.length, a.values.length)
                 })
                 
+                d3.select('svg')
+                    .selectAll('rect')
+                    .data(medal)
+                    .enter()
+                    .append('rect')
+                    .attr('height',4)
+                    .attr('width', function(d,i) {
+                        return d.values.length
+                    })
+                    .attr('y', function (d,i) {
+                        return i*5
+                    })
+                
                 console.log(medal);
                 console.log(zodiac);
                  
