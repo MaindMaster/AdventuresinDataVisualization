@@ -1,0 +1,39 @@
+<html>
+
+    <head>
+        <script src="d3.min.js"></script>
+    </head>
+    
+    
+    <body>
+        <svg></svg>
+        
+        <script>
+            
+            d3.csv('../data/olympics_2012.csv', loaded);
+            
+            function loaded(data){
+                
+                var zod = d3.nest()
+                                .key(function(d){
+                                    var mydata = d.birth.split('-');
+                                    mydata = mydata[1] + '' + mydata[2];
+                                    if(mydata > '0101' && mydata < '0201'){
+                                        return 'capricorno';   
+                                    }else{
+                                        return 'other';
+                                    }
+                                })
+                               
+                                .sortKeys(d3.ascending)
+                                .entries(data)
+                
+                console.log(zod);
+            }
+            
+            
+        </script>
+    </body>
+    
+    
+</html>

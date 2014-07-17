@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <script src="library/d3.min.js" charset="utf-8"></script>
+        <title>Test D3.js</title>
+    </head>
+    <body>
+        <svg></svg>
+        <script>
+            d3.csv('../data/olympics_2012.csv',loaded);
+            
+            function loaded (data){
+                
+                var medal =  d3.nest()
+                                .key(function(d) {
+                                    return d.medal;
+                                })
+                                .sortKeys(d3.ascending)
+                                .entries(data);
+                
+                medal.sort(function(a,b) {
+                    return d3.ascending(b.values.length, a.values.length)
+                })
+                
+                var zod = d3.nest()
+                                .key(function(d){
+                                    var mydata = d.birth.split('-');
+                                    mydata = mydata[1] + '' + mydata[2];
+                                    if(mydata > '0120' && mydata < '0218'){
+                                        return 'acquario'; //Acquario - segno di Leo   
+                                    }
+                                    if(mydata > '0219' && mydata < '0320'){
+                                        return 'pesci';
+                                    }
+                                    if(mydata > '0321' && mydata < '0420'){
+                                        return 'ariete'; 
+                                    }
+                                    if(mydata > '0421' && mydata < '0520'){
+                                        return 'toro'; 
+                                    }
+                                    if(mydata > '0521' && mydata < '0621'){
+                                        return 'gemelli'; 
+                                    }
+                                    if(mydata > '0622' && mydata < '0722'){
+                                        return 'cancro'; //Cancro - segno di Lorenzo
+                                    }
+                                    if(mydata > '0723' && mydata < '0822'){
+                                        return 'leone';
+                                    }
+                                    if(mydata > '0823' && mydata < '0922'){
+                                        return 'vergine';
+                                    }
+                                    if(mydata > '0923' && mydata < '1022'){
+                                        return 'bilancia';//Bilancia - segno di Marta
+                                    }
+                                    if(mydata > '1023' && mydata < '1121'){
+                                        return 'scorpione';
+                                    }
+                                    if(mydata > '1122' && mydata < '1221'){
+                                        return 'sagittario'; //Sagittario - segno di Giovanni 
+                                    }
+                                    //if(mydata > '1221' && mydata < '0119'){
+                                    //    return 'capricorno';
+                                    //}
+                                    else {
+                                        return 'capricorno';
+                                    }
+                                })
+                
+                .sortKeys(d3.ascending)
+                                .entries(data);
+                
+                zod.sort(function(a,b) {
+                    return d3.ascending(b.values.length, a.values.length)
+                })
+                                     
+                console.log(medal);    
+                console.log(zod);
+                
+                /* barre medagliati
+                d3.select('svg')
+                    .selectAll('rect')
+                    .data(medal)
+                    .enter()
+                    .append('rect')
+                    .attr('height',4)
+                    .attr('width', function(d,i) {
+                        return d.values.length
+                    })
+                    .attr('y', function (d,i) {
+                        return i*5
+                    })*/
+                
+                d3.select('svg')
+                    .selectAll('rect')
+                    .data(zod)
+                    .enter()
+                    .append('rect')
+                    .attr('height',4)
+                    .attr('width', function(d,i){
+                        return d.values.length
+                    })
+                    .attr('y', function (d,i) {
+                        return i*10
+                    })
+                
+                /*d3.select('svg')
+                    .append('g')
+                    .selectAll('rect')
+                    .data(zodiac)
+                    .enter()
+                    .append('rect')
+                    .attr('height',4)
+                    .attr('width', function(d,i) {
+                        return d.values.length
+                    })
+                    .attr('y', function (d,i) {
+                        return i+30*5
+                    })*/
+                
+                /*console.log(medal);
+                console.log(zodiac);
+                console.log(ariete);*/
+                 
+            }
+        </script>
+    </body>
+</html>
