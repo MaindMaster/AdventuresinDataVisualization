@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <script src="d3.min.js"></script>
+    </head>
+    
+    <body>
+        <svg></svg>
+        
+        <script>
+
+var a = 2;
+var name = 'test';
+var dataset = [1, 3, 8, 4, 1, 3, 5, 8, 2, 10, 1, 24]
+
+var mapy = d3.scale.linear()
+.domain([0, dataset.length])
+.range([0, 400])
+
+d3.select('svg')
+  .selectAll('rect')
+  .data(dataset)
+  .enter()
+  .append('rect')
+  .attr('width', function(d, i){ return d*20 })
+  .attr('height', 400/dataset.length-1)
+  .attr('y', function(d, i){ return mapy(i)})
+</script>
+
+    </body>
+
+</html>
