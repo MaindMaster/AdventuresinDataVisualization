@@ -66,7 +66,6 @@ function loadTagCloud(cont,sca)
 
 
                  function firstEnd(){
-                  console.log(w);
                   d3.select("#tagSVG").selectAll('g').remove()
                   d3.select("#tagSVG").style("opacity", 1);
 
