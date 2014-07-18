@@ -1,0 +1,76 @@
+<html>
+
+<head>
+    <script src="../d3.min.js"></script>
+</head>
+
+    
+<body>
+    <svg display="block" margin="auto"></svg>
+    
+    <script>
+        d3.json('../_map/geojson/world_map.json', function(data) {
+
+            var w = 900;
+            var h = 500;
+
+            console.log(data)
+
+            var svg = d3.select('svg')
+                .attr('width', w)
+                .attr('height', h)
+
+            var proj = d3.geo.mercator()
+                .scale((w + 1) / 2 / Math.PI)
+                .translate([w / 2, h / 2])
+
+            var pathGenerator = d3.geo.path()
+                .projection(proj)
+
+            var cols = d3.scale.category20();
+
+            svg.selectAll('path')
+                .data(function() {
+                    return data.features;
+                })
+                .enter()
+                .append('path')
+                .attr('d', function(d, i) {
+                    return pathGenerator(d)
+                })
+                .style('fill', '#aaa')
+
+
+
+            .on('click', function(d) {
+                if (d.clicked == true) {
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .style('fill', '#aaa')
+                        .attr('transform', 'translate(0, 0)')
+                        .ease('elastic')
+                        .duration(500)
+
+                } else {
+
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .style('fill', '#FFBF00')
+                        .attr('transform', 'translate(3.5, 3.5)')
+                        .ease('elastic')
+                        .duration(500)
+
+                }
+                d.clicked = !d.clicked;
+
+            })
+
+
+        })
+    </script>
+</body>
+
+
+</html>
