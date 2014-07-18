@@ -4,11 +4,19 @@
         <title>Test D3.js</title>
     </head>
     <body>
-        <svg></svg>
+        <svg width="600" height="600"></svg>
         <script>
             d3.csv('../data/olympics_2012.csv',loaded);
             
             function loaded (data){
+                
+                var _data = []
+                data.forEach(function(d){
+                    if(d.medal != ""){
+                        _data.push(d);
+                    }
+                })
+                console.log(_data);
                 
                 var zod = d3.nest()
                 
@@ -60,11 +68,46 @@
                                 })
                 
                 .sortValues(d3.ascending)
-                                .entries(data);
+                                .entries(_data);
                 
                 zod.sort(function(a,b) {
                     return d3.ascending(b.values.length, a.values.length)
                 })
+                
+                var ang = Math.PI*2 / 12;
+                
+                //zod[3].values.push( zod[3].values[0] )
+                
+                var pathMedal = d3.svg.line()
+                    .x(function(d, i){
+                        return Math.cos(ang*i) * d.values.length;
+                    })
+                    .y(function(d, i){
+                        return Math.sin(ang*i) * d.values.length;
+                    })
+                    .interpolate('basis')
+                
+//                d3.select('svg')
+//                    .append('g')
+//                    .attr('transform', 'translate(200,200)')
+//                    .append('path')
+//                    .datum(zod[3].values)
+//                    .attr('d', pathMedal)
+//                    .style('fill', 'red')
+                
+                
+                d3.select('svg')
+                    .selectAll('g')
+                    .data(zod)
+                    .enter()
+                    .append('g')
+                    .attr('transform', 'translate(200,200)')
+                    .append('path')
+                    .attr('d', function(d, i){
+                        return pathMedal(d.values)   
+                    })
+                    .style('fill', 'red')
+                
                 
                 /*
                 var medal = d3.nest()
