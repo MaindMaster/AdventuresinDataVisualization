@@ -130,6 +130,15 @@
                         return (Math.sin(ang*i) * d.values.length) * 1.8;
                     })
                     .interpolate('cardinal-closed')
+                
+                var pathMedal_small = d3.svg.line()
+                    .x(function(d, i){
+                        return (Math.cos(ang*i) * d.values.length) * 0.01;
+                    })
+                    .y(function(d, i){
+                        return (Math.sin(ang*i) * d.values.length) * 0.01;
+                    })
+                    .interpolate('cardinal-closed')
                     
                 var pathForElement = d3.svg.line()
                     .x(function(d, i){
@@ -137,6 +146,15 @@
                     })
                     .y(function(d, i){
                         return (Math.sin(ang_small*i) * d.values.length) / 1.8;
+                    })
+                    .interpolate('cardinal-closed')
+                
+                var pathForElement_small = d3.svg.line()
+                    .x(function(d, i){
+                        return (Math.cos(ang_small*i) * d.values.length) * 0.1;
+                    })
+                    .y(function(d, i){
+                        return (Math.sin(ang_small*i) * d.values.length) * 0.1;
                     })
                     .interpolate('cardinal-closed')
                 
@@ -153,6 +171,11 @@
                     })
                 
                 groups.append('path')
+                    .attr('d',function(d,i){
+                        return pathMedal_small(d.values) 
+                    })
+                    .transition()
+                    .duration(400)
                     .attr('d', function(d, i){
                         return pathMedal(d.values)   
                     })
@@ -168,7 +191,7 @@
                         return 'rotate('+360/12*i+'),translate(150,0)'
                     })
                 
-                    //inserisco il nome del segno
+                    //inserisco il nome/l'iscona identificativa del segno
                     .attr('class', 'gr_sign')
                     //.append('text')
                     //    .text(function (d,i){
@@ -178,45 +201,19 @@
                     .attr('xlink:href', function(d){
                         return 'library/images/' + d.key + '.svg';
                     })
+                    .attr('width', 0)
+                    .attr('height', 0 )
+                    .attr('x', 0)
+                    .attr('y',-20)
+                    .transition()
+                    .delay(400)
+                    .duration(400)
                     .attr('width', 30)
                     .attr('height', 30 )
-                    .attr('x', 0)
-                    .attr('y',0);
                 
                 //////////////////////////////////////////////////////////////////
                 //elementi
                 //////////////////////////////////////////////////////////////////
-                var groups_a = d3.select('svg')
-                    .selectAll('.elem')
-                    .data(element)
-                    .enter()
-                    .append('g')
-                    .attr('class', 'elem')   
-                    .attr('transform', function(d, i){
-                        return 'translate(' + (i+0.8)*450 + ',650)' // (traslazione x) , (traslazione y) 
-                    })
-                
-                groups_a.append('path')
-                    .attr('d', function(d, i){
-                        return pathForElement(d.values)   
-                    })
-                    //.style('fill', '')
-                
-                groups_a.selectAll('.gr_sign_2')
-                    .data(function(d){
-                        return d.values;   
-                    })
-                    .enter()
-                    .append('g')
-                    .attr('transform', function(d, i){
-                        return 'rotate('+360/4*i+'),translate(120,0)'
-                    })
-                    .attr('class', 'gr_sign_2')
-                    .append('text')
-                    .text(function (d,i){
-                        return d.key
-                    })
-                
                 var groups_b = d3.select('svg')
                     .selectAll('.elem')
                     .data(element)
@@ -227,36 +224,58 @@
                         return 'translate(' + (i+0.8)*450 + ',650)' // (traslazione x) , (traslazione y) 
                     })
                 
+                groups_b.append('path')
+                    .attr('d', function(d, i){
+                        return pathForElement_small(d.values)   
+                    })
+                    .transition()
+                    .duration(400)
+                    .attr('d', function(d, i){
+                        return pathForElement(d.values)   
+                    })
+                    //.style('fill', '')
+                
+                groups_b.selectAll('.gr_sign_2')
+                    .data(function(d){
+                        return d.values;   
+                    })
+                    .enter()
+                    .append('g')
+                    .attr('transform', function(d, i){
+                        return 'rotate('+360/4*i+'),translate(120,0)'
+                    })
+                
+                    //inserisco il nome/l'iscona identificativa dell'elemento
+                    .attr('class', 'gr_sign_2')
+                    //.append('text')
+                    //    .text(function (d,i){
+                    //    return d.key
+                    .append('svg:image')
+                    .attr('xlink:href', function(d){
+                        return 'library/images/' + d.key + '.svg';
+                    })
+                    .attr('width', 0)
+                    .attr('height', 0 )
+                    .attr('x', 0)
+                    .attr('y',-20)
+                    .transition()
+                    .delay(400)
+                    .duration(300)
+                    .attr('width', 30)
+                    .attr('height', 30 )
+
                 //////////////////////////////////////////////////////////////////
                 //legenda
                 //////////////////////////////////////////////////////////////////
-                
                 var labels = ['Gold', 'Silver', 'Bronze']
                 
-                groups_a.append('text')
+                groups_b.append('text')
                     .text(function(d,i){
                         return labels[i]  
                     })
                     .attr('y',200)
                     .attr('x', -20)
-                
-                /*var label = d3.select('svg')
-                    .selectAll('.label')
-                    //.data(function(d,i){
-                    //    return d.medal;   
-                    //})
-                    .data(1)
-                    .enter()
-                    .attr('class', 'label')  
-                    .text(function (d,i){
-                        return d
-                    })
-                    /*.attr('transform', function(d, i){
-                        return 'translate(' + (i+0.8)*450 + ',650)' // (traslazione x) , (traslazione y) 
-                    })*/
-                
-                
-                
+
             }
         </script>
     </body>
