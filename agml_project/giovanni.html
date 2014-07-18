@@ -16,7 +16,6 @@
                         _data.push(d);
                     }
                 })
-                console.log(_data);
                 
                 var zod = d3.nest()
                 
@@ -67,12 +66,14 @@
                                     }
                                 })
                 
-                .sortValues(d3.ascending)
+                .sortKeys(d3.ascending)
                                 .entries(_data);
                 
                 zod.sort(function(a,b) {
                     return d3.ascending(b.values.length, a.values.length)
                 })
+                
+                console.log(zod);
                 
                 var ang = Math.PI*2 / 12;
                 
@@ -87,25 +88,20 @@
                     })
                     .interpolate('cardinal-closed')
                 
-                var signs = ["Acquario", "Pesci", "Ariete", "Capricorno" ]; 
-                
                 var groups = d3.select('svg')
                     .selectAll('g')
                     .data(zod)
                     .enter()
                     .append('g')
                     .attr('transform', function(d, i){
-                        return 'translate(' + (i+1)*400 + ',200)'
+                        return 'translate(' + (i+1)*420 + ',300)' // (traslazione x) , (traslazione y) 
                     })
                 
-                    //.attr('transform', 'translate(200,200)')
                 groups.append('path')
                     .attr('d', function(d, i){
                         return pathMedal(d.values)   
                     })
                     .style('fill', '')
-                
-                
                 
                 groups.selectAll('.gr_sign')
                     .data(function(d){
@@ -114,7 +110,7 @@
                     .enter()
                     .append('g')
                     .attr('transform', function(d, i){
-                        return 'rotate('+360/12*i+'),translate(200,0)'
+                        return 'rotate('+360/12*i+'),translate(150,0)'
                     })
                 
                     .attr('class', 'gr_sign')
