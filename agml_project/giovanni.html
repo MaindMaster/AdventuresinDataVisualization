@@ -87,6 +87,8 @@
                     })
                     .interpolate('cardinal-closed')
                 
+                var signs = ["Acquario", "Pesci", "Ariete", "Capricorno" ]; 
+                
                 d3.select('svg')
                     .selectAll('g')
                     .data(zod)
@@ -104,18 +106,11 @@
                 
                 d3.select('svg')
                     .selectAll('g')
-                    .data(zod)
-                    .enter()
-                    .append('g')
-                    .attr('transform', function(d, i){
-                        return 'translate(' + (i+1)*400 + ',200)'
+                    .append('text')
+                    .data(signs)
+                    .text( function (d,i){
+                        return  d
                     })
-                    .append('text', 'hello')
-                    /*.attr('d', function(d, i){
-                        return pathMedal(d.values)   
-                    })*/
-                    .style('fill', '')
-                
                 
                 /*
                 var medal = d3.nest()
