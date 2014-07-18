@@ -4,31 +4,39 @@
         <title>BMI D3.js</title>
     </head>
     <body>
-        <svg width="1000px"></svg>
+        <svg width="1000px", height="300"></svg>
         <script>
             
             d3.csv('../data/olympics_2012.csv',loaded);
             
             function loaded (data){
                 
-                var bmiMale = d3.nest()         
-                            .key(function(d) {
-                                return (d.weight_kg/(d.height_cm*d.height_cm/100));
-                                })
+                var sp = d3.nest()         
+                            .key(function(d){
+                                return d.sport;
+                            })
+                            .key(function(d){
+                                if(d.gender == 'Male'){
+                                    return(d.weight_kg/(Math.pow(d.height_cm, 2)*10));
+//                                } else {
+//                                    return(d.weight_kg/(d.height_cm*d.height_cm)/10);
+                                }
+                            })
+                
                             .sortKeys(d3.ascending)
                             .entries(data);
                                 
                 var mapx = d3.scale.linear()
-                            .domain([0, bmiMale.length])
-                            .range([0, 1000])
+                            .domain([0, sp.length])
+                            .range([0, 5*sp.length+10])
                 
                 
                 d3.select('svg')
                             .selectAll('rect')
-                            .data(bmiMale)
+                            .data(sp)
                             .enter()
                             .append('rect')
-                            .attr('width', 2)
+                            .attr('width', 5)
                             .attr('height', function(d,i){
                                 return d.values.length
                             })
@@ -36,7 +44,7 @@
                             .attr('x', function(d,i){
                                 return mapx(i)
                             })
-                console.log(bmiMale)                   
+                console.log(sp)                   
             }
         </script>
     </body>
