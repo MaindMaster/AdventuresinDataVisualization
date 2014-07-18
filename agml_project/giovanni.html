@@ -10,52 +10,41 @@
             
             function loaded (data){
                 
-                var medal =  d3.nest()
-                                .key(function(d) {
-                                    return d.medal;
-                                })
-                                .sortKeys(d3.ascending)
-                                .entries(data);
-                
-                medal.sort(function(a,b) {
-                    return d3.ascending(b.values.length, a.values.length)
-                })
-                
                 var zod = d3.nest()
                                 .key(function(d){
                                     var mydata = d.birth.split('-');
                                     mydata = mydata[1] + '' + mydata[2];
-                                    if(mydata > '0120' && mydata < '0218'){
+                                    if(mydata > '0120' && mydata < '0220'){
                                         return 'acquario'; //Acquario - segno di Leo   
                                     }
-                                    if(mydata > '0219' && mydata < '0320'){
+                                    if(mydata > '0219' && mydata < '0321'){
                                         return 'pesci';
                                     }
-                                    if(mydata > '0321' && mydata < '0420'){
+                                    if(mydata > '0320' && mydata < '0421'){
                                         return 'ariete'; 
                                     }
-                                    if(mydata > '0421' && mydata < '0520'){
+                                    if(mydata > '0420' && mydata < '0521'){
                                         return 'toro'; 
                                     }
-                                    if(mydata > '0521' && mydata < '0621'){
+                                    if(mydata > '0520' && mydata < '0622'){
                                         return 'gemelli'; 
                                     }
-                                    if(mydata > '0622' && mydata < '0722'){
+                                    if(mydata > '0621' && mydata < '0723'){
                                         return 'cancro'; //Cancro - segno di Lorenzo
                                     }
-                                    if(mydata > '0723' && mydata < '0822'){
+                                    if(mydata > '0722' && mydata < '0824'){
                                         return 'leone';
                                     }
-                                    if(mydata > '0823' && mydata < '0922'){
+                                    if(mydata > '0823' && mydata < '0923'){
                                         return 'vergine';
                                     }
-                                    if(mydata > '0923' && mydata < '1022'){
+                                    if(mydata > '0922' && mydata < '1023'){
                                         return 'bilancia';//Bilancia - segno di Marta
                                     }
-                                    if(mydata > '1023' && mydata < '1121'){
+                                    if(mydata > '1022' && mydata < '1123'){
                                         return 'scorpione';
                                     }
-                                    if(mydata > '1122' && mydata < '1221'){
+                                    if(mydata > '1122' && mydata < '1222'){
                                         return 'sagittario'; //Sagittario - segno di Giovanni 
                                     }
                                     //if(mydata > '1221' && mydata < '0119'){
@@ -65,16 +54,133 @@
                                         return 'capricorno';
                                     }
                                 })
+                                /*.key(function(d){
+                                    return d.medal;
+                                })*/
+                
+                .sortValues(d3.ascending)
+                                .entries(data);
+                
+                zod.sort(function(a,b) {
+                    return d3.ascending(b.values.length, a.values.length)
+                })
+                
+                /*
+                var medal = d3.nest()
+                                .key(function(d){
+                                    return d.medal;
+                                })
                 
                 .sortKeys(d3.ascending)
                                 .entries(data);
                 
                 zod.sort(function(a,b) {
                     return d3.ascending(b.values.length, a.values.length)
+                })*/
+                
+                var element = d3.nest()
+                                .key(function(d){
+                                    var mysign = d.birth.split('-');
+                                    mysign = mysign[1] + '' + mysign[2];
+                                    if(mysign > '0420' && mysign < '0521' ||        //ariete
+                                        mysign > '0722' && mysign < '0824'||        //leone
+                                        mysign > '1122' && mysign < '1222')         //sagittario
+                                       {       
+                                        return 'fuoco';  
+                                    }
+                                    if(mysign > '0520' && mysign < '0622' ||        //gemelli
+                                        mysign > '0922' && mysign < '1023'||        //bilancia
+                                        mysign > '0120' && mysign < '0220')         //acquario
+                                       {       
+                                        return 'aria';  
+                                    }
+                                    if(mysign > '0621' && mysign < '0723' ||        //cancro
+                                        mysign > '1022' && mysign < '1123'||        //scorpione
+                                        mysign > '0219' && mysign < '0321')         //pesci
+                                       {       
+                                        return 'acqua';  
+                                    }
+                                    /*if(mysign > '0420' && mysign < '0521' ||        //toro
+                                        mysign > '0823' && mysign < '0923'||        //vergine
+                                        mysign > '1221' && mysign < '0119')         //capricorno
+                                       {       
+                                        return 'terra';  
+                                    }*/
+                                    else {
+                                        return 'terra';
+                                    }
+                                })
+                                /*.key(function(d){
+                                    return d.medal;
+                                })
+                                .key(function(d){
+                                    return d.sport;
+                                })*/
+                 
+                .sortValues(d3.ascending)
+                                .entries(data);
+                
+                element.sort(function(a,b) {
+                    return d3.ascending(b.values.length, a.values.length)
                 })
-                                     
-                console.log(medal);    
+                
                 console.log(zod);
+                console.log(element);
+                
+                /*d3.select('svg')
+                    .selectAll('rect')
+                    .data(element)
+                    .enter()
+                    .append('rect')
+                    .attr('height',8)
+                    .attr('width', function(d,i){
+                        return d.values.length/5
+                    })
+                    .attr('y', function (d,i) {
+                        return i*20
+                    })
+                
+                d3.select('svg')
+                    .selectAll('.elem')
+                    .data(element)
+                    .enter()
+                    //.add('class','elem')
+                    .append('rect')
+                    .style('fill','red')
+                    .attr('height',8)
+                    .attr('width', function(d,i){
+                        return d.values.length/10
+                    })
+                    .attr('y', function (d,i) {
+                        return i*20
+                    })*/
+                
+                var zodiaco = ['Ariete', 'Toro', 'Gemelli', 'Cancro', 'Leone', 'Vergine', 'Bilancia', 'Scorpione', 'Sagittario', 'Capricorono', 'Acquario', 'Pesci'];
+                
+                var segno = d3.select('svg')
+                    .selectAll('.sign')
+                    //.data(d.zod)
+                    .data(zodiaco)
+                    .enter()
+                    .append("g")
+                    .attr("class", "g")
+                    /*.attr("transform", function(d) { 
+                        return "translate(" + x(d.age) + ",30)"; 
+                    });*/
+
+                segno.selectAll("rect")
+                    //.data(function(d) { return d.zod; })
+                    .data(zod)
+                    .enter()
+                    .append("rect")
+                    .attr("width", '4')
+                    .attr("height", function(d,i) {
+                        return d.values.length/10; 
+                    })/*
+                    .attr("height", function(d) {
+                        return d.values.length/10; 
+                    })*/
+                    //.style("fill", function(d) { return color(d.name); });
                 
                 /* barre medagliati
                 d3.select('svg')
@@ -89,20 +195,7 @@
                     .attr('y', function (d,i) {
                         return i*5
                     })*/
-                
-                d3.select('svg')
-                    .selectAll('rect')
-                    .data(zod)
-                    .enter()
-                    .append('rect')
-                    .attr('height',4)
-                    .attr('width', function(d,i){
-                        return d.values.length
-                    })
-                    .attr('y', function (d,i) {
-                        return i*10
-                    })
-                
+        
                 /*d3.select('svg')
                     .append('g')
                     .selectAll('rect')
