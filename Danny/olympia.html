@@ -1,0 +1,56 @@
+<html>
+
+    <head>
+        <script src="d3js.min.js"></script>
+    </head>
+    
+    
+    <body>
+        <svg width="1000"></svg>
+        
+        <script>
+            
+            d3.csv('../data/olympics_2012.csv', loaded);
+            
+            function loaded(data){
+                console.log(data)
+                
+                var countries = d3.nest()
+                                .key(function(d){
+                                    return d.age;  
+                                })
+                               
+                                .sortKeys(d3.ascending)
+                                .entries(data)
+                
+                
+                countries.sort(function(a, b){
+                    return d3.ascending(b.values.length, a.values.length)
+                })
+                
+                
+                d3.select('svg')
+                    .selectAll('rect')
+                    .data(countries)
+                    .enter()
+                    .append('rect')
+                    .attr('height', 4)
+                    .attr('width', function(d, i){
+                        return d.values.length  
+                    })
+                    .attr('y', function(d, i){
+                        return i*5
+                    })
+                
+                console.log(countries);
+                
+                d3.select('svg')
+                    .attr('height', 5*countries.length)
+            }
+            
+            
+        </script>
+    </body>
+    
+    
+</html>
