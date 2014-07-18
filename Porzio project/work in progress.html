@@ -21,18 +21,19 @@
                 
                 var mapy = d3.scale.linear()
                     .domain([0, countries.length])
-                    .range([0, 800])
+                    .range([0, 300])
 
                 var cols = d3.scale.linear()
 				    .domain([0, countries.length])
-               
-              
+                    .range(['#ff0', '#f0f'])
+				    
+
                 d3.select('svg')
                     .selectAll('rect')
                     .data(countries)
                     .enter()
                     .append('rect')
-                    .attr('height', 800/countries.length-1)
+                    .attr('height', 300/countries.length-0)
                     .attr('width', function(d, i){
                         return d.values.length;
                     })
@@ -40,8 +41,11 @@
                         return mapy(i);
                     })
                     
-                .style('fill', 'black')
-            }
+                    .style('fill', function(d, i){
+	                   return cols(i)
+	                })
+                
+                }
                 
         </script>
     </body>
