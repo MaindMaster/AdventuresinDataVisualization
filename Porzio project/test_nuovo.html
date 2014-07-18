@@ -10,39 +10,38 @@
         d3.csv('../data/olympics_2012.csv',loaded);
             
             function loaded(data){
-            console.log("data loaded:");
-            console.log(data);
+                console.log("data loaded:");
+                console.log(data);
 
-            var sport =d3.nest()
-            .key (function(d){
-            return d.sport;
-            })
-            
-            .entries(data);
+                var sport =d3.nest()
+                    .key (function(d){
+                    return d.sport;
+                    })
+                    .entries(data);
 
-  sport(function(a,b){
+                sport.sort(function(a,b){
                     return d3.ascending(b.values.length, a.values.length);
-                
                 })
 
-            d3.select('svg')
-            .selectAll('rect')
-            .data(sport)
-            .enter()
-            .append('rect')
-            .attr('height', 5)
-            .attr('widht', function (d, i){
-            return d.vales.lenght
-            })
-            .attr('y', function (d, i){
-            return i*5
-            })
-                
-            console.log(sport);
-                
-            d3.select('svg')
-            .attr('height', 5*sport.length)
-            .style('fill', 'black')
+                d3.select('svg')
+                    .selectAll('rect')
+                    .data(sport)
+                    .enter()
+                    .append('rect')
+                    .attr('height', 5)
+                    .attr('width', function (d, i){
+                        return d.values.length
+                    })
+                    .attr('y', function (d, i){
+                        return i*5
+                    })
+
+                console.log(sport);
+
+                d3.select('svg')
+                    .attr('height', 5*sport.length)
+                    .style('fill', 'black')
+            }
                 
         </script>
     </body>

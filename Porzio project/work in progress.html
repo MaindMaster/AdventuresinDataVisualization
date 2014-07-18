@@ -15,31 +15,33 @@
                 console.log(data);
                 var countries =d3.nest()
                             .key (function(d){
-                            return d.team;
+                                return d.team;
                             })
-              
                             .entries(data);
                 
                 var mapy = d3.scale.linear()
-				.domain([0, dataset.length])
-				.range([0, 800])
+                    .domain([0, countries.length])
+                    .range([0, 800])
 
                 var cols = d3.scale.linear()
-				.domain([0, dataset.length])
+				    .domain([0, countries.length])
                
               
                 d3.select('svg')
-                .selectAll('rect')
-                .data(countries)
-                .enter()
-                .append('rect')
-	           .attr('height', 800/dataset.length-1)
-                .attr('width', function(d, i){
-                return d.values.length;
-                })
+                    .selectAll('rect')
+                    .data(countries)
+                    .enter()
+                    .append('rect')
+                    .attr('height', 800/countries.length-1)
+                    .attr('width', function(d, i){
+                        return d.values.length;
+                    })
+                    .attr('y', function(d, i){
+                        return mapy(i);
+                    })
                     
-                .style('fill', black)
-                
+                .style('fill', 'black')
+            }
                 
         </script>
     </body>
