@@ -4,7 +4,7 @@
         <title>Test D3.js</title>
     </head>
     <body>
-        <svg width="100%" height="600"></svg>
+        <svg width="100%" height="900"></svg>
         <script>
             d3.csv('../data/olympics_2012.csv',loaded);
             
@@ -18,7 +18,6 @@
                 })
                 
                 var zod = d3.nest()
-                
                                 .key(function(d){
                                     return d.medal;
                                 })
@@ -73,65 +72,6 @@
                     return d3.ascending(b.values.length, a.values.length)
                 })
                 
-                console.log(zod);
-                
-                var ang = Math.PI*2 / 12;
-                
-                //zod[3].values.push( zod[3].values[0] )
-                
-                var pathMedal = d3.svg.line()
-                    .x(function(d, i){
-                        return (Math.cos(ang*i) * d.values.length) * 1.8;
-                    })
-                    .y(function(d, i){
-                        return (Math.sin(ang*i) * d.values.length) * 1.8;
-                    })
-                    .interpolate('cardinal-closed')
-                
-                var groups = d3.select('svg')
-                    .selectAll('g')
-                    .data(zod)
-                    .enter()
-                    .append('g')
-                    .attr('transform', function(d, i){
-                        return 'translate(' + (i+1)*420 + ',300)' // (traslazione x) , (traslazione y) 
-                    })
-                
-                groups.append('path')
-                    .attr('d', function(d, i){
-                        return pathMedal(d.values)   
-                    })
-                    .style('fill', '')
-                
-                groups.selectAll('.gr_sign')
-                    .data(function(d){
-                        return d.values;   
-                    })
-                    .enter()
-                    .append('g')
-                    .attr('transform', function(d, i){
-                        return 'rotate('+360/12*i+'),translate(150,0)'
-                    })
-                
-                    .attr('class', 'gr_sign')
-                    .append('text')
-                    .text(function (d,i){
-                        return d.key
-                    })
-                
-                /*
-                var medal = d3.nest()
-                                .key(function(d){
-                                    return d.medal;
-                                })
-                
-                .sortKeys(d3.ascending)
-                                .entries(data);
-                
-                zod.sort(function(a,b) {
-                    return d3.ascending(b.values.length, a.values.length)
-                })*/
-                
                 var element = d3.nest()
                                 .key(function(d){
                                     return d.medal;
@@ -169,50 +109,154 @@
                                 })
                  
                 .sortKeys(d3.ascending)
-                                .entries(data);
+                                .entries(_data);
                 
                 element.sort(function(a,b) {
                     return d3.ascending(b.values.length, a.values.length)
                 })
                 
-                /*
                 console.log(zod);
                 console.log(element);
                 
-                d3.select('svg')
-                    .selectAll('rect')
-                    .data(element)
-                    .enter()
-                    .append('rect')
-                    .attr('height',8)
-                    .attr('width', function(d,i){
-                        return d.values.length/5
+                var ang = Math.PI*2 / 12;
+                
+                var ang_small = Math.PI*2 / 4;
+                
+                var pathMedal = d3.svg.line()
+                    .x(function(d, i){
+                        return (Math.cos(ang*i) * d.values.length) * 1.8;
                     })
-                    .attr('y', function (d,i) {
-                        return i*20
+                    .y(function(d, i){
+                        return (Math.sin(ang*i) * d.values.length) * 1.8;
+                    })
+                    .interpolate('cardinal-closed')
+                    
+                var pathForElement = d3.svg.line()
+                    .x(function(d, i){
+                        return (Math.cos(ang_small*i) * d.values.length) / 1.8;
+                    })
+                    .y(function(d, i){
+                        return (Math.sin(ang_small*i) * d.values.length) / 1.8;
+                    })
+                    .interpolate('cardinal-closed')
+                
+                //////////////////////////////////////////////////////////////////
+                // Segni zodiacali
+                //////////////////////////////////////////////////////////////////
+                var groups = d3.select('svg')
+                    .selectAll('g')
+                    .data(zod)
+                    .enter()
+                    .append('g')
+                    .attr('transform', function(d, i){
+                        return 'translate(' + (i+0.8)*450 + ',230)' // (traslazione x) , (traslazione y) 
                     })
                 
-                d3.select('svg')
+                groups.append('path')
+                    .attr('d', function(d, i){
+                        return pathMedal(d.values)   
+                    })
+                    //.style('fill', '')
+                
+                groups.selectAll('.gr_sign')
+                    .data(function(d){
+                        return d.values;   
+                    })
+                    .enter()
+                    .append('g')
+                    .attr('transform', function(d, i){
+                        return 'rotate('+360/12*i+'),translate(150,0)'
+                    })
+                
+                    //inserisco il nome del segno
+                    .attr('class', 'gr_sign')
+                    //.append('text')
+                    //    .text(function (d,i){
+                    //    return d.key
+                    .append('svg:image')
+                    //.attr('xlink:href', 'library/zodiac_signs.svg')
+                    .attr('xlink:href', function(d){
+                        return 'library/images/' + d.key + '.svg';
+                    })
+                    .attr('width', 30)
+                    .attr('height', 30 )
+                    .attr('x', 0)
+                    .attr('y',0);
+                
+                //////////////////////////////////////////////////////////////////
+                //elementi
+                //////////////////////////////////////////////////////////////////
+                var groups_a = d3.select('svg')
                     .selectAll('.elem')
                     .data(element)
                     .enter()
-                    //.add('class','elem')
-                    .append('rect')
-                    .style('fill','red')
-                    .attr('height',8)
-                    .attr('width', function(d,i){
-                        return d.values.length/10
+                    .append('g')
+                    .attr('class', 'elem')   
+                    .attr('transform', function(d, i){
+                        return 'translate(' + (i+0.8)*450 + ',650)' // (traslazione x) , (traslazione y) 
                     })
-                    .attr('y', function (d,i) {
-                        return i*20
+                
+                groups_a.append('path')
+                    .attr('d', function(d, i){
+                        return pathForElement(d.values)   
                     })
-
+                    //.style('fill', '')
+                
+                groups_a.selectAll('.gr_sign_2')
+                    .data(function(d){
+                        return d.values;   
                     })
-                    .attr("height", function(d) {
-                        return d.values.length/10; 
+                    .enter()
+                    .append('g')
+                    .attr('transform', function(d, i){
+                        return 'rotate('+360/4*i+'),translate(120,0)'
+                    })
+                    .attr('class', 'gr_sign_2')
+                    .append('text')
+                    .text(function (d,i){
+                        return d.key
+                    })
+                
+                var groups_b = d3.select('svg')
+                    .selectAll('.elem')
+                    .data(element)
+                    .enter()
+                    .append('g')
+                    .attr('class', 'elem')   
+                    .attr('transform', function(d, i){
+                        return 'translate(' + (i+0.8)*450 + ',650)' // (traslazione x) , (traslazione y) 
+                    })
+                
+                //////////////////////////////////////////////////////////////////
+                //legenda
+                //////////////////////////////////////////////////////////////////
+                
+                var labels = ['Gold', 'Silver', 'Bronze']
+                
+                groups_a.append('text')
+                    .text(function(d,i){
+                        return labels[i]  
+                    })
+                    .attr('y',200)
+                    .attr('x', -20)
+                
+                /*var label = d3.select('svg')
+                    .selectAll('.label')
+                    //.data(function(d,i){
+                    //    return d.medal;   
+                    //})
+                    .data(1)
+                    .enter()
+                    .attr('class', 'label')  
+                    .text(function (d,i){
+                        return d
+                    })
+                    /*.attr('transform', function(d, i){
+                        return 'translate(' + (i+0.8)*450 + ',650)' // (traslazione x) , (traslazione y) 
                     })*/
-                    //.style("fill", function(d) { return color(d.name); });
-                 
+                
+                
+                
             }
         </script>
     </body>

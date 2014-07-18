@@ -20,6 +20,12 @@ function createIcon(x, y, imgName, index, clazz)
 }
 
 
+d3.selection.prototype.moveToFront = function() {
+	return this.each(function(){
+		this.parentNode.appendChild(this);
+	});
+};
+
 var icons=[];
 
 for(var riga=0; riga<3; riga++){
@@ -36,6 +42,8 @@ for(var riga=0; riga<3; riga++){
 
 var iconSvgHeight=3*iconSize+3*inconOffset;
 var isOpen=false;
+var sportIndex=-1;
+var textOffset=100;
 
 d3.select('#iconsSVG').attr('width',width);
 d3.select('#iconsSVG').attr('height',iconSvgHeight);
@@ -83,9 +91,10 @@ function sportIconClicked(index)
 	{
 		if(i==index)
 		{
+			sportIndex=index;
 			icons[i].open=true;
-			// icons[i].d3Img.parentNode.appendChild(icons[i].d3Img); // move to top
 
+			icons[i].d3Img.moveToFront();
 
 			icons[i].d3Img
 			.style('opacity',1)
@@ -93,7 +102,7 @@ function sportIconClicked(index)
 			.duration(500)
 			.attr("x", width/2-iconSize/2)
 			.attr("y", iconSvgHeight/2-iconSize/2)
-			.each('end',createPieChart(index));
+			.each('end',createPieChart());
 
 		}
 		else
@@ -110,7 +119,84 @@ function sportIconClicked(index)
 
 
 
-function createPieChart(index)
+function createPieChart()
 {
-	console.log('cretatin pie for sport', sports[index]);
+
+	d3.csv('Olimpic_games_continent.csv', function(data)
+	{
+
+		createPiePerGender('Male');
+		createPiePerGender('Female');
+
+		function createPiePerGender(gender)
+		{
+
+			currentData=[];
+			for (var i = data.length - 1; i >= 0; i--) {
+				if(data[i].sport==sports[sportIndex] && data[i].gender==gender){
+					currentData.push(data[i]);
+				}
+			}
+
+			var newData=processData(currentData);
+
+			var offset=7;
+
+			var sourceHeight=iconSize;
+			
+
+			var sourceX, targetX;
+			if(gender=='Male'){
+				sourceX=width/2-iconSize/2;
+				targetX=textOffset;
+			}
+			else{
+				sourceX=width/2+iconSize/2;
+				targetX=width-textOffset;
+			}
+
+			targetHs=[];
+
+			var totalH=0;
+			var totEvents=0;
+
+			for(key in newData){
+				var tmp=newData[key]+1;
+				totalH+=tmp;
+				targetHs.push(tmp);
+				totEvents++;
+			}
+
+			var sourceLocalH=sourceHeight/totEvents;
+			var scaling=totalH/(iconSvgHeight-offset*(totEvents-1));
+
+
+
+			var prevH=0;
+
+			for(var i=0;i<targetHs.length;i++)
+			{
+				var tmp=targetHs[i];
+				var points=	targetX+','+prevH+' '+
+				targetX+','+(tmp/scaling+prevH)+' '+
+				sourceX+','+(sourceLocalH*(i+1)+iconSvgHeight/2-iconSize/2)+' '+
+				sourceX+','+(sourceLocalH*i+iconSvgHeight/2-iconSize/2);
+
+
+				prevH+=tmp/scaling+offset;
+				
+
+				var d3Img=d3.select('#iconsSVG')
+				.append("polygon")
+				.attr("points", points)
+				.attr("class", gender);
+			}
+		}
+	});
+
+
+
+
+
+
 }
