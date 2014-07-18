@@ -1,0 +1,66 @@
+<html>
+
+    <head>
+        <script src="../d3.min.js"></script>
+    </head>
+    
+    <body>
+        <svg></svg>
+        <script>
+        
+        d3.json('geojson/cities.geo.json', function(data){
+            
+            var w = 1000;
+            var h = 800;
+            
+            console.log(data)
+            
+            var svg = d3.select('svg')
+                .attr('width', w)
+                .attr('height', h)
+            
+            var proj = d3.geo.mercator()
+                .scale((w+1)/2/Math.PI)
+                .translate([w/2, h/2])
+            
+            var pathGenerator = d3.geo.path()
+                .projection(proj)
+            
+//            svg.selectAll('path')
+//                .data(data.features)
+//                .enter()
+//                .append('path')
+//                .attr('d', pathGenerator)
+            
+            svg.selectAll('rect')
+                .data(data.features)
+                .enter()
+                .append('rect')
+                .attr('width', 15)
+                .attr('height', 3)
+                .attr('x', function(d, i){
+                    return proj(d.geometry.coordinates)[0]
+                })
+                .attr('y', function(d, i){
+                    return proj(d.geometry.coordinates)[1]
+                })
+            
+            
+        })
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+            
+        </script>
+    </body>
+    
+    
+</html>
