@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <script src="libs/d3.js"></script>
+    </head>
+    
+    <body>
+        <svg height="4000" width="900"></svg>
+        
+        <script>
+        d3.csv('../data/OlympicsComplete.csv',function(data){
+            
+            
+            function calc_gold(d){
+                return d3.sum(d, function(c){
+                    if(c.medal == 'Gold'){
+                        return 1;   
+                    }else{
+                        return 0;
+                    }
+                })
+            }
+            
+            var countries = d3.nest()
+                        .key(function(d){
+                            return d.team;  
+                        })
+                        .rollup(function(d){
+                            return{
+                                gdp: +d[0].gdp,
+                                gold: calc_gold(d)
+                            }
+                        })
+                        .entries(data);
+            
+            var groups = d3.select('svg')
+                            .selectAll('g')
+                            .data(countries)
+                            .enter()
+                            .append('g')
+                            .attr('transform', function(d, i){
+                                return 'translate(0, '+ i*30 +')';
+                            })
+            
+            console.log(countries);
+          
+            groups.append('text')
+                .text(function(d, i){
+                    return d.key
+                })
+                .attr('x', 400)
+                .attr('y', 30)
+                .attr('text-anchor', 'middle')
+            
+            
+            var maxGdp = d3.max(countries, function(d){
+                return d.values.gdp;
+            });
+            
+            var mapGdp = d3.scale.linear()
+                .domain([0, maxGdp])
+                .range([0, 200])
+            
+            groups.append('rect')
+                .attr('x', 600)
+                .attr('width', function(d){
+                    return mapGdp(d.values.gdp)
+                })
+                .attr('height', 10);
+            
+        });
+        
+            
+            
+            
+            
+                                
+        </script>
+    </body>
+    
+</html>
