@@ -140,7 +140,9 @@
                     })
                     .interpolate('cardinal-closed')
                 
+                //////////////////////////////////////////////////////////////////
                 // Segni zodiacali
+                //////////////////////////////////////////////////////////////////
                 var groups = d3.select('svg')
                     .selectAll('g')
                     .data(zod)
@@ -166,14 +168,24 @@
                         return 'rotate('+360/12*i+'),translate(150,0)'
                     })
                 
+                    //inserisco il nome del segno
                     .attr('class', 'gr_sign')
                     .append('text')
                     .text(function (d,i){
                         return d.key
                     })
                 
+                groups.selectAll('.gr_sign')
+                    .append('svg:image')
+                    .attr('xlink:href', 'library/zodiac_signs.svg')
+                    .attr('width', 40)
+                    .attr('height', 40)
+                    .attr('x', 0)
+                    .attr('y',0);
+                
                 //////////////////////////////////////////////////////////////////
                 //elementi
+                //////////////////////////////////////////////////////////////////
                 var groups_b = d3.select('svg')
                     .selectAll('.elem')
                     .data(element)
