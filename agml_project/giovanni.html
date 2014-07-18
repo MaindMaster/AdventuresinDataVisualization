@@ -186,7 +186,7 @@
                 //////////////////////////////////////////////////////////////////
                 //elementi
                 //////////////////////////////////////////////////////////////////
-                var groups_a = d3.select('svg')
+                var groups_b = d3.select('svg')
                     .selectAll('.elem')
                     .data(element)
                     .enter()
@@ -196,13 +196,13 @@
                         return 'translate(' + (i+0.8)*450 + ',650)' // (traslazione x) , (traslazione y) 
                     })
                 
-                groups_a.append('path')
+                groups_b.append('path')
                     .attr('d', function(d, i){
                         return pathForElement(d.values)   
                     })
                     //.style('fill', '')
                 
-                groups_a.selectAll('.gr_sign_2')
+                groups_b.selectAll('.gr_sign_2')
                     .data(function(d){
                         return d.values;   
                     })
@@ -216,46 +216,20 @@
                     .text(function (d,i){
                         return d.key
                     })
-                
-                var groups_b = d3.select('svg')
-                    .selectAll('.elem')
-                    .data(element)
-                    .enter()
-                    .append('g')
-                    .attr('class', 'elem')   
-                    .attr('transform', function(d, i){
-                        return 'translate(' + (i+0.8)*450 + ',650)' // (traslazione x) , (traslazione y) 
-                    })
-                
+
                 //////////////////////////////////////////////////////////////////
                 //legenda
                 //////////////////////////////////////////////////////////////////
                 
                 var labels = ['Gold', 'Silver', 'Bronze']
                 
-                groups_a.append('text')
+                groups_b.append('text')
                     .text(function(d,i){
                         return labels[i]  
                     })
                     .attr('y',200)
                     .attr('x', -20)
-                
-                /*var label = d3.select('svg')
-                    .selectAll('.label')
-                    //.data(function(d,i){
-                    //    return d.medal;   
-                    //})
-                    .data(1)
-                    .enter()
-                    .attr('class', 'label')  
-                    .text(function (d,i){
-                        return d
-                    })
-                    /*.attr('transform', function(d, i){
-                        return 'translate(' + (i+0.8)*450 + ',650)' // (traslazione x) , (traslazione y) 
-                    })*/
-                
-                
+
                 
             }
         </script>
