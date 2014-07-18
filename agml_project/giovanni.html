@@ -85,15 +85,7 @@
                     .y(function(d, i){
                         return (Math.sin(ang*i) * d.values.length) * 1.8;
                     })
-                    .interpolate('basis')
-                
-//                d3.select('svg')
-//                    .append('g')
-//                    .attr('transform', 'translate(200,200)')
-//                    .append('path')
-//                    .datum(zod[3].values)
-//                    .attr('d', pathMedal)
-//                    .style('fill', 'red')
+                    .interpolate('cardinal-closed')
                 
                 d3.select('svg')
                     .selectAll('g')
@@ -108,6 +100,20 @@
                     .attr('d', function(d, i){
                         return pathMedal(d.values)   
                     })
+                    .style('fill', '')
+                
+                d3.select('svg')
+                    .selectAll('g')
+                    .data(zod)
+                    .enter()
+                    .append('g')
+                    .attr('transform', function(d, i){
+                        return 'translate(' + (i+1)*400 + ',200)'
+                    })
+                    .append('text', 'hello')
+                    /*.attr('d', function(d, i){
+                        return pathMedal(d.values)   
+                    })*/
                     .style('fill', '')
                 
                 
