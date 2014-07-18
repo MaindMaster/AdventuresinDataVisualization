@@ -4,7 +4,7 @@
         <title>Test D3.js</title>
     </head>
     <body>
-        <svg width="600" height="600"></svg>
+        <svg width="100%" height="600"></svg>
         <script>
             d3.csv('../data/olympics_2012.csv',loaded);
             
@@ -80,10 +80,10 @@
                 
                 var pathMedal = d3.svg.line()
                     .x(function(d, i){
-                        return Math.cos(ang*i) * d.values.length;
+                        return (Math.cos(ang*i) * d.values.length) * 1.8;
                     })
                     .y(function(d, i){
-                        return Math.sin(ang*i) * d.values.length;
+                        return (Math.sin(ang*i) * d.values.length) * 1.8;
                     })
                     .interpolate('basis')
                 
@@ -95,18 +95,20 @@
 //                    .attr('d', pathMedal)
 //                    .style('fill', 'red')
                 
-                
                 d3.select('svg')
                     .selectAll('g')
                     .data(zod)
                     .enter()
                     .append('g')
-                    .attr('transform', 'translate(200,200)')
+                    .attr('transform', function(d, i){
+                        return 'translate(' + (i+1)*400 + ',200)'
+                    })
+                    //.attr('transform', 'translate(200,200)')
                     .append('path')
                     .attr('d', function(d, i){
                         return pathMedal(d.values)   
                     })
-                    .style('fill', 'red')
+                    .style('fill', '')
                 
                 
                 /*
@@ -165,10 +167,11 @@
                     return d3.ascending(b.values.length, a.values.length)
                 })
                 
+                /*
                 console.log(zod);
                 console.log(element);
                 
-                /*d3.select('svg')
+                d3.select('svg')
                     .selectAll('rect')
                     .data(element)
                     .enter()
@@ -194,66 +197,13 @@
                     })
                     .attr('y', function (d,i) {
                         return i*20
-                    })*/
-                
-                var zodiaco = ['Ariete', 'Toro', 'Gemelli', 'Cancro', 'Leone', 'Vergine', 'Bilancia', 'Scorpione', 'Sagittario', 'Capricorono', 'Acquario', 'Pesci'];
-                
-                var segno = d3.select('svg')
-                    .selectAll('.sign')
-                    //.data(d.zod)
-                    .data(zodiaco)
-                    .enter()
-                    .append("g")
-                    .attr("class", "g")
-                    /*.attr("transform", function(d) { 
-                        return "translate(" + x(d.age) + ",30)"; 
-                    });*/
+                    })
 
-                segno.selectAll("rect")
-                    //.data(function(d) { return d.zod; })
-                    .data(zod)
-                    .enter()
-                    .append("rect")
-                    .attr("width", '4')
-                    .attr("height", function(d,i) {
-                        return d.values.length/10; 
-                    })/*
+                    })
                     .attr("height", function(d) {
                         return d.values.length/10; 
                     })*/
                     //.style("fill", function(d) { return color(d.name); });
-                
-                /* barre medagliati
-                d3.select('svg')
-                    .selectAll('rect')
-                    .data(medal)
-                    .enter()
-                    .append('rect')
-                    .attr('height',4)
-                    .attr('width', function(d,i) {
-                        return d.values.length
-                    })
-                    .attr('y', function (d,i) {
-                        return i*5
-                    })*/
-        
-                /*d3.select('svg')
-                    .append('g')
-                    .selectAll('rect')
-                    .data(zodiac)
-                    .enter()
-                    .append('rect')
-                    .attr('height',4)
-                    .attr('width', function(d,i) {
-                        return d.values.length
-                    })
-                    .attr('y', function (d,i) {
-                        return i+30*5
-                    })*/
-                
-                /*console.log(medal);
-                console.log(zodiac);
-                console.log(ariete);*/
                  
             }
         </script>
