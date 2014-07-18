@@ -11,39 +11,67 @@
             
             function loaded (data){
                 
+                var _data = [];
+                data.forEach(function(d){
+                    if(d.weight_kg > 0 && d.height_cm > 0){
+                        _data.push(d)
+                    }
+                })
+                
+                
+                function calc_bmi(d, gender){
+                    return d3.median(d, function(c){
+                        if(c.gender == gender){
+                            return (c.weight_kg/Math.pow(c.height_cm/100, 2))
+                        }
+                    })
+                }
+                
                 var sp = d3.nest()         
                             .key(function(d){
                                 return d.sport;
                             })
-                            .key(function(d){
-                                if(d.gender == 'Male'){
-                                    return(d.weight_kg/Math.pow(d.height_cm/100, 2));
-//                                } else {
-//                                    return(d.weight_kg/(d.height_cm*d.height_cm)/10);
+                            .rollup(function(d){
+                                return {
+                                    avr_male_bmi: calc_bmi(d, 'Male'),
+                                    avr_female_bmi: calc_bmi(d, 'Female'),
+                                    athletes: d
                                 }
                             })
-                
                             .sortKeys(d3.ascending)
-                            .entries(data);
+                            .entries(_data);
                                 
+                
                 var mapx = d3.scale.linear()
                             .domain([0, sp.length])
                             .range([0, 5*sp.length+10])
                 
                 
-                d3.select('svg')
-                            .selectAll('rect')
-                            .data(sp)
-                            .enter()
-                            .append('rect')
-                            .attr('width', 5)
-                            .attr('height', function(d,i){
-                                return d.values.length
-                            })
-                            .attr('y', 0)
-                            .attr('x', function(d,i){
-                                return mapx(i)
-                            })
+                var groups = d3.select('svg')
+                    .selectAll('g')
+                    .data(sp)
+                    .enter()
+                    .append('g')
+                    .attr('transform', function(d, i){
+                        return 'translate(' + mapx(i) + ',0)'  
+                    })
+                
+                groups.append('rect')
+                    .attr('width', 4)
+                    .attr('height', function(d, i){
+                        return d.values.avr_male_bmi
+                    })
+                    .attr('y', function(d, i){
+                        return 100 - d.values.avr_male_bmi
+                    })
+                
+                groups.append('rect')
+                    .attr('width', 4)
+                    .attr('height', function(d, i){
+                        return d.values.avr_female_bmi
+                    })
+                    .style('fill', 'red')
+                        
                 console.log(sp)                   
             }
         </script>
