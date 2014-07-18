@@ -5,45 +5,43 @@
     </head>
     <body>
         <svg width="1000px"></svg>
+        
         <script>
             d3.csv('../data/olympics_2012.csv',loaded);
             
             function loaded (data){
                 
                 
-                var bmi =  d3.nest()
-                                .key(function(d) {
-                                    return (d.weight_kg/(d.height_cm*d.height_cm/100));
-                                })
-                                .sortKeys(d3.ascending)
-                                .entries(data);
-                
-                /*var mapy = d3.scale.linear()
-                                .domain([0, bmi.length])
+                var mapx = d3.scale.linear()
+                                .domain([0, bmiMale.length])
                                 .range([0, 1000])
-                */                    
-                console.log(bmi[10])
+                
+                var bmiMale =  d3.nest()
+                                if(gender == 'Male'){
+                                    .key(function(d) {
+                                        return (d.weight_kg/(d.height_cm*d.height_cm/100));
+                                    })
+                                    .sortKeys(d3.ascending)
+                                    .entries(data);
+                                }
+                
+                                    
+                //console.log(bmi[10])
                 
                 
                 d3.select('svg')
                         .selectAll('rect')
-                        .data(bmi)
+                        .data(bmiMale)
                         .enter()
                         .append('rect')
-                        .attr('height', 2)
-                        .attr('width', function(d,i){
+                        .attr('width', 2)
+                        .attr('height', function(d,i){
                             return d.values.length
                         })
-                        /*.attr('y', function(d,i){
-                            return mapy(i)
-                        })*/
+                        .attr('x', function(d,i){
+                            return mapx(i)
+                        })
                     
-                    
-                    d3.select('svg')
-                        .attr('height', bmi.length)
-                       /* .attr('width', function(d,i){
-                            return 0
-                        })*/
                    
             }
         </script>
