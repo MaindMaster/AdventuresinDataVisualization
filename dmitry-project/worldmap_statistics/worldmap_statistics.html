@@ -1,8 +1,28 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<title>D3 World Map Template | TechSlides</title>
+
+<!--Title-->
+<title>Statistics on 2012 Olympic games</title>
+
+<head>
+
+<!--css styles-->
 <style>
- 
+    
+.UK_default {
+    fill: none;
+}
+    
+#UK {
+    fill: #A0522D;
+    stroke: #696969;
+    stroke-width: 1px;
+}
+    
+#UK:hover {
+    fill: #C0C0C0;
+}
+    
 .country {
     fill: #C0C0C0;
     stroke: #696969;
@@ -17,6 +37,17 @@
   font-size:10px;
   text-transform:capitalize;
 }
+  
+#header {
+    display:block;
+    margin: auto;
+}
+ 
+#screen {
+  margin:10px 10%;
+  height:100%;
+  overflow:hidden;
+}
     
 #container {
   margin:10px 10%;
@@ -25,6 +56,13 @@
   height:100%;
   overflow:hidden;
   background: #F0F8FF;
+}
+    
+#footer {
+  margin:10px 10%;
+  height:100%;
+  overflow:hidden;
+  text-align:center;
 }
     
 .hidden { 
@@ -50,225 +88,32 @@ div.tooltip {
 }
     
 .equator {
-  stroke: #ccc;
+  stroke: #000000;
   stroke-width: 1px;
-}
-
-</style>
-</head>
-<body>
-
-<div id="olympic_rings">
-<svg viewBox="-34 -12 68 33" width="100%" height="300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-   <defs>
-      <clipPath id="interlace">
-         <path d="M -11,-11 h 22 v 22 h -22 z M 11,-1.5 a 10.5,10.5 0 0,0 0,21 v -3 a 7.5,7.5 0 1,1 0,-15 M -11,1.5 a 7.5,7.5 0 1,1 0,15 v 3 a 10.5,10.5 0 0,0 0,-21 z" clip-rule="evenodd"/>
-      </clipPath><clipPath id="interlace_Firefox"><!-- Firefox workaround -->
-         <path d="M 0,0 l -12,12 h 12 z"/> 
-      </clipPath>
-      <g id="ring">
-         <circle r="9"  clip-path="url(#interlace)"/>
-         <circle r="9"  clip-path="url(#interlace_Firefox)"/><!-- Firefox workaround -->
-         <path d="M 0,-9 a 9,9 0 0,1 9,9" transform="rotate(45)"/>
-      </g>
-   </defs>
-
-   <g fill="none" stroke-width="2">
-      <g stroke="#0085c7" transform="translate(-22,0)">
-         <use xlink:href="#ring"/>
-         <path d="M 0,-9 a 9,9 0 0,0 0,18"/>
-      </g>
-      <use xlink:href="#ring" stroke="black"/>
-      <g stroke="#df0024" transform="translate(22,0)">
-         <use xlink:href="#ring"/>
-         <path d="M 0,-9 a 9,9 0 0,1 0,18"/>
-      </g>
-      <use xlink:href="#ring" stroke="#f4c300" transform="translate(-11,9) rotate(180)"/>
-      <use xlink:href="#ring" stroke="#009f3d" transform="translate(11,9) rotate(180)"/>
-   </g>
-</svg>    
-</div>
+} 
     
-<div id="container"></div>
+</style>
+
+</head>
+
+<body>
+   
+<!--Used for correct positioning of elements on the screen-->
+<div id="screen"></div>
+
+<!--Header div-->
+<div id="head"><svg id="header"\></div>
+
+<!--Main container div-->
+<div id="main"><svg id="container"/></div>
 
 <script src="js/d3.min.js"></script>
-<script src="js/topojson.v1.min.js"></script>
-<script>
-d3.select(window).on("resize", throttle);
+<script src="js/topojson.v1.min.js"></script>    
+<script src="js/og.2012.stat.js"></script>
+  
+<!--Footer div-->
+<div id="footer">London 2012 Olympic games &#9426</div>
 
-var zoom = d3.behavior.zoom()
-    .scaleExtent([1, 9])
-    .on("zoom", move);
-
-var width = document.getElementById('container').offsetWidth;
-var height = width / 2;
-
-var topo,projection,path,svg,g;
-
-var graticule = d3.geo.graticule();
-
-var tooltip = d3.select("#container").append("div").attr("class", "tooltip hidden");
-    
-setup(width, height);
-
-function setup(width,height){
-    
-  // Convert from spherical coordinates to planar coordinates.
-  projection = d3.geo.mercator()
-    .translate([(width/2), (height/2)])
-    .scale( width / 2 / Math.PI);
-
-  // The path generator. We need to use the projection defined before.
-  // Borders of all the countries.
-  // github.com/mbostock/d3/wiki/projection
-  path = d3.geo.path().projection(projection);
-
-  // Set up our main svg container.
-  svg = d3.select("#container").append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .call(zoom)
-      .on("click", click)
-      .append("g");
-
-  // Append the geometry container to out svg.
-  g = svg.append("g");
-    
-}
-
-d3.json("data/world-topo-min.json", function(error, world) {
-
-  var countries = topojson.feature(world, world.objects.countries).features;
-    
-  topo = countries;
-  draw(topo);
-
-});
-
-function draw(topo) {
-
-  // Add graticule to data.
-  svg.append("path")
-     .datum(graticule)
-     .attr("class", "graticule")
-     .attr("d", path);
-
-  // Add equator to data.
-  g.append("path")
-   .datum({type: "LineString", coordinates: [[-180, 0], [-90, 0], [0, 0], [90, 0], [180, 0]]})
-   .attr("class", "equator")
-   .attr("d", path);
-
-  // Select all the countries.
-  var country = g.selectAll(".country").data(topo);
-
-  country.enter().insert("path")
-      .attr("class", "country")
-      .attr("d", path)
-      .attr("id", function(d,i) { return d.id; })
-      .attr("title", function(d,i) { return d.properties.name; });
-
-  // Offsets for tooltips.
-  var offsetL = document.getElementById('container').offsetLeft+20;
-  var offsetT = document.getElementById('container').offsetTop+10;
-
-  // Tooltips.
-  country.on("mousemove", function(d,i) {
-      var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
-
-      tooltip.classed("hidden", false)
-             .attr("style", "left:"+(mouse[0]+offsetL)+"px;top:"+(mouse[1]+offsetT)+"px")
-             .html(d.properties.name);
-
-      })
-      .on("mouseout",  function(d,i) {
-        tooltip.classed("hidden", true);
-      }); 
-
-  // d3.category20 gives 20 different colors.
-  // EXAMPLE: adding some capitals from external CSV file.
-  // d3.csv("data/country-capitals.csv", function(err, capitals) {
-  //
-  //  capitals.forEach(function(i){
-  //    addpoint(i.CapitalLongitude, i.CapitalLatitude, i.CapitalName );
-  //  });
-  //
-  // });
-
-}
-
-function redraw() {
-  width = document.getElementById('container').offsetWidth;
-  height = width / 2;
-  d3.select('svg').remove();
-  setup(width,height);
-  draw(topo);
-}
-
-function move() {
-
-  var t = d3.event.translate;
-  var s = d3.event.scale; 
-  zscale = s;
-  var h = height/4;
-
-  t[0] = Math.min(
-    (width/height)  * (s - 1), 
-    Math.max( width * (1 - s), t[0] )
-  );
-
-  t[1] = Math.min(
-    h * (s - 1) + h * s, 
-    Math.max(height  * (1 - s) - h * s, t[1])
-  );
-
-  zoom.translate(t);
-  g.attr("transform", "translate(" + t + ")scale(" + s + ")");
-
-  // Adjust the country hover stroke width based on zoom level.
-  d3.selectAll(".country").style("stroke-width", 1.5 / s);
-
-}
-
-var throttleTimer;
-function throttle() {
-  window.clearTimeout(throttleTimer);
-    throttleTimer = window.setTimeout(function() {
-      redraw();
-    }, 200);
-}
-
-// Geo translation on mouse click in map.
-function click() {
-  var latlon = projection.invert(d3.mouse(this));
-  console.log(latlon);
-}
-
-// Function to add points and text to the map (used in plotting capitals).
-function addpoint(lat,lon,text) {
-
-  var gpoint = g.append("g").attr("class", "gpoint");
-  var x = projection([lat,lon])[0];
-  var y = projection([lat,lon])[1];
-
-  gpoint.append("svg:circle")
-        .attr("cx", x)
-        .attr("cy", y)
-        .attr("class","point")
-        .attr("r", 1.5);
-
-  // Conditional in case a point has no associated text.
-  if(text.length>0){
-
-    gpoint.append("text")
-          .attr("x", x+2)
-          .attr("y", y+2)
-          .attr("class","text")
-          .text(text);
-  }
-
-}
-
-</script>
 </body>
+    
 </html>
