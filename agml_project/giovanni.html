@@ -89,7 +89,7 @@
                 
                 var signs = ["Acquario", "Pesci", "Ariete", "Capricorno" ]; 
                 
-                d3.select('svg')
+                var groups = d3.select('svg')
                     .selectAll('g')
                     .data(zod)
                     .enter()
@@ -97,19 +97,30 @@
                     .attr('transform', function(d, i){
                         return 'translate(' + (i+1)*400 + ',200)'
                     })
+                
                     //.attr('transform', 'translate(200,200)')
-                    .append('path')
+                groups.append('path')
                     .attr('d', function(d, i){
                         return pathMedal(d.values)   
                     })
                     .style('fill', '')
                 
-                d3.select('svg')
-                    .selectAll('g')
+                
+                
+                groups.selectAll('.gr_sign')
+                    .data(function(d){
+                        return d.values;   
+                    })
+                    .enter()
+                    .append('g')
+                    .attr('transform', function(d, i){
+                        return 'rotate('+360/12*i+'),translate(200,0)'
+                    })
+                
+                    .attr('class', 'gr_sign')
                     .append('text')
-                    .data(signs)
-                    .text( function (d,i){
-                        return  d
+                    .text(function (d,i){
+                        return d.key
                     })
                 
                 /*
