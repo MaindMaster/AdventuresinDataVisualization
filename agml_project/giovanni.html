@@ -175,6 +175,9 @@
                         return pathMedal_small(d.values) 
                     })
                     .transition()
+                    .delay(function (d,i) {
+                        return i*300
+                    })
                     .duration(400)
                     .attr('d', function(d, i){
                         return pathMedal(d.values)   
@@ -206,10 +209,13 @@
                     .attr('x', 0)
                     .attr('y',-20)
                     .transition()
-                    .delay(400)
-                    .duration(400)
-                    .attr('width', 30)
-                    .attr('height', 30 )
+                    .delay(100)
+                    /*.delay(function (d,i) {
+                        return (i+0.4)*200
+                    })*/
+                    .duration(200)
+                    .attr('width', 25)
+                    .attr('height', 25)
                 
                 //////////////////////////////////////////////////////////////////
                 //elementi
@@ -260,9 +266,9 @@
                     .attr('y',-20)
                     .transition()
                     .delay(400)
-                    .duration(300)
-                    .attr('width', 30)
-                    .attr('height', 30 )
+                    .duration(200)
+                    .attr('width', 25)
+                    .attr('height', 25)
 
                 //////////////////////////////////////////////////////////////////
                 //legenda
