@@ -8,7 +8,7 @@
         
         <script>
         d3.csv('../data/olympics_2012.csv',OlympicsLoaded);//loading dataset and calling function loaded
-        d3.csv('../data/GDP.csv',GDP_Loaded);
+       
             function OlympicsLoaded(data){
             
                 console.log("data loaded:");
@@ -32,12 +32,16 @@
                 .data(countries)
                 .enter()
                 .append('rect')
-                .attr('height', 4)
-                .attr('width', function(d,i){
+                .attr('width', 4)
+                .attr('height', function(d,i){
                     return d.values.length;
                 })
                 .attr('x', function(d,i){
                 return i*5;
+                
+                })
+                .attr('y', function(d,i){
+                    return 800-d.values.length;
                 })
                 .on('click', function(d,i){//handles onClick() event
                     console.log(d);//print on console selected item
@@ -49,11 +53,35 @@
                 d3.select('svg')
                         .attr('height', 5*countries.length)
                         .style('fill', 'black')
+                loadGDP();
             }//endOlympicsLoaded()
             
-            function GDP_Loaded(data){
+            function loadGDP(){
                 console.log("GDP loaded");
+                 var dataset=d3.csv('../data/GDP.csv',GDP_Loaded);
+                
+                
             }//endGDP_loaded()
+            
+            
+            function GDP_Loaded(data){
+                console.log(data);
+                
+                var path = d3.svg.line()//create a line object first
+                        .x(function(d,i){return 5*i;})
+                        .y(function(d,i){return d.gdp;})
+                        .interpolate('basis');
+                
+            d3.select('svg')//and then select the above object
+                .append('path')
+                .attr('d', path(data))
+                .style('stroke', 'blue')
+                .style('fill', 'none');
+                
+                
+            }
+            
+            
             
                                 
         </script>

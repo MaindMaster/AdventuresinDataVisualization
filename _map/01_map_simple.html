@@ -1,0 +1,51 @@
+<html>
+
+    <head>
+        <script src="../d3.min.js"></script>
+    </head>
+    
+    <body>
+        <svg></svg>
+        <script>
+        
+        d3.json('geojson/world_map.json', function(data){
+            
+            var w = 700;
+            var h = 400;
+            
+            console.log(data)
+            
+            var svg = d3.select('svg')
+                .attr('width', w)
+                .attr('height', h)
+            
+            var proj = d3.geo.stereographic   ()
+                .scale((w+1)/2/Math.PI)
+                .translate([w/2, h/2])
+            
+            var pathGenerator = d3.geo.path()
+                .projection(proj)
+            
+            svg.append('path')
+                .datum(data)
+                .attr('d', pathGenerator)
+            
+            
+        })
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+            
+        </script>
+    </body>
+    
+    
+</html>
