@@ -11,6 +11,10 @@
             function loaded (data){
                 
                 var zod = d3.nest()
+                
+                                .key(function(d){
+                                    return d.medal;
+                                })
                                 .key(function(d){
                                     var mydata = d.birth.split('-');
                                     mydata = mydata[1] + '' + mydata[2];
@@ -54,9 +58,6 @@
                                         return 'capricorno';
                                     }
                                 })
-                                /*.key(function(d){
-                                    return d.medal;
-                                })*/
                 
                 .sortValues(d3.ascending)
                                 .entries(data);
@@ -79,6 +80,9 @@
                 })*/
                 
                 var element = d3.nest()
+                                .key(function(d){
+                                    return d.medal;
+                                })
                                 .key(function(d){
                                     var mysign = d.birth.split('-');
                                     mysign = mysign[1] + '' + mysign[2];
@@ -110,14 +114,8 @@
                                         return 'terra';
                                     }
                                 })
-                                /*.key(function(d){
-                                    return d.medal;
-                                })
-                                .key(function(d){
-                                    return d.sport;
-                                })*/
                  
-                .sortValues(d3.ascending)
+                .sortKeys(d3.ascending)
                                 .entries(data);
                 
                 element.sort(function(a,b) {
