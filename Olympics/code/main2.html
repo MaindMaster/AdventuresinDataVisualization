@@ -21,48 +21,76 @@
                     //            return d.gender;
                     //        })
                             .sortKeys(d3.ascending)
+                            .rollup(function(d, i){
+                                return {
+                                    athletes: d.length,
+                                    gdp: +d[0].gdp
+                                }
+                            })
                             .entries(data);
             //    console.log(gender);
                 countries.sort(function(a,b){
-                    return d3.ascending(b.values.length, a.values.length);
+                    return d3.ascending(b.values.gdp, a.values.gdp);
                 
                 })
+                
+                console.log(countries)
+                
+                var mapX = d3.scale.linear()
+                    .domain([0, countries.length])
+                    .range([0, 900])
+                
+                
                 d3.select('svg')
-                .selectAll('rect')
-                .data(countries)
-                .enter()
-                .append('rect')
-                .attr('width', 4)
-                .attr('height', function(d,i){
-                    return d.values.length;
-                })
-                .attr('x', function(d,i){
-                return i*5;
-                
-                })
-                .attr('y', function(d,i){
-                    return 800-d.values.length;
-                })
-                .on('click', function(d,i){//handles onClick() event
-                    console.log(d);//print on console selected item
-                    d3.select(this)
-                    .style('fill', 'red')
-                })
-                console.log(countries);
+                    .selectAll('rect')
+                    .data(countries)
+                    .enter()
+                    .append('rect')
+                    .attr('width', 900/countries.length-1)
+                    .attr('height', function(d,i){
+                        return d.values.athletes;
+                    })
+                    .attr('x', function(d,i){
+                    return mapX(i);
+
+                    })
+                    .attr('y', function(d,i){
+                        return 800-d.values.athletes;
+                    })
+                    .on('click', function(d,i){//handles onClick() event
+                        console.log(d);//print on console selected item
+                        d3.select(this)
+                        .style('fill', 'red')
+                    })
+               // console.log(countries);
                 
                 d3.select('svg')
                         .attr('height', 5*countries.length)
-                        .style('fill', 'black')
+                        .style('fill', 'blue')
+                
+                var maxGdp = d3.max(countries, function(d){
+                    return d.values.gdp;
+                })
+                
+                var mapY = d3.scale.linear()
+                    .domain([0, maxGdp])
+                    .range([0, 700])
+                
+                console.log( mapY(200000) );
        
                 var path = d3.svg.line()//create a line object first
-                        .x(function(d,i){return 5*i;})
-                        .y(function(d,i){return d.gdp;})
-                        .interpolate('basis');
+                        .x(function(d,i){
+                            return mapX(i)
+                        })
+                        .y(function(d,i){
+                            return 800 - mapY(d.values.gdp)
+                        })
+                        //.interpolate('basis');
                 
                 d3.select('svg')//and then select the above object
                     .append('path')
-                    .attr('d', path(data))
-                    .style('stroke', 'blue')
+                    .attr('d', path(countries))
+                    .style('stroke', 'red')
                     .style('fill', 'none');
                 
                 
