@@ -4,13 +4,24 @@
         <title>Test D3.js</title>
     </head>
     <body>
-        <svg></svg>
+        <svg width="100%" height="600"></svg>
         <script>
             d3.csv('../data/olympics_2012.csv',loaded);
             
             function loaded (data){
                 
+                var _data = []
+                data.forEach(function(d){
+                    if(d.medal != ""){
+                        _data.push(d);
+                    }
+                })
+                
                 var zod = d3.nest()
+                
+                                .key(function(d){
+                                    return d.medal;
+                                })
                                 .key(function(d){
                                     var mydata = d.birth.split('-');
                                     mydata = mydata[1] + '' + mydata[2];
@@ -54,16 +65,59 @@
                                         return 'capricorno';
                                     }
                                 })
-                                /*.key(function(d){
-                                    return d.medal;
-                                })*/
                 
-                .sortValues(d3.ascending)
-                                .entries(data);
+                .sortKeys(d3.ascending)
+                                .entries(_data);
                 
                 zod.sort(function(a,b) {
                     return d3.ascending(b.values.length, a.values.length)
                 })
+                
+                console.log(zod);
+                
+                var ang = Math.PI*2 / 12;
+                
+                //zod[3].values.push( zod[3].values[0] )
+                
+                var pathMedal = d3.svg.line()
+                    .x(function(d, i){
+                        return (Math.cos(ang*i) * d.values.length) * 1.8;
+                    })
+                    .y(function(d, i){
+                        return (Math.sin(ang*i) * d.values.length) * 1.8;
+                    })
+                    .interpolate('cardinal-closed')
+                
+                var groups = d3.select('svg')
+                    .selectAll('g')
+                    .data(zod)
+                    .enter()
+                    .append('g')
+                    .attr('transform', function(d, i){
+                        return 'translate(' + (i+1)*420 + ',300)' // (traslazione x) , (traslazione y) 
+                    })
+                
+                groups.append('path')
+                    .attr('d', function(d, i){
+                        return pathMedal(d.values)   
+                    })
+                    .style('fill', '')
+                
+                groups.selectAll('.gr_sign')
+                    .data(function(d){
+                        return d.values;   
+                    })
+                    .enter()
+                    .append('g')
+                    .attr('transform', function(d, i){
+                        return 'rotate('+360/12*i+'),translate(150,0)'
+                    })
+                
+                    .attr('class', 'gr_sign')
+                    .append('text')
+                    .text(function (d,i){
+                        return d.key
+                    })
                 
                 /*
                 var medal = d3.nest()
@@ -79,6 +133,9 @@
                 })*/
                 
                 var element = d3.nest()
+                                .key(function(d){
+                                    return d.medal;
+                                })
                                 .key(function(d){
                                     var mysign = d.birth.split('-');
                                     mysign = mysign[1] + '' + mysign[2];
@@ -110,24 +167,19 @@
                                         return 'terra';
                                     }
                                 })
-                                /*.key(function(d){
-                                    return d.medal;
-                                })
-                                .key(function(d){
-                                    return d.sport;
-                                })*/
                  
-                .sortValues(d3.ascending)
+                .sortKeys(d3.ascending)
                                 .entries(data);
                 
                 element.sort(function(a,b) {
                     return d3.ascending(b.values.length, a.values.length)
                 })
                 
+                /*
                 console.log(zod);
                 console.log(element);
                 
-                /*d3.select('svg')
+                d3.select('svg')
                     .selectAll('rect')
                     .data(element)
                     .enter()
@@ -153,66 +205,13 @@
                     })
                     .attr('y', function (d,i) {
                         return i*20
-                    })*/
-                
-                var zodiaco = ['Ariete', 'Toro', 'Gemelli', 'Cancro', 'Leone', 'Vergine', 'Bilancia', 'Scorpione', 'Sagittario', 'Capricorono', 'Acquario', 'Pesci'];
-                
-                var segno = d3.select('svg')
-                    .selectAll('.sign')
-                    //.data(d.zod)
-                    .data(zodiaco)
-                    .enter()
-                    .append("g")
-                    .attr("class", "g")
-                    /*.attr("transform", function(d) { 
-                        return "translate(" + x(d.age) + ",30)"; 
-                    });*/
+                    })
 
-                segno.selectAll("rect")
-                    //.data(function(d) { return d.zod; })
-                    .data(zod)
-                    .enter()
-                    .append("rect")
-                    .attr("width", '4')
-                    .attr("height", function(d,i) {
-                        return d.values.length/10; 
-                    })/*
+                    })
                     .attr("height", function(d) {
                         return d.values.length/10; 
                     })*/
                     //.style("fill", function(d) { return color(d.name); });
-                
-                /* barre medagliati
-                d3.select('svg')
-                    .selectAll('rect')
-                    .data(medal)
-                    .enter()
-                    .append('rect')
-                    .attr('height',4)
-                    .attr('width', function(d,i) {
-                        return d.values.length
-                    })
-                    .attr('y', function (d,i) {
-                        return i*5
-                    })*/
-        
-                /*d3.select('svg')
-                    .append('g')
-                    .selectAll('rect')
-                    .data(zodiac)
-                    .enter()
-                    .append('rect')
-                    .attr('height',4)
-                    .attr('width', function(d,i) {
-                        return d.values.length
-                    })
-                    .attr('y', function (d,i) {
-                        return i+30*5
-                    })*/
-                
-                /*console.log(medal);
-                console.log(zodiac);
-                console.log(ariete);*/
                  
             }
         </script>

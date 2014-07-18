@@ -1,50 +1,78 @@
 <html>
     <head>
         <script src="library/d3.min.js" charset="utf-8"></script>
-        <title>Test D3.js</title>
+        <title>BMI D3.js</title>
     </head>
     <body>
-        <svg width="1000px"></svg>
+        <svg width="1000px", height="300"></svg>
         <script>
+            
             d3.csv('../data/olympics_2012.csv',loaded);
             
             function loaded (data){
                 
-                
-                var bmi =  d3.nest()
-                                .key(function(d) {
-                                    return (d.weight_kg/(d.height_cm*d.height_cm/100));
-                                })
-                                .sortKeys(d3.ascending)
-                                .entries(data);
-                
-                /*var mapy = d3.scale.linear()
-                                .domain([0, bmi.length])
-                                .range([0, 1000])
-                */                    
-                console.log(bmi[10])
+                var _data = [];
+                data.forEach(function(d){
+                    if(d.weight_kg > 0 && d.height_cm > 0){
+                        _data.push(d)
+                    }
+                })
                 
                 
-                d3.select('svg')
-                        .selectAll('rect')
-                        .data(bmi)
-                        .enter()
-                        .append('rect')
-                        .attr('height', 2)
-                        .attr('width', function(d,i){
-                            return d.values.length
-                        })
-                        /*.attr('y', function(d,i){
-                            return mapy(i)
-                        })*/
-                    
-                    
-                    d3.select('svg')
-                        .attr('height', bmi.length)
-                       /* .attr('width', function(d,i){
-                            return 0
-                        })*/
-                   
+                function calc_bmi(d, gender){
+                    return d3.median(d, function(c){
+                        if(c.gender == gender){
+                            return (c.weight_kg/Math.pow(c.height_cm/100, 2))
+                        }
+                    })
+                }
+                
+                var sp = d3.nest()         
+                            .key(function(d){
+                                return d.sport;
+                            })
+                            .rollup(function(d){
+                                return {
+                                    avr_male_bmi: calc_bmi(d, 'Male'),
+                                    avr_female_bmi: calc_bmi(d, 'Female'),
+                                    athletes: d
+                                }
+                            })
+                            .sortKeys(d3.ascending)
+                            .entries(_data);
+                                
+                
+                var mapx = d3.scale.linear()
+                            .domain([0, sp.length])
+                            .range([0, 5*sp.length+10])
+                
+                
+                var groups = d3.select('svg')
+                    .selectAll('g')
+                    .data(sp)
+                    .enter()
+                    .append('g')
+                    .attr('transform', function(d, i){
+                        return 'translate(' + mapx(i) + ',0)'  
+                    })
+                
+                groups.append('rect')
+                    .attr('width', 4)
+                    .attr('height', function(d, i){
+                        return d.values.avr_male_bmi
+                    })
+                    .attr('y', function(d, i){
+                        return 100 - d.values.avr_male_bmi
+                    })
+                
+                groups.append('rect')
+                    .attr('width', 4)
+                    .attr('height', function(d, i){
+                        return d.values.avr_female_bmi
+                    })
+                    .style('fill', 'red')
+                        
+                console.log(sp)                   
             }
         </script>
     </body>

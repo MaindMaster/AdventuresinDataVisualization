@@ -4,8 +4,6 @@
 <style>
 
 body {
-  background-color: white;
-  text-align: center;
 }
 path {
   stroke: white;
@@ -23,13 +21,12 @@ svg {
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v0.min.js"></script>
 <script>
-var width = 1000
-    height = 1000;
+var width = 900
+    height = 700;
 
 var projection = d3.geo.mercator()
-    .center([0, 5])
-    .scale(150)
-    .rotate([-180,0]);
+    .scale((width*1)/2/Math.PI)
+    .translate([width/2,height/2])
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -55,12 +52,12 @@ d3.csv("../data/olympics_2012.csv", function(error, data) {
      })
 
     .attr("r", function(d,i) {
-        if(d.medal == "Gold") return 10
-        else if(d.medal == "Silver") return 5
-        else if(d.medal == "Bronze") return 3
+        if(d.medal == "Gold") return 1
+        else if(d.medal == "Silver") return 1
+        else if(d.medal == "Bronze") return 1
         else return 1
      })
-    /*
+/*
     .transition()
           .ease('elastic-in')
         .duration(10)
@@ -70,20 +67,14 @@ d3.csv("../data/olympics_2012.csv", function(error, data) {
         .attr('r', function(d, i){
           return 3
         })   
-     */
-     /*
+*/
      .style("fill", function(d,i) {
-        if(d.medal == "Gold") return "Yellow"
-        else if(d.medal == "Silver") return "Red"
-        else if(d.medal == "Bronze") return "Green"
+        if(d.medal == "Gold") return "black"
+        else if(d.medal == "Silver") return "black"
+        else if(d.medal == "Bronze") return "black"
         else return "black"
      });
-      */
 
-     .style("fill", function(d,i) {
-        if(d.gender == "Male") return "Blue"
-        else return "Pink"
-     });      
 /*
     // zoom and pan
     var zoom = d3.behavior.zoom()
@@ -98,7 +89,7 @@ d3.csv("../data/olympics_2012.csv", function(error, data) {
       });
 
     svg.call(zoom)
-    */
+*/
 });
 
 
