@@ -4,9 +4,17 @@
     <script src="libs/d3.js"></script>
 </head>
 
+<style>
+    body {
+        font-family: sans-serif;
+    }
+</style>
+
 <body>
+
     <svg height="5000" width="900"></svg>
 
+    <link rel="stylesheet" href="//rawgithub.com/Caged/d3-tip/master/examples/example-styles.css">
     <script>
         d3.csv('../data/OlympicsComplete.csv', function (data) {
 
@@ -52,7 +60,6 @@
                 .attr('y', 20)
                 .attr('text-anchor', 'middle')
 
-
             var maxGdp = d3.max(countries, function (d) {
                 return d.values.gdp;
             });
@@ -60,6 +67,8 @@
             var mapGdp = d3.scale.linear()
                 .domain([0, maxGdp])
                 .range([0, 800])
+
+
 
             groups.append('rect')
                 .attr('x', 500)
@@ -69,6 +78,33 @@
                 })
                 .attr('height', 20)
                 .style('fill', 'violet')
+
+            /* Initialize tooltip */
+            tip = d3.tip().attr('class', 'd3-tip').html(function (d) {
+                return d;
+            });
+
+            /* Invoke the tip in the context of your visualization */
+            vis.call(tip)
+
+            vis.selectAll('rect')
+                .data(data)
+                .enter()
+                .append('rect')
+                .attr('width', function () {
+                    return x.rangeBand()
+                })
+                .attr('height', function (d) {
+                    return h - y(d)
+                })
+                .attr('y', function (d) {
+                    return y(d)
+                })
+                .attr('x', function (d, i) {
+                    return x(i)
+                })
+                .on('mouseover', tip.show)
+                .on('mouseout', tip.hide);
 
 
         });
