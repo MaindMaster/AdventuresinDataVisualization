@@ -17,7 +17,7 @@
                             })
                             .key(function(d){
                                 if(d.gender == 'Male'){
-                                    return(d.weight_kg/(Math.pow(d.height_cm, 2)*10));
+                                    return(d.weight_kg/Math.pow(d.height_cm/100, 2));
 //                                } else {
 //                                    return(d.weight_kg/(d.height_cm*d.height_cm)/10);
                                 }
