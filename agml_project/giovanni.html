@@ -149,7 +149,7 @@
                     .enter()
                     .append('g')
                     .attr('transform', function(d, i){
-                        return 'translate(' + (i+1)*420 + ',230)' // (traslazione x) , (traslazione y) 
+                        return 'translate(' + (i+0.8)*450 + ',230)' // (traslazione x) , (traslazione y) 
                     })
                 
                 groups.append('path')
@@ -170,16 +170,16 @@
                 
                     //inserisco il nome del segno
                     .attr('class', 'gr_sign')
-                    .append('text')
-                    .text(function (d,i){
-                        return d.key
-                    })
-                
-                groups.selectAll('.gr_sign')
+                    //.append('text')
+                    //    .text(function (d,i){
+                    //    return d.key
                     .append('svg:image')
-                    .attr('xlink:href', 'library/zodiac_signs.svg')
-                    .attr('width', 40)
-                    .attr('height', 40)
+                    //.attr('xlink:href', 'library/zodiac_signs.svg')
+                    .attr('xlink:href', function(d){
+                        return 'library/images/' + d.key + '.svg';
+                    })
+                    .attr('width', 30)
+                    .attr('height', 30 )
                     .attr('x', 0)
                     .attr('y',0);
                 
@@ -193,7 +193,7 @@
                     .append('g')
                     .attr('class', 'elem')   
                     .attr('transform', function(d, i){
-                        return 'translate(' + (i+1)*420 + ',640)' // (traslazione x) , (traslazione y) 
+                        return 'translate(' + (i+0.8)*450 + ',650)' // (traslazione x) , (traslazione y) 
                     })
                 
                 groups_b.append('path')
@@ -217,57 +217,23 @@
                         return d.key
                     })
                 
-                /*
-                var medal = d3.nest()
-                                .key(function(d){
-                                    return d.medal;
-                                })
-                
-                .sortKeys(d3.ascending)
-                                .entries(data);
-                
-                zod.sort(function(a,b) {
-                    return d3.ascending(b.values.length, a.values.length)
-                })*/
-                
-                /*
-                console.log(zod);
-                console.log(element);
-                
-                d3.select('svg')
-                    .selectAll('rect')
-                    .data(element)
-                    .enter()
-                    .append('rect')
-                    .attr('height',8)
-                    .attr('width', function(d,i){
-                        return d.values.length/5
-                    })
-                    .attr('y', function (d,i) {
-                        return i*20
-                    })
-                
-                d3.select('svg')
+                var groups_b = d3.select('svg')
                     .selectAll('.elem')
                     .data(element)
                     .enter()
-                    //.add('class','elem')
-                    .append('rect')
-                    .style('fill','red')
-                    .attr('height',8)
-                    .attr('width', function(d,i){
-                        return d.values.length/10
+                    .append('g')
+                    .attr('class', 'elem')   
+                    .attr('transform', function(d, i){
+                        return 'translate(' + (i+0.8)*450 + ',650)' // (traslazione x) , (traslazione y) 
                     })
-                    .attr('y', function (d,i) {
-                        return i*20
-                    })
-
-                    })
-                    .attr("height", function(d) {
-                        return d.values.length/10; 
-                    })*/
-                    //.style("fill", function(d) { return color(d.name); });
-                 
+                
+                //////////////////////////////////////////////////////////////////
+                //legenda
+                //////////////////////////////////////////////////////////////////
+                
+                
+                
+                
             }
         </script>
     </body>
