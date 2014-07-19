@@ -9,7 +9,6 @@
         <script> 
         d3.csv('../data/olympics_2012.csv', loaded) 
         
-        
         function loaded(data){
             var w = 900;
             var h = 700;
@@ -49,25 +48,13 @@
                 .attr('r', function(d){
                     return mapMedal(d.medal)
                 })
-//                .style ('opacity', function(d) {
-//                    if(d.gender=="Female"){
-//                        return 0
-//                    }
-//                })
-               .style ('opacity', function(d) {
-                    if(d.gender=="Female"){
-                        return 0
-                    }
-                })
                 .style ('fill', function(d) {
-                   if(d.gender=="Male"){
-                        return "blue"
-                    }
-                   if(d.gender=="Female"){
-                        return "#ff1eff"
-                    }
-            
-                    })
-        }
-        </script>
+                   if(d.medal=="Gold") return "#ffd700"
+                   else if(d.medal=="Silver") return "#c0c0c0"
+                   else if(d.medal=="Bronze") return "#cd7f32"
+                   else return "black"
+                })           
+             </script>
+    </body>
 </htlm>
+
