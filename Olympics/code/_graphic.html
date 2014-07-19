@@ -15,7 +15,7 @@
 
 <body>
 
-    <svg height="5000" width="900"></svg>
+    <svg height="5000" width="1000"></svg>
 
 
     <script>
@@ -31,6 +31,30 @@
                     }
                 })
             }
+            
+            
+                function calc_silver(d) {
+                return d3.sum(d, function (c) {
+                    if (c.medal == 'Silver') {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                })
+            }
+            
+            
+              function calc_bronze(d) {
+                return d3.sum(d, function (c) {
+                    if (c.medal == 'Bronze') {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                })
+            }
+            
+            
 
             var countries = d3.nest()
                 .key(function (d) {
@@ -39,7 +63,9 @@
                 .rollup(function (d) {
                     return {
                         gdp: +d[0].gdp,
-                        gold: calc_gold(d)
+                        gold: calc_gold(d),
+                        silver: calc_silver(d),
+                        bronze: calc_bronze(d),
                     }
                 })
                 .entries(data);
@@ -59,7 +85,7 @@
                 .text(function (d, i) {
                     return d.key
                 })
-                .attr('x', 400)
+                .attr('x', 500)
                 .attr('y', 40)
                 .attr('text-anchor', 'middle')
 
@@ -69,7 +95,7 @@
 
             var mapGdp = d3.scale.linear()
                 .domain([0, maxGdp])
-                .range([0, 800])
+                .range([0, 400])
 
 
             /* Initialize tooltip */
@@ -79,7 +105,7 @@
             d3.select('svg').call(tip)
 
             groups.append('rect')
-                .attr('x', 500)
+                .attr('x', 600)
                 .attr('y', 25)
                 .attr('width', function (d) {
                     return mapGdp(d.values.gdp)
@@ -95,11 +121,11 @@
 
             var mapCalc_gold = d3.scale.linear()
                 .domain([0, maxGold])
-                .range([0, 800])
+                .range([0, 400])
 
             groups.append('rect')
                 .attr('x', function(d, i){
-                    return 300-mapCalc_gold(d.values.gold)
+                    return 400-mapCalc_gold(d.values.gold)
                 })
                 .attr('y', 25)
                 .attr('width', function (d) {
