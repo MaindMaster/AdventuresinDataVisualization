@@ -44,43 +44,43 @@
                                     var mydata = d.birth.split('-');
                                     mydata = mydata[1] + '' + mydata[2];
                                     if(mydata > '0120' && mydata < '0220'){
-                                        return 'a01_acquario'; //Acquario - segno di Leo   
+                                        return 'a11_acquario'; //Acquario - segno di Leo   
                                     }
                                     if(mydata > '0219' && mydata < '0321'){
-                                        return 'a02_pesci';
+                                        return 'a12_pesci';
                                     }
                                     if(mydata > '0320' && mydata < '0421'){
-                                        return 'a03_ariete'; 
+                                        return 'a01_ariete'; 
                                     }
                                     if(mydata > '0420' && mydata < '0521'){
-                                        return 'a04_toro'; 
+                                        return 'a02_toro'; 
                                     }
                                     if(mydata > '0520' && mydata < '0622'){
-                                        return 'a05_gemelli'; 
+                                        return 'a03_gemelli'; 
                                     }
                                     if(mydata > '0621' && mydata < '0723'){
-                                        return 'a06_cancro'; //Cancro - segno di Lorenzo
+                                        return 'a04_cancro'; //Cancro - segno di Lorenzo
                                     }
                                     if(mydata > '0722' && mydata < '0824'){
-                                        return 'a07_leone';
+                                        return 'a05_leone';
                                     }
                                     if(mydata > '0823' && mydata < '0923'){
-                                        return 'a08_vergine';
+                                        return 'a06_vergine';
                                     }
                                     if(mydata > '0922' && mydata < '1023'){
-                                        return 'a09_bilancia';//Bilancia - segno di Marta
+                                        return 'a07_bilancia';//Bilancia - segno di Marta
                                     }
                                     if(mydata > '1022' && mydata < '1123'){
-                                        return 'a10_scorpione';
+                                        return 'a08_scorpione';
                                     }
                                     if(mydata > '1122' && mydata < '1222'){
-                                        return 'a11_sagittario'; //Sagittario - segno di Giovanni 
+                                        return 'a09_sagittario'; //Sagittario - segno di Giovanni 
                                     }
                                     //if(mydata > '1221' && mydata < '0119'){
                                     //    return 'capricorno';
                                     //}
                                     else {
-                                        return 'a12_capricorno';
+                                        return 'a10_capricorno';
                                     }
                                 })
                                 .sortKeys(d3.ascending)
@@ -210,7 +210,8 @@
                     .enter()
                     .append('g')
                     .attr('transform', function(d, i){
-                        return 'translate(' + (i+0.8)*450 + ',230)' // (traslazione x) , (traslazione y) 
+                        return  'translate(' + (i+0.8)*450 + ',230)'  // (traslazione x) , (traslazione y)  
+                                // + 'rotate(-60)'
                     })
                 
                 groups.append('path')
@@ -355,7 +356,7 @@
                 d3.selectAll('.acqua_aGold')
                     .on('mouseover', function(){
                         d3.select('.gold')
-                        .selectAll('.a06_cancro,.a10_scorpione,.a02_pesci')
+                        .selectAll('.a04_cancro,.a08_scorpione,.a12_pesci')
                             .transition()
                             .duration(300)
                             //.attr('fill','red')
@@ -365,7 +366,7 @@
                             .attr('y', -50)
                     })
                     .on('mouseout', function() {
-                        d3.selectAll('.a06_cancro,.a10_scorpione,.a02_pesci')
+                        d3.selectAll('.a04_cancro,.a08_scorpione,.a12_pesci')
                             .transition()
                             .duration(100)
                             .attr('width',25)
@@ -375,7 +376,7 @@
                 d3.selectAll('.acqua_bSilver')
                     .on('mouseover', function(){
                         d3.select('.silver')
-                        .selectAll('.a06_cancro,.a10_scorpione,.a02_pesci')
+                        .selectAll('.a04_cancro,.a08_scorpione,.a12_pesci')
                             .transition()
                             .duration(300)
                             .attr('width',80)
@@ -384,7 +385,7 @@
                             .attr('y', -50)
                     })
                     .on('mouseout', function() {
-                        d3.selectAll('.a06_cancro,.a10_scorpione,.a02_pesci')
+                        d3.selectAll('.a04_cancro,.a08_scorpione,.a12_pesci')
                             .transition()
                             .duration(100)
                             .attr('width',25)
@@ -394,7 +395,7 @@
                 d3.selectAll('.acqua_cBronze')
                     .on('mouseover', function(){
                         d3.select('.bronze')
-                        .selectAll('.a06_cancro,.a10_scorpione,.a02_pesci')
+                        .selectAll('.a04_cancro,.a08_scorpione,.a12_pesci')
                             .transition()
                             .duration(300)
                             .attr('width',80)
@@ -403,7 +404,7 @@
                             .attr('y', -50)
                     })
                     .on('mouseout', function() {
-                        d3.selectAll('.a06_cancro,.a10_scorpione,.a02_pesci')
+                        d3.selectAll('.a04_cancro,.a08_scorpione,.a12_pesci')
                             .transition()
                             .duration(100)
                             .attr('width',25)
@@ -415,7 +416,7 @@
                 d3.selectAll('.fuoco_aGold')
                     .on('mouseover', function(){
                         d3.select('.gold')
-                        .selectAll('.a03_ariete,.a07_leone,.a11_sagittario')
+                        .selectAll('.a01_ariete,.a05_leone,.a09_sagittario')
                             .transition()
                             .duration(300)
                             //.attr('fill','red')
@@ -425,7 +426,7 @@
                             .attr('y', -50)
                     })
                     .on('mouseout', function() {
-                        d3.selectAll('.a03_ariete,.a07_leone,.a11_sagittario')
+                        d3.selectAll('.a01_ariete,.a05_leone,.a09_sagittario')
                             .transition()
                             .duration(100)
                             .attr('width',25)
@@ -435,7 +436,7 @@
                 d3.selectAll('.fuoco_bSilver')
                     .on('mouseover', function(){
                         d3.select('.silver')
-                        .selectAll('.a03_ariete,.a07_leone,.a11_sagittario')
+                        .selectAll('.a01_ariete,.a05_leone,.a09_sagittario')
                             .transition()
                             .duration(300)
                             .attr('width',80)
@@ -444,7 +445,7 @@
                             .attr('y', -50)
                     })
                     .on('mouseout', function() {
-                        d3.selectAll('.a03_ariete,.a07_leone,.a11_sagittario')
+                        d3.selectAll('.a01_ariete,.a05_leone,.a09_sagittario')
                             .transition()
                             .duration(100)
                             .attr('width',25)
@@ -454,7 +455,7 @@
                 d3.selectAll('.fuoco_cBronze')
                     .on('mouseover', function(){
                         d3.select('.bronze')
-                        .selectAll('.a03_ariete,.a07_leone,.a11_sagittario')
+                        .selectAll('.a01_ariete,.a05_leone,.a09_sagittario')
                             .transition()
                             .duration(300)
                             .attr('width',80)
@@ -463,7 +464,7 @@
                             .attr('y', -50)
                     })
                     .on('mouseout', function() {
-                        d3.selectAll('.a03_ariete,.a07_leone,.a11_sagittario')
+                        d3.selectAll('.a01_ariete,.a05_leone,.a09_sagittario')
                             .transition()
                             .duration(100)
                             .attr('width',25)
@@ -475,7 +476,7 @@
                 d3.selectAll('.aria_aGold')
                     .on('mouseover', function(){
                         d3.select('.gold')
-                        .selectAll('.a05_gemelli,.a09_bilancia,.a12_capricorno')
+                        .selectAll('.a03_gemelli,.a07_bilancia,.a10_capricorno')
                             .transition()
                             .duration(300)
                             //.attr('fill','red')
@@ -485,7 +486,7 @@
                             .attr('y', -50)
                     })
                     .on('mouseout', function() {
-                        d3.selectAll('.a05_gemelli,.a09_bilancia,.a12_capricorno')
+                        d3.selectAll('.a03_gemelli ,.a07_bilancia,.a10_capricorno')
                             .transition()
                             .duration(100)
                             .attr('width',25)
@@ -495,7 +496,7 @@
                 d3.selectAll('.aria_bSilver')
                     .on('mouseover', function(){
                         d3.select('.silver')
-                        .selectAll('.a05_gemelli,.a09_bilancia,.a12_capricorno')
+                        .selectAll('.a03_gemelli,.a07_bilancia,.a10_capricorno')
                             .transition()
                             .duration(300)
                             .attr('width',80)
@@ -504,7 +505,7 @@
                             .attr('y', -50)
                     })
                     .on('mouseout', function() {
-                        d3.selectAll('.a05_gemelli,.a09_bilancia,.a12_capricorno')
+                        d3.selectAll('.a03_gemelli,.a07_bilancia,.a10_capricorno')
                             .transition()
                             .duration(100)
                             .attr('width',25)
@@ -514,7 +515,7 @@
                 d3.selectAll('.aria_cBronze')
                     .on('mouseover', function(){
                         d3.select('.bronze')
-                        .selectAll('.a05_gemelli,.a09_bilancia,.a12_capricorno')
+                        .selectAll('.a03_gemelli,.a07_bilancia,.a10_capricorno')
                             .transition()
                             .duration(300)
                             .attr('width',80)
@@ -523,7 +524,7 @@
                             .attr('y', -50)
                     })
                     .on('mouseout', function() {
-                        d3.selectAll('.a05_gemelli,.a09_bilancia,.a12_capricorno')
+                        d3.selectAll('.a03_gemelli,.a07_bilancia,.a10_capricorno')
                             .transition()
                             .duration(100)
                             .attr('width',25)
@@ -535,7 +536,7 @@
                 d3.selectAll('.terra_aGold')
                     .on('mouseover', function(){
                         d3.select('.gold')
-                        .selectAll('.a04_toro,.a08_vergine,.a01_acquario')
+                        .selectAll('.a02_toro,.a06_vergine,.a11_acquario')
                             .transition()
                             .duration(300)
                             //.attr('fill','red')
@@ -545,7 +546,7 @@
                             .attr('y', -50)
                     })
                     .on('mouseout', function() {
-                        d3.selectAll('.a04_toro,.a08_vergine,.a01_acquario')
+                        d3.selectAll('.a02_toro,.a06_vergine,.a11_acquario')
                             .transition()
                             .duration(100)
                             .attr('width',25)
@@ -555,7 +556,7 @@
                 d3.selectAll('.terra_bSilver')
                     .on('mouseover', function(){
                         d3.select('.silver')
-                        .selectAll('.a04_toro,.a08_vergine,.a01_acquario')
+                        .selectAll('.a02_toro,.a06_vergine,.a11_acquario')
                             .transition()
                             .duration(300)
                             .attr('width',80)
@@ -564,7 +565,7 @@
                             .attr('y', -50)
                     })
                     .on('mouseout', function() {
-                        d3.selectAll('.a04_toro,.a08_vergine,.a01_acquario')
+                        d3.selectAll('.a02_toro,.a06_vergine,.a11_acquario')
                             .transition()
                             .duration(100)
                             .attr('width',25)
@@ -574,7 +575,7 @@
                 d3.selectAll('.terra_cBronze')
                     .on('mouseover', function(){
                         d3.select('.bronze')
-                        .selectAll('.a04_toro,.a08_vergine,.a01_acquario')
+                        .selectAll('.a02_toro,.a06_vergine,.a11_acquario')
                             .transition()
                             .duration(300)
                             .attr('width',80)
@@ -583,7 +584,7 @@
                             .attr('y', -50)
                     })
                     .on('mouseout', function() {
-                        d3.selectAll('.a04_toro,.a08_vergine,.a01_acquario')
+                        d3.selectAll('.a02_toro,.a06_vergine,.a11_acquario')
                             .transition()
                             .duration(100)
                             .attr('width',25)
