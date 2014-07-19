@@ -3,7 +3,6 @@
 <head>
     <script src="libs/d3.js"></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-    <link rel="stylesheet" href="//rawgithub.com/Caged/d3-tip/master/examples/example-styles.css">
 
 </head>
 
@@ -13,6 +12,37 @@
         font-size: 10pt;
         font-weight: 200;
     }
+    
+    .d3-tip {
+  line-height: 1;
+  font-weight: lighter;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: gold;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  pointer-events: none;
+}
+ 
+    /* Eastward tooltips */
+.d3-tip.e:after {
+  content: "\25C0";
+  margin: -4px 0 0 0;
+  top: 50%;
+  left: -8px;
+}
+    
 </style>
 
 <body>
@@ -58,7 +88,7 @@
 
             var countries = d3.nest()
                 .key(function (d) {
-                    return d.team;
+                    return d.country;
                 })
                 .rollup(function (d) {
                     return {
@@ -109,7 +139,7 @@
 
             /* grafico GDP rect */
             groups.append('rect')
-                .attr('x', 700)
+                .attr('x', 675)
                 .attr('y', 25)
                 .attr('width', function (d) {
                     return mapGdp(d.values.gdp)
@@ -129,16 +159,25 @@
                 .domain([0, maxGold])
                 .range([0, 100])
 
+            /* Initialize tooltip */
+            tip = d3.tip().attr('class', 'd3-tip').html(function (d) {
+                return d.values.gold;
+            });
+            d3.select('svg').call(tip)
+
+            /* ORO */
             groups.append('rect')
                 .attr('x', function (d, i) {
-                    return 550 - mapCalc_gold(d.values.gold)
+                    return 575 - mapCalc_gold(d.values.gold)
                 })
                 .attr('y', 25)
                 .attr('width', function (d) {
                     return mapCalc_gold(d.values.gold)
                 })
                 .attr('height', 20)
-                .style('fill', 'gold');
+                .style('fill', 'gold')
+                .on('mouseover', tip.show)
+                .on('mouseout', tip.hide);
 
             /* grafico ARGENTO */
             var maxSilv = d3.max(countries, function (d) {
@@ -151,7 +190,7 @@
 
             groups.append('rect')
                 .attr('x', function (d, i) {
-                    return 550 - mapCalc_silver(d.values.silver) - mapCalc_gold(d.values.gold)
+                    return 575 - mapCalc_silver(d.values.silver) - mapCalc_gold(d.values.gold)
                 })
                 .attr('y', 25)
                 .attr('width', function (d) {
@@ -171,7 +210,7 @@
 
             groups.append('rect')
                 .attr('x', function (d, i) {
-                    return 550 - mapCalc_bronze(d.values.bronze) - mapCalc_silver(d.values.silver) - mapCalc_gold(d.values.gold)
+                    return 575 - mapCalc_bronze(d.values.bronze) - mapCalc_silver(d.values.silver) - mapCalc_gold(d.values.gold)
                 })
                 .attr('y', 25)
                 .attr('width', function (d) {
