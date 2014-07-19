@@ -165,6 +165,9 @@
                     })
                     .interpolate('cardinal-closed')
                 
+                var color = d3.scale.ordinal()
+                    .range(["#308fef", "#5fa9f3", "#1176db"]);
+
                 //////////////////////////////////////////////////////////////////
                 // Segni zodiacali
                 //////////////////////////////////////////////////////////////////
@@ -181,6 +184,9 @@
                     .attr('d',function(d,i){
                         return pathMedal_small(d.values) 
                     })
+                    .style("fill", function (d,i) {
+                        return color(d.values.length);
+                    })
                     .transition()
                     .delay(function (d,i) {
                         return i*300
@@ -189,7 +195,7 @@
                     .attr('d', function(d, i){
                         return pathMedal(d.values)   
                     })
-                    .style('fill', 'blue')
+                
                 
                 groups.selectAll('.gr_sign')
                     .data(function(d){
@@ -234,7 +240,7 @@
                     .append('g')
                     .attr('class', 'elem')   
                     .attr('transform', function(d, i){
-                        return 'translate(' + (i+0.8)*450 + ',650)' // (traslazione x) , (traslazione y) 
+                        return 'translate(' + (i+0.8)*450 + ',600)' // (traslazione x) , (traslazione y) 
                     })
                 
                 groups_b.append('path')
