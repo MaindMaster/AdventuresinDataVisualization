@@ -165,8 +165,9 @@
                     })
                     .interpolate('cardinal-closed')
                 
-                var color = d3.scale.ordinal()
-                    .range(["#308fef", "#5fa9f3", "#1176db"]);
+                var color = d3.scale.linear()
+                    .domain([0,1,2])
+                    .range(["red", "yellow", "green"]);
 
                 //////////////////////////////////////////////////////////////////
                 // Segni zodiacali
@@ -185,7 +186,7 @@
                         return pathMedal_small(d.values) 
                     })
                     .style("fill", function (d,i) {
-                        return color(d.values.length);
+                        return  color(i)
                     })
                     .transition()
                     .delay(function (d,i) {
@@ -195,9 +196,18 @@
                     .attr('d', function(d, i){
                         return pathMedal(d.values)   
                     })
+                    
+                var group_sign = groups.append('g')
+                        .attr('opacity', 0)
                 
+                group_sign.transition()
+                        .duration(200)
+                        .delay(function(d, i){
+                            return i*300 + 300;
+                        })
+                        .attr('opacity', 1)
                 
-                groups.selectAll('.gr_sign')
+                group_sign.selectAll('.gr_sign')
                     .data(function(d){
                         return d.values;   
                     })
@@ -206,29 +216,25 @@
                     .attr('transform', function(d, i){
                         return 'rotate('+360/12*i+'),translate(150,0)'
                     })
-                
-                    //inserisco il nome/l'icona identificativa del segno
                     .attr('class', 'gr_sign')
-                    //.append('text')
-                    //    .text(function (d,i){
-                    //    return d.key
                     .append('svg:image')
                     //.attr('xlink:href', 'library/zodiac_signs.svg')
                     .attr('xlink:href', function(d){
                         return 'library/images/' + d.key + '.svg';
                     })
-                    .attr('width', 0)
-                    .attr('height', 0 )
                     .attr('x', 0)
                     .attr('y',-20)
-                    .transition()
-                    .delay(100)
-                    /*.delay(function (d,i) {
-                        return (i+0.4)*200
-                    })*/
-                    .duration(200)
                     .attr('width', 25)
-                    .attr('height', 25)
+                    .attr('height',35)
+                    
+                
+                
+                    //inserisco il nome/l'icona identificativa del segno
+                    
+                    //.append('text')
+                    //    .text(function (d,i){
+                    //    return d.key
+               
                 
                 //////////////////////////////////////////////////////////////////
                 //elementi
