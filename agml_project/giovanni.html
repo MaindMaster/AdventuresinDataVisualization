@@ -6,8 +6,9 @@
     <body>
         
         <style>
-            .red {
-              font-family: tahoma,sans-serif;
+            .text {
+                font-family: tahoma,sans-serif;
+                /*fill:red;*/
             }
         </style>
         
@@ -227,7 +228,24 @@
                     .attr('y',-20)
                     .attr('width', 25)
                     .attr('height',25)
-
+                
+                //ingrandisco le icone se faccio il mousehover
+                d3.selectAll('image')
+                    .on('mouseover', function(){
+                        d3.select(this)
+                            .transition()
+                            .duration(200)
+                            .attr('width',70)
+                            .attr('height',70)
+                    })
+                    .on('mouseout', function() {
+                        d3.select(this)
+                            .transition()
+                            .duration(100)
+                            .attr('width',25)
+                            .attr('height',25)
+                      })
+                
                 //////////////////////////////////////////////////////////////////
                 //elementi
                 //////////////////////////////////////////////////////////////////
@@ -287,59 +305,32 @@
                     .attr('y',-15)
                     .attr('width', 25)
                     .attr('height',25)
-                
-                
-                
-                /*
-                groups_b.append('path')
-                    .attr('d', function(d, i){
-                        return pathForElement_small(d.values)   
-                    })
-                    .transition()
-                    .duration(400)
-                    .attr('d', function(d, i){
-                        return pathForElement(d.values)   
-                    })
-                    .style("fill", function (d,i) {
-                        return  color(i)
+                    .attr('id', function (d,i) {
+                        return d.key;
                     })
                 
-                groups_b.selectAll('.gr_sign_2')
-                    .data(function(d){
-                        return d.values;   
-                    })
-                    .enter()
-                    .append('g')
-                    .attr('transform', function(d, i){
-                        return 'rotate('+360/4*i+'),translate(110,0)' // (distanza dal centro),(rotazione)
-                    })
+                //con il mousehover su un elemento evidenzio 3 segni zodiacali
+                d3.selectAll('#acqua')
+                    .on('click', function(){
+                        d3.select(this)
+                            //.transition()
+                            //.duration(300)
+                            .attr('width',200)
+                            .attr('height',200)
+                })
                 
-                    //inserisco il nome/l'iscona identificativa dell'elemento
-                    .attr('class', 'gr_sign_2')
-                    //.append('text')
-                    //    .text(function (d,i){
-                    //    return d.key
-                    .append('svg:image')
-                    .attr('xlink:href', function(d){
-                        return 'library/images/' + d.key + '.svg';
-                    })
-                    .attr('width', 0)
-                    .attr('height', 0 )
-                    .attr('x', 0)
-                    .attr('y',-15)
-                    .transition()
-                    .delay(400)
-                    .duration(200)
-                    .attr('width', 25)
-                    .attr('height', 25)*/
-
                 //////////////////////////////////////////////////////////////////
                 //legenda
                 //////////////////////////////////////////////////////////////////
                 var labels = ['Gold', 'Silver', 'Bronze']
                 
                 groups_b.append('text')
-                    .attr('class','red')
+                    .attr('class','text')
+                    .attr('opacity', 0)
+                    .transition()
+                    .duration(1000)
+                    .delay(600)
+                    .attr('opacity', 1)
                     .text(function(d,i){
                         return labels[i]  
                     })
