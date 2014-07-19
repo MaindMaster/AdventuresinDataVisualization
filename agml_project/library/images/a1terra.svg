@@ -7,13 +7,12 @@
 	 height="141.732px" viewBox="0 0 141.732 141.732" enable-background="new 0 0 141.732 141.732" xml:space="preserve">
 <sodipodi:namedview  inkscape:pageshadow="2" fit-margin-right="0" inkscape:pageopacity="0.0" inkscape:window-height="1018" fit-margin-bottom="0" inkscape:window-x="-8" inkscape:document-units="px" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:window-width="1920" inkscape:current-layer="layer1" fit-margin-left="0" fit-margin-top="0" showgrid="false" inkscape:cy="189.24062" inkscape:cx="484.0582" inkscape:zoom="0.7" borderopacity="1.0" bordercolor="#666666" pagecolor="#ffffff" id="base">
 	</sodipodi:namedview>
-<path fill="none" stroke="#1D1D1B" stroke-width="8" stroke-linecap="round" stroke-linejoin="bevel" stroke-miterlimit="10" d="
-	M60.779,14.92C38.173,17.611,32.79,36.449,32.252,57.71c0.539,16.417,12.38,26.644,26.643,36.871
-	c12.11,8.073,10.227,26.374-4.307,28.526c16.417,8.074,26.643,1.884,34.178-8.342c4.576-8.075,4.576-18.301-5.381-26.375
-	c8.073,4.037,14.263,6.19,24.489,1.884c-6.189-1.884-10.227-2.96-12.38-9.149c-4.036-14.265,12.649-16.147,12.649-36.602
-	c0-12.111-10.766-29.604-26.913-29.604"/>
-<path fill="none" stroke="#1D1D1B" stroke-width="8" stroke-linecap="round" stroke-linejoin="bevel" stroke-miterlimit="10" d="
-	M82.169,16.265c5.383,5.382,13.456,12.109,8.073,26.913c-5.382-9.42-14.802-8.075-14.802-2.692
-	c4.037,9.42,2.692,21.53-10.764,24.221c4.036-9.419,2.692-16.148-8.074-14.801c-6.459,0.538-8.881-7.805-8.073-14.803
-	c1.345-10.765,7.804-18.031,13.456-20.184"/>
+<path fill="none" stroke="#000000" stroke-width="9" stroke-linecap="square" stroke-linejoin="bevel" stroke-miterlimit="10" d="
+	M91.964,83.01c15.973-15.974,27.723-61.893,26.928-61.679c0.215-0.795-45.703,10.955-61.678,26.932
+	C41.257,64.217,42.906,77.05,51.561,86.907c0,0,0.535,0.641,0.835,0.92c0.281,0.303,0.567,0.6,0.861,0.895
+	C53.258,88.719,76.007,98.966,91.964,83.01z"/>
+<line fill="none" stroke="#000000" stroke-width="9" stroke-linecap="square" stroke-linejoin="bevel" stroke-miterlimit="10" x1="52.964" y1="88.425" x2="52.964" y2="116.407"/>
+<path fill="none" stroke="#000000" stroke-width="9" stroke-linecap="square" stroke-linejoin="bevel" stroke-miterlimit="10" d="
+	M12.486,117.923c0,0,7.848-3.07,16.405-3.07c8.56,0,22.825,6.479,35.902,6.479c13.077,0,21.059-6.479,36.391-6.479
+	s18.277,6.479,27.137,6.479"/>
 </svg>

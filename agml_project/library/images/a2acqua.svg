@@ -7,22 +7,12 @@
 	 height="141.732px" viewBox="0 0 141.732 141.732" enable-background="new 0 0 141.732 141.732" xml:space="preserve">
 <sodipodi:namedview  inkscape:pageshadow="2" fit-margin-right="0" inkscape:pageopacity="0.0" inkscape:window-height="1018" fit-margin-bottom="0" inkscape:window-x="-8" inkscape:document-units="px" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:window-width="1920" inkscape:current-layer="layer1" fit-margin-left="0" fit-margin-top="0" showgrid="false" inkscape:cy="189.24062" inkscape:cx="484.0582" inkscape:zoom="0.7" borderopacity="1.0" bordercolor="#666666" pagecolor="#ffffff" id="base">
 	</sodipodi:namedview>
-<g>
-	<path fill="#FFFFFF" stroke="#000000" stroke-width="9" stroke-linejoin="round" stroke-miterlimit="10" d="M101.826,25.781
-		c11.006,0,19.926,8.922,19.926,19.926c0,11.006-8.92,19.927-19.926,19.927c-11.004,0-19.926-8.921-19.926-19.927"/>
-	
-		<line fill="none" stroke="#000000" stroke-width="9" stroke-linejoin="round" stroke-miterlimit="10" x1="81.9" y1="45.707" x2="81.9" y2="15.351"/>
-</g>
-<g>
-	<path fill="none" stroke="#000000" stroke-width="9" stroke-linejoin="round" stroke-miterlimit="10" d="M89.826,84.78
-		c11.006,0,19.926,8.922,19.926,19.927c0,11.006-8.92,19.927-19.926,19.927c-11.004,0-19.926-8.921-19.926-19.927"/>
-	
-		<line fill="none" stroke="#000000" stroke-width="9" stroke-linejoin="round" stroke-miterlimit="10" x1="69.9" y1="104.707" x2="69.9" y2="15.351"/>
-</g>
-<g>
-	<path fill="none" stroke="#000000" stroke-width="9" stroke-linejoin="round" stroke-miterlimit="10" d="M34.224,66.531
-		c-11.006,0-19.926,8.921-19.926,19.926s8.92,19.926,19.926,19.926c11.004,0,19.926-8.921,19.926-19.926"/>
-	
-		<line fill="none" stroke="#000000" stroke-width="9" stroke-linejoin="round" stroke-miterlimit="10" x1="54.15" y1="86.457" x2="54.15" y2="15.351"/>
-</g>
+<path d="M89.077,34.085c7.502,8.736,13.432,15.638,2.854,34.359c-5.08,8.994-6.998,16.249-6.998,22.289
+	c0,10.574,5.883,17.426,10.975,23.352c1.814,2.113,9.633-4.323,7.816-6.438c-7.506-8.735-13.436-15.635-2.854-34.363
+	c13.975-24.739,4.02-36.326-3.977-45.637C95.077,25.535,87.26,31.971,89.077,34.085z M78.188,107.647
+	c-7.502-8.735-13.434-15.635-2.854-34.363c13.977-24.739,4.021-36.326-3.977-45.637c-1.816-2.112-9.631,4.325-7.815,6.438
+	c7.504,8.736,13.433,15.638,2.855,34.359c-5.081,8.994-7,16.249-7,22.289c0,10.574,5.884,17.426,10.975,23.352
+	C72.19,116.198,80.005,109.76,78.188,107.647z M52.657,107.647c-7.504-8.735-13.434-15.635-2.854-34.363
+	c13.977-24.739,4.021-36.326-3.978-45.637c-1.815-2.112-9.632,4.325-7.815,6.438c7.505,8.736,13.433,15.637,2.855,34.359
+	c-5.083,8.994-7,16.249-7,22.289c0,10.574,5.884,17.426,10.975,23.352C46.656,116.198,54.473,109.76,52.657,107.647z"/>
 </svg>
