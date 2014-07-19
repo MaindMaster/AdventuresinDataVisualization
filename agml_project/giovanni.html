@@ -328,18 +328,19 @@
                 
                 //con il mousehover su un elemento evidenzio 3 segni zodiacali
                 //acqua
-                d3.selectAll('.acquagold')
+                d3.selectAll('.acquaGold')
                     .on('mouseover', function(){
                         //d3.select('svg.gold').selectAll('.06_cancro,.10_scorpione,.02_pesci')
-                        d3.select('.gold').selectAll('.06_cancro')
+                        d3.select('.gold')//'.05_gemelli')
+                        //.select('05_gemelli')
                             //.transition()
                             //.duration(300)
                             //.attr('fill','red')
                             .attr('width',100)
                             .attr('height',100)
                     })
-                
-                d3.selectAll('.acquasilver')
+                /*
+                d3.selectAll('.acquaSilver')
                     .on('mouseover', function(){
                         d3.select('.silver').selectAll('image')
                             .transition()
@@ -349,7 +350,7 @@
                             .attr('height',100)
                     })
                 
-                d3.selectAll('.acquabronze')
+                d3.selectAll('.acquaBronze')
                     .on('mouseover', function(){
                         d3.select('.bronze').selectAll('image')
                             .transition()
@@ -357,7 +358,7 @@
                             //.attr('fill','red')
                             .attr('width',100)
                             .attr('height',100)
-                    })
+                    })*/
                 
                 //////////////////////////////////////////////////////////////////
                 //legenda
