@@ -1,0 +1,336 @@
+<html>
+
+    <head>
+        <script src="libs/d3.min.js"></script>
+    </head>
+    
+    
+    <body>
+        <svg width="800" height="500"></svg>
+        
+        <script>
+            
+                 d3.csv('Olimpic_games_continent.csv', loaded);
+            
+            function loaded(data){
+                
+                
+                var podium = d3.nest()
+                                .key(function(d){
+                                    return d.full_name;
+                                })
+                                .entries(data);
+                
+                
+                podium.sort(function(a, b){
+                    
+                    var medalscorea=0;
+                    for(var i=0; i<a.values.length;i++){
+                        var medal=a.values[i].medal;
+                        
+                        if(medal=='Gold')medalscorea+=3;
+                        if(medal=='Silver')medalscorea+=2;
+                        if(medal=='Bronze')medalscorea+=1;
+                    }
+                        
+                    
+                    var medalscoreb=0;
+                    for(var i=0; i<b.values.length;i++){
+                        var medal=b.values[i].medal;
+                        
+                        if(medal=='Gold')medalscoreb+=3;
+                        if(medal=='Silver')medalscoreb+=2;
+                        if(medal=='Bronze')medalscoreb+=1;
+                    }
+                    
+                    if(medalscorea==medalscoreb)
+                        return d3.descending(a.values.length, b.values.length);
+                    else 
+                       return d3.descending(medalscorea, medalscoreb);
+                    
+                })
+            
+                
+                
+            
+            
+            
+                           var podiumWidth=160;
+                            var podiumh=200;
+            var podiumstart=163;    
+            var podiumstarty=50;
+            
+            
+            
+            
+                    var Goldgradient = d3.select('svg')
+    .append("linearGradient")
+    .attr("y1",  podiumstarty)
+    .attr("y2", podiumstarty+podiumh)
+    .attr("x1", "0")
+    .attr("x2", "0")
+    .attr("id", "Goldgradient")
+    .attr("gradientUnits", "userSpaceOnUse")
+
+Goldgradient
+    .append("stop")
+    .attr("offset", "0")
+    .attr("stop-color", "#F2F20A")
+
+Goldgradient
+    .append("stop")
+    .attr("offset", "0.5")
+    .attr("stop-color", "#D4A017")
+        
+
+
+                    var Silvergradient = d3.select('svg')
+    .append("linearGradient")
+    .attr("y1",  podiumstarty+podiumh*1/3)
+    .attr("y2", podiumstarty+podiumh)
+    .attr("x1", "0")
+    .attr("x2", "0")
+    .attr("id", "Silvergradient")
+    .attr("gradientUnits", "userSpaceOnUse")
+
+Silvergradient
+    .append("stop")
+    .attr("offset", "0")
+    .attr("stop-color", "#E6E6D5")
+
+Silvergradient
+    .append("stop")
+    .attr("offset", "0.5")
+    .attr("stop-color", "#C0C0C0")
+
+
+
+
+              var Bronzgradient = d3.select('svg')
+    .append("linearGradient")
+    .attr("y1",  podiumstarty+podiumh)
+    .attr("y2", podiumstarty+podiumh*1/3)
+    .attr("x1", "0")
+    .attr("x2", "0")
+    .attr("id", "Bronzgradient")
+    .attr("gradientUnits", "userSpaceOnUse")
+
+Bronzgradient
+    .append("stop")
+    .attr("offset", "0")
+    .attr("stop-color", "#800000")
+
+Bronzgradient
+    .append("stop")
+    .attr("offset", "0.5")
+    .attr("stop-color", "#CD5C5C")
+            
+
+
+
+
+
+            
+            
+         
+                d3.select('svg')
+                    .append('rect')
+                    .attr('width', podiumWidth)
+                    .attr('height', 2/3*podiumh)
+                    .attr('fill','url(#Silvergradient)')
+                .attr('x', podiumstart)
+                .attr('y', podiumstarty+podiumh*1/3)
+                .attr('rx', 10)
+                .attr('ry', 10)
+                
+                  d3.select('svg')
+                  .append('rect')
+                    .attr('width', podiumWidth)
+                    .attr('height', podiumh)
+                  .attr('fill','url(#Goldgradient)')
+                    .attr('x', podiumstart+podiumWidth)
+                .attr('y', podiumstarty)
+                .attr('rx', 10)
+                .attr('ry', 10)
+                  
+                    d3.select('svg')
+                  .append('rect')
+                    .attr('width', podiumWidth)
+                    .attr('height', 1/3*podiumh)
+                .attr('fill','url(#Bronzgradient)')
+                        .attr('x', podiumstart+2*podiumWidth)
+                .attr('y', podiumstarty+podiumh*2/3)
+               .attr('rx', 10)
+                .attr('ry', 10)
+                    
+                    
+                    var first=podium [0];
+                var second=podium [1];
+                var third=podium [2];
+                 var iconsize=50;
+                
+                d3.select('svg')
+                .append('svg:image')
+                .attr('x', podiumstart+(podiumWidth-iconsize)/2)
+                    .attr('y', podiumstarty+podiumh-iconsize-10)
+                .attr('width', iconsize)
+                    .attr('height', iconsize)
+                .attr('xlink:href','img/icons/'+second.values[0].sport+'.png')
+                
+                
+                          
+                d3.select('svg')
+                .append('svg:image')
+                .attr('x', podiumstart+(podiumWidth-iconsize)/2+podiumWidth)
+                    .attr('y', podiumstarty+podiumh-iconsize-10)
+                .attr('width', iconsize)
+                    .attr('height', iconsize)
+                .attr('xlink:href','img/icons/'+first.values[0].sport+'.png')
+                
+                
+                   d3.select('svg')
+                .append('svg:image')
+                .attr('x', podiumstart+(podiumWidth-iconsize)/2+podiumWidth*2)
+                    .attr('y', podiumstarty+podiumh-iconsize-10)
+                .attr('width', iconsize)
+                    .attr('height', iconsize)
+                .attr('xlink:href','img/icons/'+third.values[0].sport+'.png')
+                   
+            
+                   
+                   //////////////////////   secondo
+                   
+                   
+                  d3.select('svg')
+                .append('text')
+                  .attr('font-family', 'Arial')
+                  .attr('font-size', '18px')
+                  .attr('x', podiumstart)
+                   .attr('y', podiumstarty)
+                  .text(second.key.substring(0, 18))
+                  
+                             d3.select('svg')
+                .append('text')
+                  .attr('font-family', 'Arial')
+                  .attr('font-size', '18px')
+                  .attr('x', podiumstart)
+                   .attr('y', podiumstarty+20)
+                  .text(second.values[0].age)
+                             
+                             
+                             
+                                           d3.select('svg')
+                .append('text')
+                  .attr('font-family', 'Arial')
+                  .attr('font-size', '18px')
+                  .attr('x', podiumstart)
+                   .attr('y', podiumstarty+40)
+                  .text(second.values[0].team)
+                 
+                                           
+                                                                                  d3.select('svg')
+                .append('text')
+                  .attr('font-family', 'Arial')
+                  .attr('font-size', '18px')
+                  .attr('x', podiumstart)
+                   .attr('y', podiumstarty+60)
+                  .text(second.values[0].gender)
+                                                                                  
+                                                                                  
+                                                                                  
+         //////////////////////   first                                                                
+                                                                                  
+                                                                                  
+                      d3.select('svg')
+                .append('text')
+                  .attr('font-family', 'Arial')
+                  .attr('font-size', '18px')
+                  .attr('x', podiumstart+podiumWidth)
+                   .attr('y', podiumstarty)
+                  .text(first.key.substring(0, 18))
+                
+                      
+                      
+                d3.select('svg')
+                .append('text')
+                  .attr('font-family', 'Arial')
+                  .attr('font-size', '18px')
+                  .attr('x', podiumstart+podiumWidth)
+                   .attr('y', podiumstarty+20)
+                  .text(first.values[0].age)
+                             
+                             
+                             
+                d3.select('svg')
+                .append('text')
+                  .attr('font-family', 'Arial')
+                  .attr('font-size', '18px')
+                  .attr('x', podiumstart+podiumWidth)
+                   .attr('y', podiumstarty+40)
+                  .text(first.values[0].team)
+                 
+                                           
+                 d3.select('svg')
+                .append('text')
+                  .attr('font-family', 'Arial')
+                  .attr('font-size', '18px')
+                  .attr('x', podiumstart+podiumWidth)
+                   .attr('y', podiumstarty+60)
+                  .text(first.values[0].gender)                                                                  
+                 
+                   
+                            //////////////////////   third                                                                
+                                                                                  
+                                                                                  
+                      d3.select('svg')
+                .append('text')
+                  .attr('font-family', 'Arial')
+                  .attr('font-size', '18px')
+                  .attr('x', podiumstart+2*podiumWidth)
+                   .attr('y', podiumstarty)
+                  .text(third.key.substring(0, 16))
+                
+                      
+                      
+                d3.select('svg')
+                .append('text')
+                  .attr('font-family', 'Arial')
+                  .attr('font-size', '18px')
+                  .attr('x', podiumstart+2*podiumWidth)
+                   .attr('y', podiumstarty+20)
+                  .text(third.values[0].age)
+                             
+                             
+                             
+                d3.select('svg')
+                .append('text')
+                  .attr('font-family', 'Arial')
+                  .attr('font-size', '18px')
+                  .attr('x', podiumstart+2*podiumWidth)
+                   .attr('y', podiumstarty+40)
+                  .text(third.values[0].team)
+                 
+                                           
+                 d3.select('svg')
+                .append('text')
+                  .attr('font-family', 'Arial')
+                  .attr('font-size', '18px')
+                  .attr('x', podiumstart+2*podiumWidth)
+                   .attr('y', podiumstarty+60)
+                  .text(third.values[0].gender)  
+                   
+                
+                    
+            }
+
+           
+            
+            
+            
+            
+            
+        </script>
+    </body>
+    
+    
+</html>
