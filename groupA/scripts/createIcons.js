@@ -39,6 +39,7 @@ for(var riga=0; riga<3; riga++){
 }
 
 
+var pieCharGroupId='pieCharGroup';
 
 var iconSvgHeight=3*iconSize+3*inconOffset;
 var isOpen=false;
@@ -54,6 +55,8 @@ function sportIconClicked(index)
 
 	if(icons[index].open)
 	{
+		d3.selectAll('.'+pieCharGroupId).remove();
+
 		for(var i=0;i<icons.length;i++)
 		{
 			if(i==index)
@@ -69,7 +72,6 @@ function sportIconClicked(index)
 			}
 			else
 			{
-
 				icons[i].d3Img
 				.attr('class','sportIcon')
 				.transition()
@@ -125,12 +127,33 @@ function createPieChart()
 	d3.csv('Olimpic_games_continent.csv', function(data)
 	{
 
-		createPiePerGender('Male');
-		createPiePerGender('Female');
+		maleData=extractData('Male');
+		femaleData=extractData('Female');
 
-		function createPiePerGender(gender)
+		var tmp;
+		tmp=d3.nest()
+		.key( function(d) { return d.name; })
+		.entries(maleData);
+
+		var maleLength=tmp.length;
+
+		tmp=d3.nest()
+		.key( function(d) { return d.name; })
+		.entries(femaleData);
+
+		var femaleLength=tmp.length;
+
+		var tot=maleLength+femaleLength;
+		maleLength/=tot;
+		femaleLength/=tot;
+
+
+		createPiePerGender('Male',"Men's",maleData, maleLength,'#c9f0f3','#82eff7');
+		createPiePerGender('Female',"Women's",femaleData,femaleLength,'#f3c9c9','#ee7b7b');
+
+
+		function extractData(gender)
 		{
-
 			currentData=[];
 			for (var i = data.length - 1; i >= 0; i--) {
 				if(data[i].sport==sports[sportIndex] && data[i].gender==gender){
@@ -138,21 +161,30 @@ function createPieChart()
 				}
 			}
 
+			return currentData;
+		}
+
+		function createPiePerGender(gender,toRemove,currentData, percent, colBar, overCol)
+		{
 			var newData=processData(currentData);
 
 			var offset=7;
 
-			var sourceHeight=iconSize;
+			var sourceHeight=iconSize*percent;
 			
 
-			var sourceX, targetX;
+			var sourceX, targetX, startLabel, location;
 			if(gender=='Male'){
 				sourceX=width/2-iconSize/2;
 				targetX=textOffset;
+				startLabel=textOffset-5;
+				location='end';
 			}
 			else{
 				sourceX=width/2+iconSize/2;
 				targetX=width-textOffset;
+				startLabel=targetX+5;
+				location='start';
 			}
 
 			targetHs=[];
@@ -163,33 +195,107 @@ function createPieChart()
 			for(key in newData){
 				var tmp=newData[key]+1;
 				totalH+=tmp;
-				targetHs.push(tmp);
+				var label=key.replace(toRemove,'');
+				targetHs.push({value: tmp, evt: label});
 				totEvents++;
 			}
+
+			targetHs= targetHs.sort(function(a, b) { 
+				if(a.value==b.value)
+				{
+					if ( a.evt < b.evt )
+						return -1;
+					if ( a.evt > b.evt )
+						return 1;
+					return 0;
+				}
+				return b.value - a.value; 
+			});
+
 
 			var sourceLocalH=sourceHeight/totEvents;
 			var scaling=totalH/(iconSvgHeight-offset*(totEvents-1));
 
 
 
+
+
 			var prevH=0;
+
+			var group=d3.select('#iconsSVG')
+			.append("g")
+			.attr('class',pieCharGroupId);
+
+
 
 			for(var i=0;i<targetHs.length;i++)
 			{
-				var tmp=targetHs[i];
+				var tmp=targetHs[i].value;
 				var points=	targetX+','+prevH+' '+
 				targetX+','+(tmp/scaling+prevH)+' '+
-				sourceX+','+(sourceLocalH*(i+1)+iconSvgHeight/2-iconSize/2)+' '+
-				sourceX+','+(sourceLocalH*i+iconSvgHeight/2-iconSize/2);
+				sourceX+','+(sourceLocalH*(i+1)+iconSvgHeight/2-sourceHeight/2)+' '+
+				sourceX+','+(sourceLocalH*i+iconSvgHeight/2-sourceHeight/2);
+
+				var points0 =
+				sourceX+','+prevH+' '+
+				sourceX+','+(tmp/scaling+prevH)+' '+
+				sourceX+','+(sourceLocalH*(i+1)+iconSvgHeight/2-sourceHeight/2)+' '+
+				sourceX+','+(sourceLocalH*i+iconSvgHeight/2-sourceHeight/2);
+
+				var centerTextY=(prevH+(tmp/scaling+prevH))/2;
 
 
 				prevH+=tmp/scaling+offset;
 				
+				group.append("text")
+				.attr("font-family", "Arial")
+				.attr("font-size", "10px")
+				.attr('y',centerTextY)
+				.attr('x',sourceX)
+				.text(targetHs[i].evt)
+				.style("opacity", 0)
+				//.on('mouseover',function(){d3.select(this).attr('font-weight','bold')})
+				//.on('mouseout',function(){d3.select(this).attr('font-weight','regular')})
 
-				var d3Img=d3.select('#iconsSVG')
+				.attr('text-anchor',location)
+				// .attr('textLength',textOffset)
+				.transition()
+				.duration(500)
+				.style("opacity", 1)
+				.attr('x',startLabel)
+
+				group
 				.append("polygon")
-				.attr("points", points)
-				.attr("class", gender);
+				// .data(tmp)
+				.attr("points", points0)
+				.attr("class", gender)
+				.style("opacity", 0)
+				.attr('data',tmp)
+				.attr('fill',colBar)
+				.on('mouseover',function(d){	
+					var tmp=d3.select(this);
+					var data=tmp.attr('data');
+
+					div.transition()        
+					.duration(200)      
+					.style("opacity", .9);      
+					div.html(data)  
+					.style("left", (d3.event.pageX) + "px")     
+					.style("top", (d3.event.pageY - 28) + "px"); 
+					
+					tmp.attr('fill',overCol); 
+				})
+				.on('mouseout',function(){
+					div.transition()        
+					.duration(200)      
+					.style("opacity", 0);
+
+					d3.select(this).attr('fill',colBar);
+				})
+				.transition()
+				.duration(500)
+				.style("opacity", 1)
+				.attr("points", points);
 			}
 		}
 	});

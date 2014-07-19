@@ -23,7 +23,11 @@
 	var iconSize=120;
 	var inconOffset=(width-iconSize*6)/5;
 
-	var sports=['Archery','Boxing','Diving','Gymnastics','Sailing','Taekwando','Athletics','Canoe','Equestrian','Judo','Shooting','Weightlifting','Badminton','Cycling','Fencing','Rowing','Swimming','Wrestling'];
+	var div = d3.select("body").append("div")   
+    .attr("class", "tooltip")               
+    .style("opacity", 0);
+
+	var sports=['Archery','Boxing','Diving','Gymnastics','Sailing','Taekwondo','Athletics','Canoeing','Equestrianism','Judo','Shooting','Weightlifting','Badminton','Cycling','Fencing','Rowing','Swimming','Wrestling'];
 	</script>
 
 	<script type="text/javascript" src="scripts/tagCloud.js"></script>
