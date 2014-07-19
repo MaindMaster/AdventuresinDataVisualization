@@ -31,6 +31,17 @@
                     }
                 })
             }
+            
+            
+            function calc_silver(d) {
+                return d3.sum(d, function (c) {
+                    if (c.medal == 'Silver') {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                })
+            }
 
             var countries = d3.nest()
                 .key(function (d) {
@@ -40,6 +51,7 @@
                     return {
                         gdp: +d[0].gdp,
                         gold: calc_gold(d)
+                        silver: calc_silver(d)
                     }
                 })
                 .entries(data);
