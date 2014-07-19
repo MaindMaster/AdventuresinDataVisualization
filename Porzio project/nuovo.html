@@ -4,7 +4,7 @@
     </head>
     
     <body>
-        <svg></svg>
+        <svg height="100%" width="100%"></svg>
         
         <script>
 
@@ -21,7 +21,7 @@ d3.select('svg')
   .data(dataset)
   .enter()
   .append('rect')
-  .attr('width', function(d, i){ return d*20 })
+  .attr('width', function(d, i){ return d*10 })
   .attr('height', 400/dataset.length-1)
   .attr('y', function(d, i){ return mapy(i)})
 </script>
