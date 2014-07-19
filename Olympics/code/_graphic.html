@@ -23,7 +23,7 @@
     <script>
         d3.csv('../data/OlympicsComplete.csv', function (data) {
 
-            /*calcolo delle medaglie d'oro */
+            /* calcolo oro */
             function calc_gold(d) {
                 return d3.sum(d, function (c) {
                     if (c.medal == 'Gold') {
@@ -34,7 +34,7 @@
                 })
             }
 
-            /* calcolo delle medaglie d'argento */
+            /* calcolo argento */
             function calc_silver(d) {
                 return d3.sum(d, function (c) {
                     if (c.medal == 'Silver') {
@@ -45,7 +45,7 @@
                 })
             }
 
-            /*calcolo delle medaglie di bronzo */
+            /* calcolo bronzo */
             function calc_bronze(d) {
                 return d3.sum(d, function (c) {
                     if (c.medal == 'Bronze') {
@@ -56,7 +56,6 @@
                 })
             }
 
-
             var countries = d3.nest()
                 .key(function (d) {
                     return d.team;
@@ -66,7 +65,6 @@
                         gdp: +d[0].gdp,
                         gold: calc_gold(d),
                         silver: calc_silver(d),
-                        bronze: calc_bronze(d),
                     }
                 })
                 .entries(data);
@@ -82,7 +80,7 @@
 
             console.log(countries);
 
-            /* nomi degli stati */
+            /* testi*/
             groups.append('text')
                 .text(function (d, i) {
                     return d.key
@@ -108,8 +106,7 @@
             });
             d3.select('svg').call(tip)
 
-
-            /* grafico GDP */
+            /* grafico GDP rect */
             groups.append('rect')
                 .attr('x', 700)
                 .attr('y', 25)
@@ -121,6 +118,7 @@
                 .on('mouseover', tip.show)
                 .on('mouseout', tip.hide);
 
+
             /* grafico ORO */
             var maxGold = d3.max(countries, function (d) {
                 return d.values.gold;
@@ -128,7 +126,7 @@
 
             var mapCalc_gold = d3.scale.linear()
                 .domain([0, maxGold])
-                .range([0, 200])
+                .range([0, 100])
 
             groups.append('rect')
                 .attr('x', function (d, i) {
@@ -141,14 +139,14 @@
                 .attr('height', 20)
                 .style('fill', 'gold');
 
-            /* grafico Argento */
+            /* grafico ARGENTO */
             var maxSilv = d3.max(countries, function (d) {
                 return d.values.silver;
             });
 
             var mapCalc_silver = d3.scale.linear()
                 .domain([0, maxSilv])
-                .range([0, 200])
+                .range([0, 100])
 
             groups.append('rect')
                 .attr('x', function (d, i) {
