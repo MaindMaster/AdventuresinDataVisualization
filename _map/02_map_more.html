@@ -29,9 +29,9 @@
             var cols = d3.scale.category20();
             
             svg.selectAll('path')
-                .data(function(){
-                    return data.features;  
-                })
+//                .data(function(){
+//                  return data.features;  
+//                })
                 .enter()
                 .append('path')
                 .attr('d', function(d, i){

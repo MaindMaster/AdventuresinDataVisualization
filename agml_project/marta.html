@@ -49,16 +49,6 @@
                 .attr('r', function(d){
                     return mapMedal(d.medal)
                 })
-//                .style ('opacity', function(d) {
-//                    if(d.gender=="Female"){
-//                        return 0
-//                    }
-//                })
-               .style ('opacity', function(d) {
-                    if(d.gender=="Female"){
-                        return 0
-                    }
-                })
                 .style ('fill', function(d) {
                    if(d.gender=="Male"){
                         return "blue"
@@ -66,7 +56,6 @@
                    if(d.gender=="Female"){
                         return "#ff1eff"
                     }
-            
                     })
         }
         </script>
