@@ -4,6 +4,8 @@
          <title>first test</title>
     </head>
     <body>
+        <h3 style="font-style:italic; color:#2F4F4F">Male athletes with and without medal </h3>
+        
         <svg> </svg>
         
         <script> 
@@ -54,15 +56,14 @@
                     }
                    if(d.gender=="Female"){
                         return "#ff1eff"
+                   }
+                    })
+            
+                .style ('opacity', function(d) {
+                    if(d.gender=="Female"){
+                        return 0
                     }
-                }) 
-                .style('opacity', function(d) {
-                    if(d.medal=="Silver") return 0
-                    if(d.medal=="Bronze") return 0
-                    if(d.medal=="") return 0
-                })
+                })            
         }
-             </script>
-    </body>
+        </script>
 </htlm>
-

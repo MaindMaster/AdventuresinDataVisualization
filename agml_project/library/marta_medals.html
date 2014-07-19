@@ -33,7 +33,7 @@
                     .domain(["", "Gold", "Silver", "Bronze"])
                     .range([1, 4, 3, 2])
             
-            console.log( mapMedal("Gold") )
+            console.log(mapMedal("Gold"))
             
             svg.selectAll('circle')
                 .data(data)
@@ -48,20 +48,15 @@
                 .attr('r', function(d){
                     return mapMedal(d.medal)
                 })
-                .style ('fill', function(d) {
-                   if(d.gender=="Male"){
-                        return "blue"
-                    }
-                   if(d.gender=="Female"){
-                        return "#ff1eff"
-                    }
-            
-                    })
-                .style ('opacity', function(d) {
-                    if(d.gender=="Female"){
-                        return 0
-                    }
-                })            
+                .style ('fill', function(d, i) {
+                   if(d.medal=="Gold") return "#ffd700";
+                   if(d.medal=="Silver") return "#c0c0c0";
+                   if(d.medal=="Bronze") return "#cd7f32";
+                   else return "black"
+                }) 
+
         }
-        </script>
+             </script>
+    </body>
 </htlm>
+

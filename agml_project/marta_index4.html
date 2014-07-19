@@ -7,9 +7,15 @@
         <svg> </svg>
         
         <script> 
-        d3.csv('../data/olympics_2012.csv', loaded) 
+        d3.csv('../data/olympics_2012.csv', function(data1){
+            d3.json('../_map/geojson/world_map.json', function(data2){
+                loaded(data1, data2)
+            })
+        }) 
         
-        function loaded(data){
+        
+        
+        function loaded(data, map){
             var w = 900;
             var h = 700;
 
@@ -22,6 +28,24 @@
             var proj = d3.geo.mercator()
                 .scale((w+1)/2/Math.PI)
                 .translate([w/2, h/2])
+            
+            
+                        
+            var pathGenerator = d3.geo.path()
+                .projection(proj)
+            
+            svg.selectAll('path')
+                .data(function(){
+                  return map.features;  
+                })
+                .enter()
+                .append('path')
+                .attr('d', function(d, i){
+                    return pathGenerator(d)   
+                })
+                .style('fill', 'white')
+                .style('stroke', 'lightgrey')
+            
             
             data.forEach(function(d){
                     var latlon = (d.born_lat_lon) ? d.born_lat_lon.split(',') : [0,0]
@@ -49,11 +73,18 @@
                     return mapMedal(d.medal)
                 })
                 .style ('fill', function(d) {
-                   if(d.medal=="Gold") return "#ffd700"
-                   else if(d.medal=="Silver") return "#c0c0c0"
-                   else if(d.medal=="Bronze") return "#cd7f32"
-                   else return "black"
+                   if(d.gender=="Male"){
+                        return "blue"
+                    }
+                   if(d.gender=="Female"){
+                        return "#ff1eff"
+                    }
                 }) 
+                .style('opacity', function(d) {
+                    if(d.medal=="Gold") return 0
+                    if(d.medal=="Bronze") return 0
+                    if(d.medal=="") return 0
+                })
         }
              </script>
     </body>
