@@ -8,13 +8,9 @@
             font-family: monospace;
             font-size: 0.7em;
             font-weight: 100;
-            letter-spacing: 0.2em;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
             color: #B0B0B0;    
-            }
-            
-            h1{
-            
             }
             
         </style>
@@ -59,7 +55,7 @@
                             athletes: d
                         }
                     })
-                    .sortKeys(d3.ascending)
+                    .sortValues(d3.ascending)
                     .entries(_data);
                                 
                 var mapx = d3.scale.linear()
@@ -96,7 +92,6 @@
                         return 200 - d.values.avr_male_bmi
                     })
                     .attr('fill', '#57DBFF')
-                    
                     .on('mouseover', function(){
                             d3.select(this.parentNode)
                                 .select('.bmi_text')
@@ -119,7 +114,7 @@
                 groups.append('rect')
                     .attr('width', 10)
                     .attr('height', function(d, i){
-                        return d.values.avr_female_bmi
+                        return (d.values.avr_female_bmi)*3
                     })
                     .attr('y', midpt)
                     .style('fill', '#FF78D8')
@@ -147,17 +142,16 @@
                         return d.key
                     })
                     .attr('x', function(d,i){
-                        return midpt + 5 + d.values.avr_female_bmi
+                        return midpt + 10 +(d.values.avr_female_bmi)*3
                     })
                     .attr('transform', 'rotate(90)') 
                     
+                    
                 
                 groups.append('text')
-//                    .text(function(d){
-//                        return 'place'
-//                    })
-                    .attr('y', 150)
+                    .attr('y', midpt/2)
                     .style('opacity', 0)
+                    .style('font-size',20)
                     .attr('class', 'bmi_text')
                      
 
