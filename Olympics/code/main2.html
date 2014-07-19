@@ -56,9 +56,10 @@
                 .sortKeys(d3.ascending)
                 .rollup(function (d, i) { //creates a new series objects that hold number of athletes and gdp
                     return {
-                        
+                        country: d.country,
                         athletes: d.length,
                         gdp: +d[0].gdp
+
                     }
                 })
                 .entries(data);
@@ -75,8 +76,11 @@
                 .range([0, 900])
 
 
-            d3.select('svg')
-                .selectAll('rect')
+            var mainGroup = d3.select('svg')
+                .append('g')
+                .attr('transform', 'translate(50,0)')
+            
+            mainGroup.selectAll('rect')
                 .data(countries)
                 .enter()
                 .append('rect')
@@ -96,7 +100,7 @@
                     d3.select(this)
                         .style('fill', 'red')
                 })
-            console.log(countries);
+            // console.log(countries);
 
             d3.select('svg')
                 .attr('height', 5 * countries.length)
@@ -110,19 +114,18 @@
                 .domain([0, maxGdp])
                 .range([0, 700])
 
-            // console.log(mapY(200000));
+            console.log(mapY(200000));
 
             var path = d3.svg.line() //create a line object first
                 .x(function (d, i) {
-                    return mapX(i);
+                    return mapX(i)
                 })
                 .y(function (d, i) {
-                    return 800 - mapY(d.values.gdp);
+                    return 800 - mapY(d.values.gdp)
                 })
                 .interpolate('basis');
 
-            d3.select('svg') //and then select the above object
-            .append('path')
+            mainGroup.append('path')
                 .attr('d', path(countries))
                 .style('stroke', 'red')
                 .style('fill', 'none')
@@ -136,16 +139,19 @@
                     bottom: 30,
                     left: 40
                 },
-                width = 960 - margin.left - margin.right,
-                height = 800 - margin.top - margin.bottom;
+                width = 900,
+                height = 800;
 
-            var formatPercent = d3.format(".0%");
+            var formatPercent = d3.format(".0");
 
             var x = d3.scale.ordinal()
-//                .domain(countries.map(function(d) { return d.key; }))
+                .domain(data.map(function (d) {
+                    return d.country;
+                }))
                 .rangeRoundBands([0, width], .1, 1);
 
             var y = d3.scale.linear()
+                .domain([0, countries.length])
                 .range([height, 0]);
 
             var xAxis = d3.svg.axis()
@@ -154,18 +160,14 @@
 
             var yAxis = d3.svg.axis()
                 .scale(y)
-                .orient("left")
+                .orient("right")
                 .tickFormat(formatPercent);
 
             d3.select('svg')
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-            
-            
-            x.domain(countries.map(function(d) { return d.key; }))
-          //  y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+                //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             d3.select('svg')
                 .append("g")
@@ -180,25 +182,28 @@
                 .append("text")
                 .attr("transform", "rotate(-90)")
                 .attr("y", 6)
-                .attr("dy", ".71em")//wtf?
+                .attr("dy", ".71em") //wtf?
                 .style("text-anchor", "end")
-                .text("Frequency");
-          
-            d3.selectAll(".bar")
-                .data(data)
-                .enter()
-                .attr("class", "bar")
-                .attr("x", function (d) {
-                    return x(d.team);
-                })
-                .attr("width", x.rangeBand())
-                .attr("y", function (d) {
-                    return y(d.length);
-                })
-                .attr("height", function (d) {
-                    return height - y(d.length);
-                });
+                .text("Athletes");
 
+            
+            
+            var mapY = d3.scale.linear()
+                .domain([0, maxGdp])
+                .range([height, 0])
+            
+            
+            var yRightAxis = d3.svg.axis()
+                .scale(mapY)
+                .orient("left")
+            
+            
+            
+            d3.select('svg')
+                .append("g")
+                .attr("class", "y axis")
+                .attr("transform", "translate(980,0)")
+                .call(yRightAxis);
 
 
         } //endOlympicsLoaded()
