@@ -53,10 +53,13 @@ function move() {
 
   zoom.translate(t);
   g.attr("transform","translate(" + t + ")scale(" + s + ")");
+  gcap.attr("transform","translate(" + t + ")scale(" + s + ")");
 
   // Adjust the country hover stroke width based on zoom level.
   d3.selectAll(".country").style("stroke-width",1 / s);
   d3.select("#UK").style("stroke-width",1 / s);
+  d3.selectAll(".pointloc").style("stroke-width",1 / s);
+  d3.selectAll(".lineloc").style("stroke-width",1 / s);
 }
 
 // Geo translation on mouse click in the map.
@@ -75,7 +78,7 @@ var width = document.getElementById('screen').offsetWidth;
 
 var height = width / 2;
 
-var topo, projection, path, svg, g;
+var topo, projection, path, svg, g, gcap;
 
 var graticule = d3.geo.graticule();
 
@@ -103,8 +106,9 @@ function setup(width,height){
         .call(zoom)
         .on("click",click);
 
-  // Append the geometry container to our svg.
+  // Append the geometry containers to our svg.
   g = svg.append("g");
+  gcap = svg.append("g");
     
   // Append an image with olympic rings to the header.
   var header = d3.select("#header")
@@ -114,6 +118,45 @@ function setup(width,height){
 	           .attr("width",300)
 	           .attr("height",150)
 	           .attr('xlink:href','data/olympic_rings.png');
+	
+  // Append the first text part of the 2012 olympic year.
+  d3.select("#header").append("text")
+  		.style("fill","#000000")
+  		.attr("x","86px")
+  		.attr("y","115px")
+  		.style("font-size","30px")
+		.text("20");
+	
+  // Append the second text part of the 2012 olympic year.
+  d3.select("#header").append("text")
+  		.style("fill","#000000")
+  		.attr("x","182px")
+  		.attr("y","115px")
+  		.style("font-size","30px")
+		.text("12");
+	
+  // Append the curved "London" text to the image with olympic rings.
+  var london = d3.select("#header").append("svg")
+  				.attr("x","28px")
+  				.attr("y","-50px");
+	
+  london.append("defs")
+  		.append("path")
+  		.attr("id","london")
+  		.attr("d","M 100 102 q 42 -60 80 102");
+	
+  var thing = london.append("g").attr("id","thing");
+	
+  thing.append("text")
+  		.style("fill","#000000")
+  		.style("font-size","19px")
+  		.append("textPath")
+  		.attr("xlink:href","#london")
+		.text("London");
+	
+  thing.append("use")
+    .attr("xlink:href","#london")
+    .style("fill","none");
 }
 
 // Load and draw data with world map topology. 
@@ -202,6 +245,7 @@ function draw(topo) {
                 inside = inside + 1;
             } else {
                 d3.selectAll(".gline").remove();
+				d3.selectAll(".glocation").remove();
                 inside = inside - 1;
             }
       })
@@ -214,7 +258,47 @@ function draw(topo) {
     capitals.forEach(function(i){
         addpoint(i.CapitalLongitude,i.CapitalLatitude,i.CapitalName);
     });  
-  });  
+  });
+	
+  // Add some statistics.
+  d3.select("#stat").attr("style","padding-left:"+(offsetL-20)+"px").text("Statistics: ");
+  var stat_svg = d3.select("#stat")
+  					.append("svg")
+  					.attr("width","500px")
+  					.attr("height","20px");
+	
+  stat_svg.append("rect")
+  		.attr("width","20px")
+  		.attr("height","8px")
+  		.attr("y","12px")
+  		.style("fill","#228B22");
+	
+  stat_svg.append("text")
+  		.style("fill","#228B22")
+  		.attr("x","25px")
+  		.attr("y","20px")
+		.text(" - native participants");
+	
+  stat_svg.append("text")
+  		.style("fill","#000000")
+  		.attr("x","162px")
+  		.attr("y","20px")
+		.text(" and ");
+	
+  stat_svg.append("rect")
+  		.attr("width","20px")
+  		.attr("height","8px")
+  		.attr("x","191px")
+  		.attr("y","12px")
+  		.style("fill","#DC143C");
+	
+  stat_svg.append("text")
+  		.style("fill","#DC143C")
+  		.attr("x","215px")
+  		.attr("y","20px")
+  		.attr("width","124px")
+  		.attr("height","18px")
+		.text(" - participants from other countries ");
 }
 
 ////////////////////////////////////////////////////////////
@@ -223,7 +307,7 @@ function draw(topo) {
 
 // Function to add points and text to the map (used in plotting capitals).
 function addpoint(lat,lon,text) {
-  var gpoint = g.append("g").attr("class","gpoint");
+  var gpoint = gcap.attr("d",path).attr("class","gcapital");
   var x = projection([lat,lon])[0];
   var y = projection([lat,lon])[1];
 
@@ -232,7 +316,10 @@ function addpoint(lat,lon,text) {
         .attr("cx",x)
         .attr("cy",y)
         .attr("class","point")
-        .attr("r",1.5);
+        .attr("r",1.5)
+  		.attr("fill","#000000")
+		.attr("stroke","#000000")
+		.attr("stroke-width","0.1");
 
   // Conditional in case a point has no associated text.
   if(text.length > 0){
@@ -247,14 +334,18 @@ function addpoint(lat,lon,text) {
 // Statistics on participants from different countries.
 function country_participants(team_name,i) {
 var stat = d3.csv("data/olympics_2012.csv", function(data){
+	
+	team_name_tmp = team_name.split(',');
+	team_name = team_name_tmp[0];
+	
     data.forEach(function(d,i){
         if(d.team == team_name) {
                 var latlon = d.born_lat_lon.split(',');
                 var bornloc = d.born_location.split(', ');
                 if(bornloc[bornloc.length - 1] == team_name) {
-                    if(!isNaN(latlon[1]) && !isNaN(latlon[0])) { addLine(latlon[1],latlon[0],"#7CFC00",i); }
+                    if(!isNaN(latlon[1]) && !isNaN(latlon[0])) { addLine(latlon[1],latlon[0],"#228B22",i); }
                 } else { 
-                    if(!isNaN(latlon[1]) && !isNaN(latlon[0])) { addLine(latlon[1],latlon[0],"FF0000",i); }
+                    if(!isNaN(latlon[1]) && !isNaN(latlon[0])) { addLine(latlon[1],latlon[0],"#DC143C",i); }
                 }
         }
     });
@@ -268,20 +359,44 @@ function addLine(lat,lon,color,i) {
     
     var x = projection([lat,lon])[0];
     var y = projection([lat,lon])[1];
-    
+	
     var gline = g.append("g").attr("class", "gline");
-    
-    gline.append("svg:line")
-        .attr("x1",uk_x)
-        .attr("y1",uk_y)
-        .attr("x2",uk_x)
-        .attr("y2",uk_y)
-        .style("stroke",color)
-        .style("stroke-width","1px")
-        .transition()
-        .delay(i*0.5)
-        .attr("x1",uk_x)
-        .attr("y1",uk_y)
-        .attr("x2",x)
-        .attr("y2",y);
+	
+	var h;
+	var halfy = 0.5*(y + uk_y);
+	
+	if(y > uk_y) {h = halfy - uk_y + y;} 
+	else {h = halfy - y + uk_y;}
+	
+	var lineData = [{"x": x, "y": y}, {"x": 0.5*(x + uk_x), "y": -0.1*h}, {"x": uk_x, "y": uk_y}];
+ 
+ 	var lineFunction = d3.svg.line()
+                          .x(function(d) {return d.x;})
+                          .y(function(d) {return d.y;})
+                          .interpolate("basis");
+	
+	gline.append("path")
+		.datum([])
+	 	.attr("class","lineloc")
+     	.style("stroke",color)
+     	.style("stroke-width","0.5px")
+	 	.style("stroke-opacity","0.5")
+	 	.style("fill","none")
+	 	.transition()
+     	.delay(0.5*i)
+	    .attr("d",lineFunction(lineData));
+	
+	var gpoint = g.append("g").attr("class","glocation");
+	
+	gpoint.append("svg:circle")
+        .attr("cx",x)
+        .attr("cy",y)
+        .attr("class","pointloc")
+        .attr("r",0)
+		.transition()
+		.delay(i*0.5)
+		.attr("r",0.5)
+		.attr("fill","#000000")
+		.attr("stroke","#000000")
+		.attr("stroke-width","0.1");
 }
