@@ -27,8 +27,19 @@
                 
                 var zod = d3.nest()
                                 .key(function(d){
-                                    return d.medal;
+                                    //return d.medal;
+                                    var mydata2 = d.medal;
+                                    if(mydata2 == 'Gold'){
+                                        return '01_Gold';  
+                                    }
+                                    if(mydata2 == 'Silver'){
+                                        return '02_bSilver';  
+                                    }
+                                    if(mydata2 == 'Bronze'){
+                                        return '03_Bronze';  
+                                    }
                                 })
+                                .sortKeys(d3.ascending)
                                 .key(function(d){
                                     var mydata = d.birth.split('-');
                                     mydata = mydata[1] + '' + mydata[2];
@@ -81,8 +92,19 @@
                 
                 var element = d3.nest()
                                 .key(function(d){
-                                    return d.medal;
+                                    //return d.medal;
+                                    var mydata2bis = d.medal;
+                                    if(mydata2bis == 'Gold'){
+                                        return 'aGold';  
+                                    }
+                                    if(mydata2bis == 'Silver'){
+                                        return 'bSilver';  
+                                    }
+                                    if(mydata2bis == 'Bronze'){
+                                        return 'cBronze';  
+                                    }
                                 })
+                                .sortKeys(d3.ascending)
                                 .key(function(d){
                                     var mysign = d.birth.split('-');
                                     mysign = mysign[1] + '' + mysign[2];
@@ -114,9 +136,11 @@
                                         return 'terra';
                                     }
                                 })
-                 
-                .sortKeys(d3.ascending)
+                                .sortKeys(d3.ascending)
                                 .entries(_data);
+                 /*
+                .sortKeys(d3.ascending)
+                                .entries(_data);*/
                 
                 element.sort(function(a,b) {
                     return d3.ascending(b.values.length, a.values.length)
@@ -322,43 +346,253 @@
                     .attr('height',25)
                     .attr('class', function (d,i) {
                         var dt = d3.select(this.parentNode.parentNode).data();
-                        console.log(dt);
-                        return d.key + dt[0].key
+                        //console.log(dt);
+                        return d.key + '_' + dt[0].key
                     })
                 
                 //con il mousehover su un elemento evidenzio 3 segni zodiacali
-                //acqua
-                d3.selectAll('.acquaGold')
+                //////acqua////////////////////////////////////////////////////////////////
+                d3.selectAll('.acqua_aGold')
                     .on('mouseover', function(){
-                        //d3.select('svg.gold').selectAll('.06_cancro,.10_scorpione,.02_pesci')
                         d3.select('.gold')
-                        .select('.a05_gemelli')
-                            //.transition()
-                            //.duration(300)
-                            //.attr('fill','red')
-                            .attr('width',100)
-                            .attr('height',100)
-                    })
-                /*
-                d3.selectAll('.acquaSilver')
-                    .on('mouseover', function(){
-                        d3.select('.silver').selectAll('image')
+                        .selectAll('.a06_cancro,.a10_scorpione,.a02_pesci')
                             .transition()
                             .duration(300)
                             //.attr('fill','red')
-                            .attr('width',100)
-                            .attr('height',100)
+                            .attr('width',80)
+                            .attr('height',80)
+                            //.attr('x', 0)
+                            .attr('y', -50)
                     })
+                    .on('mouseout', function() {
+                        d3.selectAll('.a06_cancro,.a10_scorpione,.a02_pesci')
+                            .transition()
+                            .duration(100)
+                            .attr('width',25)
+                            .attr('height',25)
+                            .attr('y', -20)
+                      })
+                d3.selectAll('.acqua_bSilver')
+                    .on('mouseover', function(){
+                        d3.select('.silver')
+                        .selectAll('.a06_cancro,.a10_scorpione,.a02_pesci')
+                            .transition()
+                            .duration(300)
+                            .attr('width',80)
+                            .attr('height',80)
+                            .attr('x', 0)
+                            .attr('y', -50)
+                    })
+                    .on('mouseout', function() {
+                        d3.selectAll('.a06_cancro,.a10_scorpione,.a02_pesci')
+                            .transition()
+                            .duration(100)
+                            .attr('width',25)
+                            .attr('height',25)
+                            .attr('y', -20) 
+                      })
+                d3.selectAll('.acqua_cBronze')
+                    .on('mouseover', function(){
+                        d3.select('.bronze')
+                        .selectAll('.a06_cancro,.a10_scorpione,.a02_pesci')
+                            .transition()
+                            .duration(300)
+                            .attr('width',80)
+                            .attr('height',80)
+                            .attr('x', 0)
+                            .attr('y', -50)
+                    })
+                    .on('mouseout', function() {
+                        d3.selectAll('.a06_cancro,.a10_scorpione,.a02_pesci')
+                            .transition()
+                            .duration(100)
+                            .attr('width',25)
+                            .attr('height',25)
+                            .attr('y', -20) 
+                      })
                 
-                d3.selectAll('.acquaBronze')
+                //////fuoco////////////////////////////////////////////////////////////////
+                d3.selectAll('.fuoco_aGold')
                     .on('mouseover', function(){
-                        d3.select('.bronze').selectAll('image')
+                        d3.select('.gold')
+                        .selectAll('.a03_ariete,.a07_leone,.a11_sagittario')
                             .transition()
                             .duration(300)
                             //.attr('fill','red')
-                            .attr('width',100)
-                            .attr('height',100)
-                    })*/
+                            .attr('width',80)
+                            .attr('height',80)
+                            //.attr('x', 0)
+                            .attr('y', -50)
+                    })
+                    .on('mouseout', function() {
+                        d3.selectAll('.a03_ariete,.a07_leone,.a11_sagittario')
+                            .transition()
+                            .duration(100)
+                            .attr('width',25)
+                            .attr('height',25)
+                            .attr('y', -20)
+                      })
+                d3.selectAll('.fuoco_bSilver')
+                    .on('mouseover', function(){
+                        d3.select('.silver')
+                        .selectAll('.a03_ariete,.a07_leone,.a11_sagittario')
+                            .transition()
+                            .duration(300)
+                            .attr('width',80)
+                            .attr('height',80)
+                            .attr('x', 0)
+                            .attr('y', -50)
+                    })
+                    .on('mouseout', function() {
+                        d3.selectAll('.a03_ariete,.a07_leone,.a11_sagittario')
+                            .transition()
+                            .duration(100)
+                            .attr('width',25)
+                            .attr('height',25)
+                            .attr('y', -20) 
+                      })
+                d3.selectAll('.fuoco_cBronze')
+                    .on('mouseover', function(){
+                        d3.select('.bronze')
+                        .selectAll('.a03_ariete,.a07_leone,.a11_sagittario')
+                            .transition()
+                            .duration(300)
+                            .attr('width',80)
+                            .attr('height',80)
+                            .attr('x', 0)
+                            .attr('y', -50)
+                    })
+                    .on('mouseout', function() {
+                        d3.selectAll('.a03_ariete,.a07_leone,.a11_sagittario')
+                            .transition()
+                            .duration(100)
+                            .attr('width',25)
+                            .attr('height',25)
+                            .attr('y', -20) 
+                      })
+                
+                //////aria////////////////////////////////////////////////////////////////
+                d3.selectAll('.aria_aGold')
+                    .on('mouseover', function(){
+                        d3.select('.gold')
+                        .selectAll('.a05_gemelli,.a09_bilancia,.a12_capricorno')
+                            .transition()
+                            .duration(300)
+                            //.attr('fill','red')
+                            .attr('width',80)
+                            .attr('height',80)
+                            //.attr('x', 0)
+                            .attr('y', -50)
+                    })
+                    .on('mouseout', function() {
+                        d3.selectAll('.a05_gemelli,.a09_bilancia,.a12_capricorno')
+                            .transition()
+                            .duration(100)
+                            .attr('width',25)
+                            .attr('height',25)
+                            .attr('y', -20)
+                      })
+                d3.selectAll('.aria_bSilver')
+                    .on('mouseover', function(){
+                        d3.select('.silver')
+                        .selectAll('.a05_gemelli,.a09_bilancia,.a12_capricorno')
+                            .transition()
+                            .duration(300)
+                            .attr('width',80)
+                            .attr('height',80)
+                            .attr('x', 0)
+                            .attr('y', -50)
+                    })
+                    .on('mouseout', function() {
+                        d3.selectAll('.a05_gemelli,.a09_bilancia,.a12_capricorno')
+                            .transition()
+                            .duration(100)
+                            .attr('width',25)
+                            .attr('height',25)
+                            .attr('y', -20) 
+                      })
+                d3.selectAll('.aria_cBronze')
+                    .on('mouseover', function(){
+                        d3.select('.bronze')
+                        .selectAll('.a05_gemelli,.a09_bilancia,.a12_capricorno')
+                            .transition()
+                            .duration(300)
+                            .attr('width',80)
+                            .attr('height',80)
+                            .attr('x', 0)
+                            .attr('y', -50)
+                    })
+                    .on('mouseout', function() {
+                        d3.selectAll('.a05_gemelli,.a09_bilancia,.a12_capricorno')
+                            .transition()
+                            .duration(100)
+                            .attr('width',25)
+                            .attr('height',25)
+                            .attr('y', -20) 
+                      })
+                
+                //////terra////////////////////////////////////////////////////////////////
+                d3.selectAll('.terra_aGold')
+                    .on('mouseover', function(){
+                        d3.select('.gold')
+                        .selectAll('.a04_toro,.a08_vergine,.a01_acquario')
+                            .transition()
+                            .duration(300)
+                            //.attr('fill','red')
+                            .attr('width',80)
+                            .attr('height',80)
+                            //.attr('x', 0)
+                            .attr('y', -50)
+                    })
+                    .on('mouseout', function() {
+                        d3.selectAll('.a04_toro,.a08_vergine,.a01_acquario')
+                            .transition()
+                            .duration(100)
+                            .attr('width',25)
+                            .attr('height',25)
+                            .attr('y', -20)
+                      })
+                d3.selectAll('.terra_bSilver')
+                    .on('mouseover', function(){
+                        d3.select('.silver')
+                        .selectAll('.a04_toro,.a08_vergine,.a01_acquario')
+                            .transition()
+                            .duration(300)
+                            .attr('width',80)
+                            .attr('height',80)
+                            .attr('x', 0)
+                            .attr('y', -50)
+                    })
+                    .on('mouseout', function() {
+                        d3.selectAll('.a04_toro,.a08_vergine,.a01_acquario')
+                            .transition()
+                            .duration(100)
+                            .attr('width',25)
+                            .attr('height',25)
+                            .attr('y', -20) 
+                      })
+                d3.selectAll('.terra_cBronze')
+                    .on('mouseover', function(){
+                        d3.select('.bronze')
+                        .selectAll('.a04_toro,.a08_vergine,.a01_acquario')
+                            .transition()
+                            .duration(300)
+                            .attr('width',80)
+                            .attr('height',80)
+                            .attr('x', 0)
+                            .attr('y', -50)
+                    })
+                    .on('mouseout', function() {
+                        d3.selectAll('.a04_toro,.a08_vergine,.a01_acquario')
+                            .transition()
+                            .duration(100)
+                            .attr('width',25)
+                            .attr('height',25)
+                            .attr('y', -20) 
+                      })
+                
+                
+                
                 
                 //////////////////////////////////////////////////////////////////
                 //legenda
