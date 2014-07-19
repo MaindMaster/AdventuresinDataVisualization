@@ -105,7 +105,7 @@
                                        {       
                                         return 'acqua';  
                                     }
-                                    /*if(mysign > '0420' && mysign < '0521' ||        //toro
+                                    /*if(mysign > '0420' && mysign < '0521' ||      //toro
                                         mysign > '0823' && mysign < '0923'||        //vergine
                                         mysign > '1221' && mysign < '0119')         //capricorno
                                        {       
@@ -169,6 +169,10 @@
                 var color = d3.scale.linear()
                     .domain([0,1,2])
                     .range(["#ffd700", "#c0c0c0", "#cd7f32"]);
+                
+                var order = d3.scale.linear()
+                    .domain([1,2,3])
+                    .range(["1", "2", "3"]);
 
                 //////////////////////////////////////////////////////////////////
                 // Segni zodiacali
@@ -228,6 +232,9 @@
                     .attr('y',-20)
                     .attr('width', 25)
                     .attr('height',25)
+                    .attr('class', function (d,i) {
+                        return d.key;
+                    })
                 
                 //ingrandisco le icone se faccio il mousehover
                 d3.selectAll('image')
@@ -307,18 +314,82 @@
                     .attr('y',-15)
                     .attr('width', 25)
                     .attr('height',25)
-                    .attr('id', function (d,i) {
-                        return d.key;
+                    .attr('class', function (d,i) {
+                        return d.key
+                        
                     })
                 
                 //con il mousehover su un elemento evidenzio 3 segni zodiacali
-                d3.selectAll('#acqua')
-                    .on('click', function(){
-                        d3.select(this)
-                            //.transition()
-                            //.duration(300)
-                            .attr('width',200)
-                            .attr('height',200)
+                //acqua
+                d3.selectAll('.acqua')
+                    .on('mouseover', function(){
+                        d3.selectAll('.cancro,.scorpione,.pesci')
+                            .transition()
+                            .duration(300)
+                            //.attr('fill','red')
+                            .attr('width',50)
+                            .attr('height',50)
+                })
+                .on('mouseout', function() {
+                        d3.selectAll('.cancro,.scorpione,.pesci')
+                            .transition()
+                            .duration(100)
+                            .attr('width',25)
+                            .attr('height',25)
+                })
+                
+                //fuoco
+                d3.selectAll('.fuoco')
+                    .on('mouseover', function(){
+                        d3.selectAll('.ariete,.leone,.sagittario')
+                            .transition()
+                            .duration(100)
+                            //.attr('fill','red')
+                            .attr('width',50)
+                            .attr('height',50)
+                })
+                .on('mouseout', function() {
+                        d3.selectAll('.ariete,.leone,.sagittario')
+                            .transition()
+                            .duration(300)
+                            .attr('width',25)
+                            .attr('height',25)
+                })
+                
+                //aria
+                d3.selectAll('.aria')
+                    .on('mouseover', function(){
+                        d3.selectAll('.gemelli,.bilancia,.acquario')
+                            .transition()
+                            .duration(100)
+                            //.attr('fill','red')
+                            .attr('width',50)
+                            .attr('height',50)
+                })
+                .on('mouseout', function() {
+                        d3.selectAll('.gemelli,.bilancia,.acquario')
+                            .transition()
+                            .duration(300)
+                            .attr('width',25)
+                            .attr('height',25)
+                })
+                
+                //terra
+                d3.selectAll('.terra')
+                    .on('mouseover', function(){
+                        d3.selectAll('.toro,.vergine,.capricorno')
+                            .transition()
+                            .duration(100)
+                            //.attr('fill','red')
+                            .attr('width',50)
+                            .attr('height',50)
+                })
+                .on('mouseout', function() {
+                        d3.selectAll('.toro,.vergine,.capricorno')
+                            .transition()
+                            .duration(300)
+                            .attr('width',25)
+                            .attr('height',25)
                 })
                 
                 //////////////////////////////////////////////////////////////////
@@ -339,15 +410,6 @@
                     .attr('y',200)
                     .attr('x', -20)
                 
-                //con il mousehover su un elemento evidenzio 3 segni zodiacali
-                d3.selectAll('#acqua')
-                    .on('click', function(){
-                        d3.select(this)
-                            //.transition()
-                            //.duration(300)
-                            .attr('width',200)
-                            .attr('height',200)
-                })
             }
         </script>
     </body>
