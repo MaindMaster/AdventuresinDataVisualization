@@ -16,6 +16,13 @@ h1
 	color: gray;
 }
 
+.boh
+{
+	font-family: 'Impact';
+	color: gray;
+	padding-left: 80;
+}
+
 .sportIcon:hover
 {
 	opacity: 0.3 !important;

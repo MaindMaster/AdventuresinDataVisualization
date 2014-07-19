@@ -120,8 +120,7 @@
         }
     });
 
-    console.log(anotherAck);
-
+    
 
     d3.select('#podiumSVG')
     .selectAll('text')
