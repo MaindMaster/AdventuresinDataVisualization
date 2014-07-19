@@ -9,9 +9,11 @@
         <svg></svg>
         <script>
         
-        d3.json('../fixed.json', function(topo){
+        d3.json('../PDU_espaceurbain copy.json', function(topo){
             
-            var data = topojson.feature(topo, topo.objects.PDU_espaceurbain).features;
+            console.log(topo);
+
+            var data = topojson.feature(topo, topo.objects.layer1).features;
             
             var w = 900;
             var h = 700;
