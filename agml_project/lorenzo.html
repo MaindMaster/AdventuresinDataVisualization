@@ -90,8 +90,8 @@
                         return d.values.avr_male_bmi
                     })
 
-                    .attr('y', function(d, i){
-                        return midpt - d.values.avr_male_bmi
+                    .attr('y', function(d,i){
+                        return 200 - d.values.avr_male_bmi
                     })
                     .attr('fill', '#57DBFF')
                     
@@ -114,12 +114,17 @@
                     })
                     .attr('transform', 'rotate(90)') 
 
-                groups.append('text')
+                    
+                d3.append('text')
                     .text(function(d){
-                         return d.getRandomValues
+                        on.mouseover = groupeValue
+                            function groupValue(){  
+                            return 
+                        }
                     })
                     .attr('x', 50)    
                     .attr('y', 50)
+                
                 
                 console.log(sp)                   
             }
