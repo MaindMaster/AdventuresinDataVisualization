@@ -77,9 +77,6 @@
                     .data(sp)
                     .enter()
                     .append('g')
-                    .attr('x', function(d,i){
-                        return i*d
-                    })
                     .attr('transform', function(d, i){
                         return 'translate(' + mapx(i) + ',0)'  
                     })
@@ -89,13 +86,35 @@
                     .attr('height', function(d, i){
                         return d.values.avr_male_bmi
                     })
-
+//                    .transition()
+//                    .ease('bounce')
+//                    .duration(1000)
+//                    .delay(function(d, i){
+//                    return i*250
+//	               })
                     .attr('y', function(d,i){
                         return 200 - d.values.avr_male_bmi
                     })
                     .attr('fill', '#57DBFF')
                     
-                        
+                    .on('mouseover', function(){
+                            d3.select(this.parentNode)
+                                .select('.bmi_text')
+                                .text(function (d){  
+                                    return d.values.avr_male_bmi
+                                })
+                                .transition()
+                                .style('opacity', 1)
+                    })
+                    .on('mouseout', function(){
+                            d3.select(this.parentNode)
+                                .select('.bmi_text')
+                                .text(function (d){  
+                                    return d.values.avr_male_bmi
+                                })
+                                .transition()
+                                .style('opacity', 0)
+                    })
                 
                 groups.append('rect')
                     .attr('width', 10)
@@ -104,6 +123,24 @@
                     })
                     .attr('y', midpt)
                     .style('fill', '#FF78D8')
+                    .on('mouseover', function(){
+                            d3.select(this.parentNode)
+                                .select('.bmi_text')
+                                .text(function (d){  
+                                    return d.values.avr_female_bmi
+                                })
+                                .transition()
+                                .style('opacity', 1)
+                    })
+                    .on('mouseout', function(){
+                            d3.select(this.parentNode)
+                                .select('.bmi_text')
+                                .text(function (d){  
+                                    return d.values.avr_female_bmi
+                                })
+                                .transition()
+                                .style('opacity', 0)
+                    })
                 
                 groups.append('text')
                     .text(function(d){
@@ -113,17 +150,18 @@
                         return midpt + 5 + d.values.avr_female_bmi
                     })
                     .attr('transform', 'rotate(90)') 
+                    
+                
+                groups.append('text')
+//                    .text(function(d){
+//                        return 'place'
+//                    })
+                    .attr('y', 150)
+                    .style('opacity', 0)
+                    .attr('class', 'bmi_text')
+                     
 
                     
-                d3.append('text')
-                    .text(function(d){
-                        on.mouseover = groupeValue
-                            function groupValue(){  
-                            return 
-                        }
-                    })
-                    .attr('x', 50)    
-                    .attr('y', 50)
                 
                 
                 console.log(sp)                   
