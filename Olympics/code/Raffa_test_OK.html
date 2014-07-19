@@ -3,7 +3,6 @@
 <head>
     <script src="libs/d3.js"></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-    <link rel="stylesheet" href="//rawgithub.com/Caged/d3-tip/master/examples/example-styles.css">
 
 </head>
 
@@ -13,10 +12,61 @@
         font-size: 10pt;
         font-weight: 200;
     }
+    h1 {
+        font-size: 15pt;
+        font-weight: 800;
+        padding: 20px 0px 20px 280px;
+    }
+    .d3-tip {
+        line-height: 1;
+        font-weight: bold;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        border-radius: 2px;
+        pointer-events: none;
+    }
+    .d3-tip_gdp {
+        line-height: 1;
+        font-weight: bold;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: #50C878;
+        border-radius: 2px;
+        pointer-events: none;
+    }
+    .d3-tip_gold {
+        line-height: 1;
+        font-weight: bold;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: #FFD700;
+        border-radius: 2px;
+        pointer-events: none;
+    }
+    .d3-tip_silver {
+        line-height: 1;
+        font-weight: bold;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: silver;
+        border-radius: 2px;
+        pointer-events: none;
+    }
+    .d3-tip_bronze {
+        line-height: 1;
+        font-weight: bold;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: #CD7F32;
+        border-radius: 2px;
+        pointer-events: none;
+    }
 </style>
 
 <body>
 
+    <h1>Medals won and GDP  comparison</h1>
     <svg height="5000" width="100%"></svg>
 
 
@@ -59,7 +109,7 @@
             /* ELENCO */
             var countries = d3.nest()
                 .key(function (d) {
-                    return d.team;
+                    return d.country;
                 })
                 .rollup(function (d) {
                     return {
@@ -69,7 +119,17 @@
                         bronze: calc_bronze(d),
                     }
                 })
+
+            .sortKeys(d3.ascending)
                 .entries(data);
+
+            countries.sort(function (a, b) {
+                return d3.ascending(b.values.length, a.values.length);
+
+            })
+
+
+
 
             var groups = d3.select('svg')
                 .selectAll('g')
@@ -77,7 +137,7 @@
                 .enter()
                 .append('g')
                 .attr('transform', function (d, i) {
-                    return 'translate(0, ' + i * 30 + ')';
+                    return 'translate(0, ' + i * 20 + ')';
                 })
 
             console.log(countries);
@@ -98,17 +158,17 @@
 
             var mapGdp = d3.scale.linear()
                 .domain([0, maxGdp])
-                .range([0, 450])
+                .range([0, 409])
 
 
             /* Initialize tooltip */
-            tip = d3.tip().attr('class', 'd3-tip').html(function (d) {
+            tip = d3.tip().attr('class', 'd3-tip_gdp n').html(function (d) {
                 return d.values.gdp;
             });
             d3.select('svg').call(tip)
 
             groups.append('rect')
-                .attr('x', 680)
+                .attr('x', 650)
                 .attr('y', 25)
                 .attr('width', function (d) {
                     return mapGdp(d.values.gdp)
@@ -126,18 +186,26 @@
 
             var mapCalc_gold = d3.scale.linear()
                 .domain([0, maxGold])
-                .range([0, 150])
+                .range([0, 200])
+
+            /* Initialize tooltip */
+            tip = d3.tip().attr('class', 'd3-tip_gold').html(function (d) {
+                return d.values.gold;
+            });
+            d3.select('svg').call(tip)
 
             groups.append('rect')
                 .attr('x', function (d, i) {
-                    return 520 - mapCalc_gold(d.values.gold)
+                    return 550 - mapCalc_gold(d.values.gold)
                 })
                 .attr('y', 25)
                 .attr('width', function (d) {
                     return mapCalc_gold(d.values.gold)
                 })
                 .attr('height', 10)
-                .style('fill', 'gold');
+                .style('fill', '#FFD700')
+                .on('mouseover', tip.show)
+                .on('mouseout', tip.hide);
 
             /* SILVER */
             var maxSilv = d3.max(countries, function (d) {
@@ -146,18 +214,26 @@
 
             var mapCalc_silver = d3.scale.linear()
                 .domain([0, maxSilv])
-                .range([0, 150])
+                .range([0, 86])
+
+            /* Initialize tooltip */
+            tip = d3.tip().attr('class', 'd3-tip_silver').html(function (d) {
+                return d.values.silver;
+            });
+            d3.select('svg').call(tip)
 
             groups.append('rect')
                 .attr('x', function (d, i) {
-                    return 520 - mapCalc_silver(d.values.silver) - mapCalc_gold(d.values.gold)
+                    return 550 - mapCalc_silver(d.values.silver) - mapCalc_gold(d.values.gold)
                 })
                 .attr('y', 25)
                 .attr('width', function (d) {
                     return mapCalc_silver(d.values.silver)
                 })
                 .attr('height', 10)
-                .style('fill', 'silver');
+                .style('fill', 'silver')
+                .on('mouseover', tip.show)
+                .on('mouseout', tip.hide);
 
             /* BRONZE */
             var maxBron = d3.max(countries, function (d) {
@@ -166,18 +242,26 @@
 
             var mapCalc_bronze = d3.scale.linear()
                 .domain([0, maxBron])
-                .range([0, 150])
+                .range([0, 80])
+
+            /* Initialize tooltip */
+            tip = d3.tip().attr('class', 'd3-tip_bronze').html(function (d) {
+                return d.values.bronze;
+            });
+            d3.select('svg').call(tip)
 
             groups.append('rect')
                 .attr('x', function (d, i) {
-                    return 520 - mapCalc_bronze(d.values.bronze) - mapCalc_silver(d.values.silver) - mapCalc_gold(d.values.gold)
+                    return 550 - mapCalc_bronze(d.values.bronze) - mapCalc_silver(d.values.silver) - mapCalc_gold(d.values.gold)
                 })
                 .attr('y', 25)
                 .attr('width', function (d) {
                     return mapCalc_bronze(d.values.bronze)
                 })
                 .attr('height', 10)
-                .style('fill', '#CD7F32');
+                .style('fill', '#CD7F32')
+                .on('mouseover', tip.show)
+                .on('mouseout', tip.hide);
 
         });
     </script>
