@@ -33,43 +33,43 @@
                                     var mydata = d.birth.split('-');
                                     mydata = mydata[1] + '' + mydata[2];
                                     if(mydata > '0120' && mydata < '0220'){
-                                        return '01_acquario'; //Acquario - segno di Leo   
+                                        return 'a01_acquario'; //Acquario - segno di Leo   
                                     }
                                     if(mydata > '0219' && mydata < '0321'){
-                                        return '02_pesci';
+                                        return 'a02_pesci';
                                     }
                                     if(mydata > '0320' && mydata < '0421'){
-                                        return '03_ariete'; 
+                                        return 'a03_ariete'; 
                                     }
                                     if(mydata > '0420' && mydata < '0521'){
-                                        return '04_toro'; 
+                                        return 'a04_toro'; 
                                     }
                                     if(mydata > '0520' && mydata < '0622'){
-                                        return '05_gemelli'; 
+                                        return 'a05_gemelli'; 
                                     }
                                     if(mydata > '0621' && mydata < '0723'){
-                                        return '06_cancro'; //Cancro - segno di Lorenzo
+                                        return 'a06_cancro'; //Cancro - segno di Lorenzo
                                     }
                                     if(mydata > '0722' && mydata < '0824'){
-                                        return '07_leone';
+                                        return 'a07_leone';
                                     }
                                     if(mydata > '0823' && mydata < '0923'){
-                                        return '08_vergine';
+                                        return 'a08_vergine';
                                     }
                                     if(mydata > '0922' && mydata < '1023'){
-                                        return '09_bilancia';//Bilancia - segno di Marta
+                                        return 'a09_bilancia';//Bilancia - segno di Marta
                                     }
                                     if(mydata > '1022' && mydata < '1123'){
-                                        return '10_scorpione';
+                                        return 'a10_scorpione';
                                     }
                                     if(mydata > '1122' && mydata < '1222'){
-                                        return '11_sagittario'; //Sagittario - segno di Giovanni 
+                                        return 'a11_sagittario'; //Sagittario - segno di Giovanni 
                                     }
                                     //if(mydata > '1221' && mydata < '0119'){
                                     //    return 'capricorno';
                                     //}
                                     else {
-                                        return '12_capricorno';
+                                        return 'a12_capricorno';
                                     }
                                 })
                                 .sortKeys(d3.ascending)
@@ -331,8 +331,8 @@
                 d3.selectAll('.acquaGold')
                     .on('mouseover', function(){
                         //d3.select('svg.gold').selectAll('.06_cancro,.10_scorpione,.02_pesci')
-                        d3.select('.gold')//'.05_gemelli')
-                        //.select('05_gemelli')
+                        d3.select('.gold')
+                        .select('.a05_gemelli')
                             //.transition()
                             //.duration(300)
                             //.attr('fill','red')
