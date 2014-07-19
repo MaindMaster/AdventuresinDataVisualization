@@ -1,0 +1,326 @@
+<html>
+
+<head>
+    <script src="libs/d3.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+</head>
+
+<style>
+    body {
+        font-family: sans-serif;
+        font-size: 8pt;
+        font-weight: 200;
+    }
+    h1 {
+        margin-left: 220px;
+        margin-top: 40px;
+    }
+    .d3-tip {
+        line-height: 1;
+        font-weight: lighter;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border-radius: 2px;
+        pointer-events: none;
+    }
+    .d3-tip1 {
+        line-height: 1;
+        font-weight: lighter;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: gold;
+        border-radius: 2px;
+        pointer-events: none;
+    }
+    .d3-tip2 {
+        line-height: 1;
+        font-weight: lighter;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: silver;
+        border-radius: 2px;
+        pointer-events: none;
+    }
+    .d3-tip3 {
+        line-height: 1;
+        font-weight: lighter;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: #CC6633;
+        border-radius: 2px;
+        pointer-events: none;
+    }
+    /* Creates a small triangle extender for the tooltip */
+    .d3-tip:after {
+        box-sizing: border-box;
+        display: inline;
+        font-size: 10px;
+        width: 100%;
+        line-height: 1;
+        color: rgba(0, 0, 0, 0.8);
+        position: absolute;
+        pointer-events: none;
+    }
+    .d3-tip1:after {
+        box-sizing: border-box;
+        display: inline;
+        font-size: 10px;
+        width: 100%;
+        line-height: 1;
+        color: rgba(0, 0, 0, 0.8);
+        position: absolute;
+        pointer-events: none;
+    }
+    .d3-tip2:after {
+        box-sizing: border-box;
+        display: inline;
+        font-size: 10px;
+        width: 100%;
+        line-height: 1;
+        color: rgba(0, 0, 0, 0.8);
+        position: absolute;
+        pointer-events: none;
+    }
+    .d3-tip3:after {
+        box-sizing: border-box;
+        display: inline;
+        font-size: 10px;
+        width: 100%;
+        line-height: 1;
+        color: rgba(0, 0, 0, 0.8);
+        position: absolute;
+        pointer-events: none;
+    }
+    /* Northward tooltips */
+    .d3-tip.n:after {
+        content: "\25BC";
+        margin: -1px 0 0 0;
+        top: 100%;
+        left: 0;
+        text-align: center;
+    }
+    .d3-tip1.n:after {
+        content: "\25BC";
+        margin: -1px 0 0 0;
+        top: 100%;
+        left: 0;
+        text-align: center;
+    }
+    .d3-tip2.n:after {
+        content: "\25BC";
+        margin: -1px 0 0 0;
+        top: 100%;
+        left: 0;
+        text-align: center;
+    }
+    .d3-tip3.n:after {
+        content: "\25BC";
+        margin: -1px 0 0 0;
+        top: 100%;
+        left: 0;
+        text-align: center;
+    }
+</style>
+
+<body>
+    <h1>Correlation between medals won </br> and GDP of each country</h1>
+
+    <svg height="2500" width="100%"></svg>
+
+    <script>
+        d3.csv('../data/OlympicsComplete.csv', function (data) {
+
+            /* calcolo oro */
+            function calc_gold(d) {
+                return d3.sum(d, function (c) {
+                    if (c.medal == 'Gold') {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                })
+            }
+
+            /* calcolo argento */
+            function calc_silver(d) {
+                return d3.sum(d, function (c) {
+                    if (c.medal == 'Silver') {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                })
+            }
+
+            /* calcolo bronzo */
+            function calc_bronze(d) {
+                return d3.sum(d, function (c) {
+                    if (c.medal == 'Bronze') {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                })
+            }
+
+            var countries = d3.nest()
+                .key(function (d) {
+                    return d.country;
+                })
+                .rollup(function (d) {
+                    return {
+                        gdp: +d[0].gdp,
+                        gold: calc_gold(d),
+                        silver: calc_silver(d),
+                        bronze: calc_bronze(d),
+                    }
+                })
+                .entries(data)
+
+
+
+            var groups = d3.select('svg')
+                .selectAll('g')
+                .data(countries)
+                .enter()
+                .append('g')
+                .attr('transform', function (d, i) {
+                    return 'translate(0, ' + i * 16 + ')';
+                })
+
+            console.log(countries);
+
+            /* testi*/
+            groups.append('text')
+                .text(function (d, i) {
+                    return d.key
+                })
+                .attr('x', 625)
+                .attr('y', 76)
+                .attr('text-anchor', 'middle')
+
+
+            /* grafico GDP */
+            var maxGdp = d3.max(countries, function (d) {
+                return d.values.gdp;
+            });
+
+            var mapGdp = d3.scale.linear()
+                .domain([0, maxGdp])
+                .range([0, 409])
+
+
+            /* Initialize tooltip */
+            tip = d3.tip().attr('class', 'd3-tip n').html(function (d) {
+                return d.values.gdp;
+            });
+            d3.select('svg').call(tip)
+
+            /* grafico GDP rect */
+            groups.append('rect')
+                .attr('x', 675)
+                .attr('y', 65)
+                .attr('width', function (d) {
+                    return mapGdp(d.values.gdp)
+                })
+                .attr('height', 15)
+                .style('fill', '#2E8B57')
+                .on('mouseover', tip.show)
+                .on('mouseout', tip.hide);
+
+
+            /* grafico ORO */
+            var maxGold = d3.max(countries, function (d) {
+                return d.values.gold;
+            });
+
+            var mapCalc_gold = d3.scale.linear()
+                .domain([0, maxGold])
+                .range([0, 200])
+
+            /* Initialize tooltip */
+            tip = d3.tip().attr('class', 'd3-tip1 n').html(function (d) {
+                return d.values.gold;
+            });
+            d3.select('svg').call(tip)
+
+            /* ORO */
+            groups.append('rect')
+                .attr('x', function (d, i) {
+                    return 575 - mapCalc_gold(d.values.gold)
+                })
+                .attr('y', 65)
+                .attr('width', function (d) {
+                    return mapCalc_gold(d.values.gold)
+                })
+                .attr('height', 15)
+                .style('fill', 'gold')
+                .on('mouseover', tip.show)
+                .on('mouseout', tip.hide);
+
+            /* grafico ARGENTO */
+            var maxSilv = d3.max(countries, function (d) {
+                return d.values.silver;
+            });
+
+            var mapCalc_silver = d3.scale.linear()
+                .domain([0, maxSilv])
+                .range([0, 86])
+
+            /* Initialize tooltip */
+            tip = d3.tip().attr('class', 'd3-tip2 n').html(function (d) {
+                return d.values.silver;
+            });
+            d3.select('svg').call(tip)
+
+            groups.append('rect')
+                .attr('x', function (d, i) {
+                    return 575 - mapCalc_silver(d.values.silver) - mapCalc_gold(d.values.gold)
+                })
+                .attr('y', 65)
+                .attr('width', function (d) {
+                    return mapCalc_silver(d.values.silver)
+                })
+                .attr('height', 15)
+                .style('fill', 'silver')
+                .on('mouseover', tip.show)
+                .on('mouseout', tip.hide);
+
+
+            /* grafico BRONZO */
+            var maxBron = d3.max(countries, function (d) {
+                return d.values.bronze;
+            });
+
+            var mapCalc_bronze = d3.scale.linear()
+                .domain([0, maxBron])
+                .range([0, 80])
+
+            /* Initialize tooltip */
+            tip = d3.tip().attr('class', 'd3-tip3 n').html(function (d) {
+                return d.values.bronze;
+            });
+            d3.select('svg').call(tip)
+
+            groups.append('rect')
+                .attr('x', function (d, i) {
+                    return 575 - mapCalc_bronze(d.values.bronze) - mapCalc_silver(d.values.silver) - mapCalc_gold(d.values.gold)
+                })
+                .attr('y', 65)
+                .attr('width', function (d) {
+                    return mapCalc_bronze(d.values.bronze)
+                })
+                .attr('height', 15)
+                .style('fill', '#CC6633')
+                .on('mouseover', tip.show)
+                .on('mouseout', tip.hide);
+
+
+
+        });
+    </script>
+</body>
+
+</html>

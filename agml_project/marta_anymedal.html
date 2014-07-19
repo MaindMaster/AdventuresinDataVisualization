@@ -1,0 +1,92 @@
+<htlm>
+    <head>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+         <title>first test</title>
+    </head>
+    <body>
+        <svg> </svg>
+        
+        <script> 
+        d3.csv('../data/olympics_2012.csv', function(data1){
+            d3.json('../_map/geojson/world_map.json', function(data2){
+                loaded(data1, data2)
+            })
+        }) 
+        
+        
+        
+        function loaded(data, map){
+            var w = 900;
+            var h = 700;
+
+            console.log(data)
+
+            var svg = d3.select('svg')
+                .attr('width', w)
+                .attr('height', h)
+
+            var proj = d3.geo.mercator()
+                .scale((w+1)/2/Math.PI)
+                .translate([w/2, h/2])
+            
+            
+                        
+            var pathGenerator = d3.geo.path()
+                .projection(proj)
+            
+            svg.selectAll('path')
+                .data(function(){
+                  return map.features;  
+                })
+                .enter()
+                .append('path')
+                .attr('d', function(d, i){
+                    return pathGenerator(d)   
+                })
+                .style('fill', 'white')
+                .style('stroke', 'lightgrey')
+            
+            
+            data.forEach(function(d){
+                    var latlon = (d.born_lat_lon) ? d.born_lat_lon.split(',') : [0,0]
+                    var newlatlon = [latlon[1], latlon[0]]
+                    d.born_lat_lon = newlatlon;
+                });
+            
+            var mapMedal = d3.scale.ordinal()
+                    .domain(["", "Gold", "Silver", "Bronze"])
+                    .range([1, 4, 3, 2])
+            
+            console.log( mapMedal("Gold") )
+            
+            svg.selectAll('circle')
+                .data(data)
+                .enter()
+                .append('circle')
+                .attr('cx', function(d, i){
+                    return proj(d.born_lat_lon)[0]
+                    })
+                .attr('cy', function(d, i){
+                    return proj(d.born_lat_lon)[1]
+                    })
+                .attr('r', function(d){
+                    return mapMedal(d.medal)
+                })
+                .style ('fill', function(d) {
+                   if(d.gender=="Male"){
+                        return "blue"
+                    }
+                   if(d.gender=="Female"){
+                        return "#ff1eff"
+                    }
+                }) 
+                .style('opacity', function(d) {
+                    if(d.medal=="Gold") return 0
+                    if(d.medal=="Bronze") return 0
+                    if(d.medal=="Silver") return 0
+                })
+        }
+             </script>
+    </body>
+</htlm>
+

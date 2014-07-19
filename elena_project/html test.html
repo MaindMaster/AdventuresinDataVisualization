@@ -8,9 +8,9 @@
             <svg></svg>
             
             <script>
-            d3.csv('../data/olympics_2012.csv', loaded);
+            d3.csv('../data/olympics_2012.csv', loaded); {
                 
-                function loaded(data) {
+                function loaded("data loaded");
                     console.log(data)
         
                 
@@ -18,13 +18,14 @@
                                      .key(function(d) {
                                         return d.team;
                                      })
-                                    .key(function(d) {
-                                        return d.gender;
-
-                                    })
+                                  
                                     .sortKeys(d3.ascending)
                                     .entries(data);
 
+                    
+                    countries.sort(function(a,b){
+                        return d3.ascending(b.values.lenght, a.values.lenght)
+                                            })
 
                     d3.select('svg')
                         .selectAll('rect')
@@ -39,16 +40,16 @@
                             return i*5
                         })
 
-                    
+                    console.log(countries);
+                    d.3elect('svg')
+                    .attr('height', 5*countries.length)
+                    .style('fill', 'black')
                     
                 }
-                
-                
+                 
             </script>
         
     
         </body>
-    
-
 
 </html>

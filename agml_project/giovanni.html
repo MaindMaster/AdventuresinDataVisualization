@@ -4,6 +4,14 @@
         <title>Test D3.js</title>
     </head>
     <body>
+        
+        <style>
+            .text {
+                font-family: tahoma,sans-serif;
+                /*fill:red;*/
+            }
+        </style>
+        
         <svg width="100%" height="900"></svg>
         <script>
             d3.csv('../data/olympics_2012.csv',loaded);
@@ -97,7 +105,7 @@
                                        {       
                                         return 'acqua';  
                                     }
-                                    /*if(mysign > '0420' && mysign < '0521' ||        //toro
+                                    /*if(mysign > '0420' && mysign < '0521' ||      //toro
                                         mysign > '0823' && mysign < '0923'||        //vergine
                                         mysign > '1221' && mysign < '0119')         //capricorno
                                        {       
@@ -130,6 +138,15 @@
                         return (Math.sin(ang*i) * d.values.length) * 1.8;
                     })
                     .interpolate('cardinal-closed')
+                
+                var pathMedal_small = d3.svg.line()
+                    .x(function(d, i){
+                        return (Math.cos(ang*i) * d.values.length) * 0.01;
+                    })
+                    .y(function(d, i){
+                        return (Math.sin(ang*i) * d.values.length) * 0.01;
+                    })
+                    .interpolate('cardinal-closed')
                     
                 var pathForElement = d3.svg.line()
                     .x(function(d, i){
@@ -140,6 +157,23 @@
                     })
                     .interpolate('cardinal-closed')
                 
+                var pathForElement_small = d3.svg.line()
+                    .x(function(d, i){
+                        return (Math.cos(ang_small*i) * d.values.length) * 0.01;
+                    })
+                    .y(function(d, i){
+                        return (Math.sin(ang_small*i) * d.values.length) * 0.01;
+                    })
+                    .interpolate('cardinal-closed')
+                
+                var color = d3.scale.linear()
+                    .domain([0,1,2])
+                    .range(["#ffd700", "#c0c0c0", "#cd7f32"]);
+                
+                var order = d3.scale.linear()
+                    .domain([1,2,3])
+                    .range(["1", "2", "3"]);
+
                 //////////////////////////////////////////////////////////////////
                 // Segni zodiacali
                 //////////////////////////////////////////////////////////////////
@@ -153,70 +187,77 @@
                     })
                 
                 groups.append('path')
+                    .attr('d',function(d,i){
+                        return pathMedal_small(d.values) 
+                    })
+                    .style("fill", function (d,i) {
+                        return  color(i)
+                    })
+                    .transition()
+                    .delay(function (d,i) {
+                        return i*300
+                    })
+                    .duration(400)
                     .attr('d', function(d, i){
                         return pathMedal(d.values)   
                     })
-                    //.style('fill', '')
+                    
+                var group_sign = groups.append('g')
+                        .attr('opacity', 0)
                 
-                groups.selectAll('.gr_sign')
+                group_sign.transition()
+                        .duration(200)
+                        .delay(function(d, i){
+                            return i*200 + 300;
+                        })
+                        .attr('opacity', 1)
+                
+                //inserisco l'icona identificativa del segno
+                group_sign.selectAll('.gr_sign')
                     .data(function(d){
                         return d.values;   
                     })
                     .enter()
                     .append('g')
                     .attr('transform', function(d, i){
-                        return 'rotate('+360/12*i+'),translate(150,0)'
+                        return 'rotate('+360/12*i+'),translate(140,10)' //(distanza dal centro),(rotazione) 
                     })
-                
-                    //inserisco il nome del segno
                     .attr('class', 'gr_sign')
-                    //.append('text')
-                    //    .text(function (d,i){
-                    //    return d.key
                     .append('svg:image')
                     //.attr('xlink:href', 'library/zodiac_signs.svg')
                     .attr('xlink:href', function(d){
                         return 'library/images/' + d.key + '.svg';
                     })
-                    .attr('width', 30)
-                    .attr('height', 30 )
                     .attr('x', 0)
-                    .attr('y',0);
+                    .attr('y',-20)
+                    .attr('width', 25)
+                    .attr('height',25)
+                    .attr('class', function (d,i) {
+                        return d.key;
+                    })
+                
+                //ingrandisco le icone se faccio il mousehover
+                d3.selectAll('image')
+                    .on('mouseover', function(){
+                        d3.select(this)
+                            .transition()
+                            .duration(100)
+                            .attr('width',70)
+                            .attr('height',70)
+                            /*.attr('x', 10)
+                            .attr('y', 10)*/
+                    })
+                    .on('mouseout', function() {
+                        d3.select(this)
+                            .transition()
+                            .duration(100)
+                            .attr('width',25)
+                            .attr('height',25)
+                      })
                 
                 //////////////////////////////////////////////////////////////////
                 //elementi
                 //////////////////////////////////////////////////////////////////
-                var groups_a = d3.select('svg')
-                    .selectAll('.elem')
-                    .data(element)
-                    .enter()
-                    .append('g')
-                    .attr('class', 'elem')   
-                    .attr('transform', function(d, i){
-                        return 'translate(' + (i+0.8)*450 + ',650)' // (traslazione x) , (traslazione y) 
-                    })
-                
-                groups_a.append('path')
-                    .attr('d', function(d, i){
-                        return pathForElement(d.values)   
-                    })
-                    //.style('fill', '')
-                
-                groups_a.selectAll('.gr_sign_2')
-                    .data(function(d){
-                        return d.values;   
-                    })
-                    .enter()
-                    .append('g')
-                    .attr('transform', function(d, i){
-                        return 'rotate('+360/4*i+'),translate(120,0)'
-                    })
-                    .attr('class', 'gr_sign_2')
-                    .append('text')
-                    .text(function (d,i){
-                        return d.key
-                    })
-                
                 var groups_b = d3.select('svg')
                     .selectAll('.elem')
                     .data(element)
@@ -224,38 +265,150 @@
                     .append('g')
                     .attr('class', 'elem')   
                     .attr('transform', function(d, i){
-                        return 'translate(' + (i+0.8)*450 + ',650)' // (traslazione x) , (traslazione y) 
+                        return 'translate(' + (i+0.8)*450 + ',600)' // (traslazione x) , (traslazione y) 
                     })
+                
+                groups_b.append('path')
+                    .attr('d',function(d,i){
+                        return pathForElement_small(d.values) 
+                    })
+                    .style("fill", function (d,i) {
+                        return  color(i)
+                    })
+                    .transition()
+                    .delay(function (d,i) {
+                        return i*200 + 300
+                    })
+                    .duration(400)
+                    .attr('d', function(d, i){
+                        return pathForElement(d.values)   
+                    })
+                    
+                var groups_b_sign = groups_b.append('g')
+                        .attr('opacity', 0)
+                
+                groups_b_sign.transition()
+                        .duration(200)
+                        .delay(function(d, i){
+                            return i*300 + 300;
+                        })
+                        .attr('opacity', 1)
+                
+                //inserisco l'icona identificativa dell'elemento
+                groups_b_sign.selectAll('.gr_sign')
+                    .data(function(d){
+                        return d.values;   
+                    })
+                    .enter()
+                    .append('g')
+                    .attr('transform', function(d, i){
+                        return 'rotate('+360/4*i+'),translate(105,0)' //(distanza dal centro),(rotazione) 
+                    })
+                    .attr('class', 'gr_sign')
+                    .append('svg:image')
+                    //.attr('xlink:href', 'library/zodiac_signs.svg')
+                    .attr('xlink:href', function(d){
+                        return 'library/images/' + d.key + '.svg';
+                    })
+                    .attr('x', 0)
+                    .attr('y',-15)
+                    .attr('width', 25)
+                    .attr('height',25)
+                    .attr('class', function (d,i) {
+                        return d.key
+                        
+                    })
+                
+                //con il mousehover su un elemento evidenzio 3 segni zodiacali
+                //acqua
+                d3.selectAll('.acqua')
+                    .on('mouseover', function(){
+                        d3.selectAll('.cancro,.scorpione,.pesci')
+                            .transition()
+                            .duration(300)
+                            //.attr('fill','red')
+                            .attr('width',50)
+                            .attr('height',50)
+                })
+                .on('mouseout', function() {
+                        d3.selectAll('.cancro,.scorpione,.pesci')
+                            .transition()
+                            .duration(100)
+                            .attr('width',25)
+                            .attr('height',25)
+                })
+                
+                //fuoco
+                d3.selectAll('.fuoco')
+                    .on('mouseover', function(){
+                        d3.selectAll('.ariete,.leone,.sagittario')
+                            .transition()
+                            .duration(100)
+                            //.attr('fill','red')
+                            .attr('width',50)
+                            .attr('height',50)
+                })
+                .on('mouseout', function() {
+                        d3.selectAll('.ariete,.leone,.sagittario')
+                            .transition()
+                            .duration(300)
+                            .attr('width',25)
+                            .attr('height',25)
+                })
+                
+                //aria
+                d3.selectAll('.aria')
+                    .on('mouseover', function(){
+                        d3.selectAll('.gemelli,.bilancia,.acquario')
+                            .transition()
+                            .duration(100)
+                            //.attr('fill','red')
+                            .attr('width',50)
+                            .attr('height',50)
+                })
+                .on('mouseout', function() {
+                        d3.selectAll('.gemelli,.bilancia,.acquario')
+                            .transition()
+                            .duration(300)
+                            .attr('width',25)
+                            .attr('height',25)
+                })
+                
+                //terra
+                d3.selectAll('.terra')
+                    .on('mouseover', function(){
+                        d3.selectAll('.toro,.vergine,.capricorno')
+                            .transition()
+                            .duration(100)
+                            //.attr('fill','red')
+                            .attr('width',50)
+                            .attr('height',50)
+                })
+                .on('mouseout', function() {
+                        d3.selectAll('.toro,.vergine,.capricorno')
+                            .transition()
+                            .duration(300)
+                            .attr('width',25)
+                            .attr('height',25)
+                })
                 
                 //////////////////////////////////////////////////////////////////
                 //legenda
                 //////////////////////////////////////////////////////////////////
-                
                 var labels = ['Gold', 'Silver', 'Bronze']
                 
-                groups_a.append('text')
+                groups_b.append('text')
+                    .attr('class','text')
+                    .attr('opacity', 0)
+                    .transition()
+                    .duration(1000)
+                    .delay(600)
+                    .attr('opacity', 1)
                     .text(function(d,i){
                         return labels[i]  
                     })
                     .attr('y',200)
                     .attr('x', -20)
-                
-                /*var label = d3.select('svg')
-                    .selectAll('.label')
-                    //.data(function(d,i){
-                    //    return d.medal;   
-                    //})
-                    .data(1)
-                    .enter()
-                    .attr('class', 'label')  
-                    .text(function (d,i){
-                        return d
-                    })
-                    /*.attr('transform', function(d, i){
-                        return 'translate(' + (i+0.8)*450 + ',650)' // (traslazione x) , (traslazione y) 
-                    })*/
-                
-                
                 
             }
         </script>
