@@ -5,9 +5,18 @@
         
         <style>
             p {
-            font-family: verdana;
+            font-family: monospace;
             font-size: 0.7em;
+            font-weight: 100;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #B0B0B0;    
             }
+            
+            h1{
+            
+            }
+            
         </style>
         
     </head>
@@ -25,7 +34,7 @@
                 var _data = [];
                 data.forEach(function(d){
                     if(d.weight_kg > 0 && d.height_cm > 0
-//                      &&  typeof d.weight_kg == 'number' && typeof d.weight_kg == 'number'
+                       && d.weight_kg !== null && d.height_cm !== null
                       ){
                         _data.push(d)
                     }
@@ -40,29 +49,28 @@
                 }
                 
                 var sp = d3.nest()         
-                            .key(function(d){
-                                return d.sport;
-                            })
-                            .rollup(function(d){
-                                return {
-                                    avr_male_bmi: calc_bmi(d, 'Male'),
-                                    avr_female_bmi: calc_bmi(d, 'Female'),
-                                    athletes: d
-                                }
-                            })
-                            .sortKeys(d3.ascending)
-                            .entries(_data);
+                    .key(function(d){
+                        return d.sport;
+                    })
+                    .rollup(function(d){
+                        return {
+                            avr_male_bmi: calc_bmi(d, 'Male'),
+                            avr_female_bmi: calc_bmi(d, 'Female'),
+                            athletes: d
+                        }
+                    })
+                    .sortKeys(d3.ascending)
+                    .entries(_data);
                                 
                 var mapx = d3.scale.linear()
-                            .domain([0, sp.length])
-                            .range([0, 10*sp.length+10])
+                    .domain([0, sp.length])
+                    .range([0, 10*sp.length+10])
                 
                 var hieghtscale = d3.scale.linear()
-                                .domain([0, sp.value])
-                                .range([0, 10*sp.value+10])
+                    .domain([0, sp.value])
+                    .range([0, 10*sp.value+10])
                 
                 var midpt = 200
-                
                 
                 var groups = d3.select('svg')
                     .selectAll('g')
@@ -75,7 +83,6 @@
                     .attr('transform', function(d, i){
                         return 'translate(' + mapx(i) + ',0)'  
                     })
-                    
                 
                 groups.append('rect')
                     .attr('width', 10)
@@ -86,30 +93,34 @@
                     .attr('y', function(d, i){
                         return midpt - d.values.avr_male_bmi
                     })
+                    .attr('fill', '#57DBFF')
+                    
+                        
                 
                 groups.append('rect')
                     .attr('width', 10)
                     .attr('height', function(d, i){
                         return d.values.avr_female_bmi
                     })
-
                     .attr('y', midpt)
-                    .style('fill', 'red')
-                
+                    .style('fill', '#FF78D8')
                 
                 groups.append('text')
                     .text(function(d){
                         return d.key
                     })
+                    .attr('x', function(d,i){
+                        return midpt + 5 + d.values.avr_female_bmi
+                    })
                     .attr('transform', 'rotate(90)') 
 
-//                    .attr('y', 100)
-//                    .attr('rotate', 90)
-//                    .attr('transform', function(d, i){
-//                        return 'translate(' + (i)*100 + ',0)'
-//                      return 'translate(' + mapx(i) + ',0)'
-//                    }
-
+                groups.append('text')
+                    .text(function(d){
+                         return d.getRandomValues
+                    })
+                    .attr('x', 50)    
+                    .attr('y', 50)
+                
                 console.log(sp)                   
             }
         </script>
