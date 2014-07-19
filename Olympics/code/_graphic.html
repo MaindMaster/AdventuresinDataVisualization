@@ -1,7 +1,10 @@
 <html>
 
 <head>
-    <script src="elena_project/d3.min.js"></script>
+    <script src="libs/d3.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    <link rel="stylesheet" href="//rawgithub.com/Caged/d3-tip/master/examples/example-styles.css">
+
 </head>
 
 <style>
@@ -14,9 +17,9 @@
 
     <svg height="5000" width="900"></svg>
 
-    <link rel="stylesheet" href="//rawgithub.com/Caged/d3-tip/master/examples/example-styles.css">
+
     <script>
-        d3.csv('../elena_project/OlympicsComplete.csv', function (data) {
+        d3.csv('../data/OlympicsComplete.csv', function (data) {
 
 
             function calc_gold(d) {
@@ -57,7 +60,7 @@
                     return d.key
                 })
                 .attr('x', 400)
-                .attr('y', 20)
+                .attr('y', 40)
                 .attr('text-anchor', 'middle')
 
             var maxGdp = d3.max(countries, function (d) {
@@ -69,42 +72,42 @@
                 .range([0, 800])
 
 
+            /* Initialize tooltip */
+            tip = d3.tip().attr('class', 'd3-tip').html(function (d) {
+                return d.values.gdp;
+            });
+            d3.select('svg').call(tip)
 
             groups.append('rect')
                 .attr('x', 500)
-                .attr('y', 5)
+                .attr('y', 25)
                 .attr('width', function (d) {
                     return mapGdp(d.values.gdp)
                 })
                 .attr('height', 20)
                 .style('fill', 'violet')
-
-            /* Initialize tooltip */
-            tip = d3.tip().attr('class', 'd3-tip').html(function (d) {
-                return d;
-            });
-
-            /* Invoke the tip in the context of your visualization */
-            vis.call(tip)
-
-            vis.selectAll('rect')
-                .data(data)
-                .enter()
-                .append('rect')
-                .attr('width', function () {
-                    return x.rangeBand()
-                })
-                .attr('height', function (d) {
-                    return h - y(d)
-                })
-                .attr('y', function (d) {
-                    return y(d)
-                })
-                .attr('x', function (d, i) {
-                    return x(i)
-                })
                 .on('mouseover', tip.show)
                 .on('mouseout', tip.hide);
+
+            var maxGold = d3.max(countries, function (d) {
+                return d.values.gold;
+            });
+
+            var mapCalc_gold = d3.scale.linear()
+                .domain([0, maxGold])
+                .range([0, 800])
+
+            groups.append('rect')
+                .attr('x', function(d, i){
+                    return 300-mapCalc_gold(d.values.gold)
+                })
+                .attr('y', 25)
+                .attr('width', function (d) {
+                    return mapCalc_gold(d.values.gold)
+                })
+                .attr('height', 20)
+                .style('fill', 'gold');
+
 
 
         });
