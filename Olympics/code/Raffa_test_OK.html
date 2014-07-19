@@ -23,7 +23,7 @@
     <script>
         d3.csv('../data/OlympicsComplete.csv', function (data) {
 
-
+            /* CANVAS DIMENSIONS */
             function calc_gold(d) {
                 return d3.sum(d, function (c) {
                     if (c.medal == 'Gold') {
@@ -56,6 +56,7 @@
                 })
             }
 
+            /* ELENCO */
             var countries = d3.nest()
                 .key(function (d) {
                     return d.team;
@@ -81,6 +82,7 @@
 
             console.log(countries);
 
+            /* TEXT */
             groups.append('text')
                 .text(function (d, i) {
                     return d.key
@@ -89,6 +91,7 @@
                 .attr('y', 35)
                 .attr('text-anchor', 'middle')
 
+            /* GDP */
             var maxGdp = d3.max(countries, function (d) {
                 return d.values.gdp;
             });
@@ -111,10 +114,12 @@
                     return mapGdp(d.values.gdp)
                 })
                 .attr('height', 10)
-                .style('fill', 'red')
+                .style('fill', '#50C878')
                 .on('mouseover', tip.show)
                 .on('mouseout', tip.hide);
 
+
+            /* GOLD */
             var maxGold = d3.max(countries, function (d) {
                 return d.values.gold;
             });
@@ -134,6 +139,7 @@
                 .attr('height', 10)
                 .style('fill', 'gold');
 
+            /* SILVER */
             var maxSilv = d3.max(countries, function (d) {
                 return d.values.silver;
             });
@@ -152,6 +158,26 @@
                 })
                 .attr('height', 10)
                 .style('fill', 'silver');
+
+            /* BRONZE */
+            var maxBron = d3.max(countries, function (d) {
+                return d.values.bronze;
+            });
+
+            var mapCalc_bronze = d3.scale.linear()
+                .domain([0, maxBron])
+                .range([0, 150])
+
+            groups.append('rect')
+                .attr('x', function (d, i) {
+                    return 520 - mapCalc_bronze(d.values.bronze) - mapCalc_silver(d.values.silver) - mapCalc_gold(d.values.gold)
+                })
+                .attr('y', 25)
+                .attr('width', function (d) {
+                    return mapCalc_bronze(d.values.bronze)
+                })
+                .attr('height', 10)
+                .style('fill', '#CD7F32');
 
         });
     </script>
