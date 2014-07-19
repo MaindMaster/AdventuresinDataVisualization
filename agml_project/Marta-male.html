@@ -9,7 +9,6 @@
         <script> 
         d3.csv('../data/olympics_2012.csv', loaded) 
         
-        
         function loaded(data){
             var w = 900;
             var h = 700;
@@ -56,7 +55,13 @@
                    if(d.gender=="Female"){
                         return "#ff1eff"
                     }
+            
                     })
+                .style ('opacity', function(d) {
+                    if(d.gender=="Female"){
+                        return 0
+                    }
+                })            
         }
         </script>
 </htlm>

@@ -6,7 +6,7 @@
     
     
     <body>
-        <svg></svg>
+        <svg width="5800" height="500"></svg>
         
         <script>
             
@@ -14,11 +14,57 @@
             
             function loaded(data){
                 
-                console.log(data)
+                
+                var podium = d3.nest()
+                                .key(function(d){
+                                    return d.full_name;
+                                })
+                                .entries(data);
                 
                 
+                podium.sort(function(a, b){
+                    if(a.values.length == b.values.length){
+                        return d3.descending(a.values[0].gender, b.values[0].gender);
+                    }else{
+                        return d3.descending(a.values.length, b.values.length);
+                    }
+                })
+                
+                
+                var filtered_pod = podium.filter(function(d){
+                    return (d.values.length > 2)
+                })
+                
+                console.log(filtered_pod)
                
-               
+                
+                var maph = d3.scale.linear()
+                            .domain([0, 8])
+                            .range([0, 200])
+                
+                
+                d3.select('svg')
+                    .selectAll('rect')
+                    .data(filtered_pod)
+                    .enter()
+                    .append('rect')
+                    .attr('width', 3)
+                    .attr('height', function(d, i){
+                        return maph( d.values.length );
+                    })
+                    .attr('x', function(d, i){
+                        return i*5;
+                    })
+                    .attr('y', function(d, i){
+                        return 250 - maph( d.values.length );
+                    })
+                    .style('fill', function(d, i){
+                        if(d.values[0].gender == 'Male'){
+                            return 'blue';
+                        }else{
+                            return 'pink';
+                        }
+                    })
             }
             
             

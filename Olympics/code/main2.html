@@ -56,6 +56,7 @@
                 .sortKeys(d3.ascending)
                 .rollup(function (d, i) { //creates a new series objects that hold number of athletes and gdp
                     return {
+                        
                         athletes: d.length,
                         gdp: +d[0].gdp
                     }
@@ -95,7 +96,7 @@
                     d3.select(this)
                         .style('fill', 'red')
                 })
-            // console.log(countries);
+            console.log(countries);
 
             d3.select('svg')
                 .attr('height', 5 * countries.length)
@@ -109,14 +110,14 @@
                 .domain([0, maxGdp])
                 .range([0, 700])
 
-            console.log(mapY(200000));
+            // console.log(mapY(200000));
 
             var path = d3.svg.line() //create a line object first
                 .x(function (d, i) {
-                    return mapX(i)
+                    return mapX(i);
                 })
                 .y(function (d, i) {
-                    return 800 - mapY(d.values.gdp)
+                    return 800 - mapY(d.values.gdp);
                 })
                 .interpolate('basis');
 
@@ -136,11 +137,12 @@
                     left: 40
                 },
                 width = 960 - margin.left - margin.right,
-                height = 500 - margin.top - margin.bottom;
+                height = 800 - margin.top - margin.bottom;
 
             var formatPercent = d3.format(".0%");
 
             var x = d3.scale.ordinal()
+//                .domain(countries.map(function(d) { return d.key; }))
                 .rangeRoundBands([0, width], .1, 1);
 
             var y = d3.scale.linear()
@@ -155,12 +157,15 @@
                 .orient("left")
                 .tickFormat(formatPercent);
 
-            var svg = d3.select("body").append("svg")
+            d3.select('svg')
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+            
+            
+            x.domain(countries.map(function(d) { return d.key; }))
+          //  y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
 
             d3.select('svg')
                 .append("g")
@@ -175,12 +180,24 @@
                 .append("text")
                 .attr("transform", "rotate(-90)")
                 .attr("y", 6)
-                .attr("dy", ".71em")
+                .attr("dy", ".71em")//wtf?
                 .style("text-anchor", "end")
                 .text("Frequency");
-
-
-
+          
+            d3.selectAll(".bar")
+                .data(data)
+                .enter()
+                .attr("class", "bar")
+                .attr("x", function (d) {
+                    return x(d.team);
+                })
+                .attr("width", x.rangeBand())
+                .attr("y", function (d) {
+                    return y(d.length);
+                })
+                .attr("height", function (d) {
+                    return height - y(d.length);
+                });
 
 
 

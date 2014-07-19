@@ -10,6 +10,8 @@
 <style>
     body {
         font-family: sans-serif;
+        font-size: 10pt;
+        font-weight: 200;
     }
 </style>
 
@@ -43,6 +45,17 @@
                 })
             }
 
+
+            function calc_bronze(d) {
+                return d3.sum(d, function (c) {
+                    if (c.medal == 'Bronze') {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                })
+            }
+
             var countries = d3.nest()
                 .key(function (d) {
                     return d.team;
@@ -50,8 +63,8 @@
                 .rollup(function (d) {
                     return {
                         gdp: +d[0].gdp,
-                        gold: calc_gold(d)
-                        silver: calc_silver(d)
+                        gold: calc_gold(d),
+                        silver: calc_silver(d),
                     }
                 })
                 .entries(data);
