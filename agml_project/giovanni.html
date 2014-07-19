@@ -216,7 +216,7 @@
                     .enter()
                     .append('g')
                     .attr('transform', function(d, i){
-                        return 'rotate('+360/12*i+'),translate(150,0)'
+                        return 'rotate('+360/12*i+'),translate(140,10)' //(distanza dal centro),(rotazione) 
                     })
                     .attr('class', 'gr_sign')
                     .append('svg:image')
@@ -234,9 +234,11 @@
                     .on('mouseover', function(){
                         d3.select(this)
                             .transition()
-                            .duration(200)
+                            .duration(100)
                             .attr('width',70)
                             .attr('height',70)
+                            /*.attr('x', 10)
+                            .attr('y', 10)*/
                     })
                     .on('mouseout', function() {
                         d3.select(this)
@@ -336,7 +338,16 @@
                     })
                     .attr('y',200)
                     .attr('x', -20)
-
+                
+                //con il mousehover su un elemento evidenzio 3 segni zodiacali
+                d3.selectAll('#acqua')
+                    .on('click', function(){
+                        d3.select(this)
+                            //.transition()
+                            //.duration(300)
+                            .attr('width',200)
+                            .attr('height',200)
+                })
             }
         </script>
     </body>
