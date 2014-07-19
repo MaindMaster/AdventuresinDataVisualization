@@ -1,0 +1,49 @@
+<html>
+    
+<head>
+    <script src="d3.min.js"></script>    
+</head>    
+    
+    <body>
+    
+        <svg></svg>
+        
+        <script>
+        
+        // Load data.
+        d3.csv('../data/olympics_2012.csv',loaded);
+        
+        function loaded(data) {
+            
+            var teams = d3.nest()
+                        .key(function(d){return d.team;})
+                        .sortKeys(d3.ascending)
+                        .entries(data);
+            
+            teams.sort(function(a,b){return d3.ascending(b.values.length, a.values.length)});
+            
+            d3.select('svg')
+                .selectAll('rect')
+                .data(teams)
+                .enter()
+                .append('rect')
+                .attr('height',4)
+                .attr('width',function(d,i){return d.values.length;})
+                .attr('y', function(d,i){return i*5;});
+            
+            console.log(teams);
+            
+            var max_width=-1;
+            for(var i=0; i<teams.length; ++i)
+                max_width=Math.max(max_width,teams[i].values.length);
+            
+            d3.select('svg')
+                .attr('height',5*teams.length)
+                .attr('width',max_width);
+        }
+            
+        </script>
+        
+    </body>
+    
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!--Title-->
+<title>Statistics on 2012 Olympic games</title>
+
+<head>
+
+<!--css styles-->
+<style>
+    
+.UK_default {
+    fill: none;
+}
+    
+#UK {
+    fill: #A0522D;
+    stroke: #696969;
+    stroke-width: 1px;
+}
+    
+#UK:hover {
+    fill: #C0C0C0;
+}
+    
+.country {
+    fill: #C0C0C0;
+    stroke: #696969;
+    stroke-width: 1px;
+}
+    
+.country:hover {
+    fill: #A0522D;
+}
+    
+.text{
+  font-size:10px;
+  text-transform:capitalize;
+}
+  
+#header {
+    display:block;
+    margin: auto;
+}
+ 
+#screen {
+  margin:10px 10%;
+  height:100%;
+  overflow:hidden;
+}
+    
+#container {
+  margin:10px 10%;
+  border:2px solid #000;
+  border-radius: 5px;
+  height:100%;
+  overflow:hidden;
+  background: #F0F8FF;
+}
+    
+#footer {
+  margin:10px 10%;
+  height:100%;
+  overflow:hidden;
+  text-align:center;
+  font-variant: small-caps;
+}
+    
+.hidden { 
+  display: none; 
+}
+    
+div.tooltip {
+  color: #222; 
+  background: #fff; 
+  padding: .5em; 
+  text-shadow: #f5f5f5 0 1px 0;
+  border-radius: 2px; 
+  box-shadow: 0px 0px 2px 0px #a6a6a6;
+  opacity: 0.9; 
+  position: absolute;
+}
+    
+.graticule {
+  fill: none;
+  stroke: #bbb;
+  stroke-width: .5px;
+  stroke-opacity: .5;
+}
+    
+.equator {
+  stroke: #000000;
+  stroke-width: 1px;
+} 
+  
+#stat {
+	font-variant: small-caps;	
+}
+	
+</style>
+
+</head>
+
+<body>
+   
+<!--Used for correct positioning of elements on the screen-->
+<div id="screen"></div>
+
+<!--Header div-->
+<div id="head"><svg id="header"\></div>
+<div id="stat"></div>
+
+<!--Main container div-->
+<div id="main"><svg id="container"/></div>
+
+<script src="js/d3.min.js"></script>
+<script src="js/topojson.v1.min.js"></script>    
+<script src="js/og.2012.stat.js"></script>
+  
+<!--Footer div-->
+<div id="footer">Adventures in data visualization 2014</div>
+
+</body>
+    
+</html>

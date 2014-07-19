@@ -5,9 +5,14 @@
         
         <style>
             p {
-            font-family: verdana;
+            font-family: 'Helvetica';
             font-size: 0.7em;
+            font-weight: bold;
+            letter-spacing: -0.1em;
+            text-transform: uppercase;
+            color: #B0B0B0;    
             }
+            
         </style>
         
     </head>
@@ -25,7 +30,7 @@
                 var _data = [];
                 data.forEach(function(d){
                     if(d.weight_kg > 0 && d.height_cm > 0
-//                      &&  typeof d.weight_kg == 'number' && typeof d.weight_kg == 'number'
+                       && d.weight_kg !== null && d.height_cm !== null
                       ){
                         _data.push(d)
                     }
@@ -40,77 +45,121 @@
                 }
                 
                 var sp = d3.nest()         
-                            .key(function(d){
-                                return d.sport;
-                            })
-                            .rollup(function(d){
-                                return {
-                                    avr_male_bmi: calc_bmi(d, 'Male'),
-                                    avr_female_bmi: calc_bmi(d, 'Female'),
-                                    athletes: d
-                                }
-                            })
-                            .sortKeys(d3.ascending)
-                            .entries(_data);
+                    .key(function(d){
+                        return d.sport;
+                    })
+                    .rollup(function(d){
+                        return {
+                            avr_male_bmi: calc_bmi(d, 'Male'),
+                            avr_female_bmi: calc_bmi(d, 'Female'),
+                            athletes: d
+                        }
+                    })
+                    .sortValues(d3.ascending)
+                    .entries(_data);
                                 
                 var mapx = d3.scale.linear()
-                            .domain([0, sp.length])
-                            .range([0, 10*sp.length+10])
+                    .domain([0, sp.length])
+                    .range([0, 10*sp.length+10])
                 
                 var hieghtscale = d3.scale.linear()
-                                .domain([0, sp.value])
-                                .range([0, 10*sp.value+10])
+                    .domain([0, sp.value])
+                    .range([0, 10*sp.value+10])
                 
-                var midpt = 200
-                
+                var midpt = 500
                 
                 var groups = d3.select('svg')
                     .selectAll('g')
                     .data(sp)
                     .enter()
                     .append('g')
-                    .attr('x', function(d,i){
-                        return i*d
-                    })
                     .attr('transform', function(d, i){
                         return 'translate(' + mapx(i) + ',0)'  
                     })
+                
+                groups.append('rect')
+                    .attr('width', 10)
+                    .attr('height', function(d, i){
+                        return Math.pow(d.values.avr_male_bmi,2)-300
+                    })
+                    .attr('y', function(d,i){
+                        return midpt - (Math.pow(d.values.avr_male_bmi,2)-300)
+                         
+                    })
+                    .attr('fill', '#57DBFF')
+                    .on('mouseover', function(){
+                            d3.select(this.parentNode)
+                                .select('.bmi_text')
+                                .text(function (d){  
+                                    return d.values.avr_male_bmi
+                                })
+                                .transition()
+                                .style('opacity', 1)
+                    })
+                    .on('mouseout', function(){
+                            d3.select(this.parentNode)
+                                .select('.bmi_text')
+                                .text(function (d){  
+                                    return d.values.avr_male_bmi
+                                })
+                                .transition()
+                                .style('opacity', 0)
+                    })
+                
+                groups.append('rect')
+                    .attr('width', 10)
+                    .attr('height', function(d, i){
+                        return Math.pow(d.values.avr_female_bmi, 2)-300
+                    })
+                    .attr('y', midpt)
+                    .style('fill', '#FF78D8')
+                    .on('mouseover', function(){
+                            d3.select(this.parentNode)
+                                .select('.bmi_text')
+                                .text(function (d){  
+                                    return d.values.avr_female_bmi
+                                })
+                            d3.select(this.parentNode)
+                                .select('.sport_text')
+                                .text(function(d){
+                                   return d.key
+                                })
+                                .transition()
+                                .style('opacity', 1)
+                    })
+                    .on('mouseout', function(){
+                            d3.select(this.parentNode)
+                                .select('.bmi_text')
+                                .text(function (d){  
+                                    return d.values.avr_female_bmi
+                                })
+                            d3.select(this.parentNode)
+                                .select('.sport_text')
+                                .text(function(d){
+                                   return d.key
+                                })
+                                .transition()
+                                .style('opacity', 0)
+                    })
+                            
+                groups.append('text')
+
+                    .attr('y', 300)
+                    .style('opacity', 0)
+                    .style('font-size',20)
+                    .attr('class', 'sport_text')
+                    
+                groups.append('text')
+                    .attr('y', midpt/2)
+                    .style('opacity', 0)
+                    .style('font-size',20)
+                    .attr('class', 'bmi_text')
+                     
+
                     
                 
-                groups.append('rect')
-                    .attr('width', 10)
-                    .attr('height', function(d, i){
-                        return d.values.avr_male_bmi
-                    })
-
-                    .attr('y', function(d, i){
-                        return midpt - d.values.avr_male_bmi
-                    })
                 
-                groups.append('rect')
-                    .attr('width', 10)
-                    .attr('height', function(d, i){
-                        return d.values.avr_female_bmi
-                    })
-
-                    .attr('y', midpt)
-                    .style('fill', 'red')
-                
-                
-                groups.append('text')
-                    .text(function(d){
-                        return d.key
-                    })
-                    .attr('transform', 'rotate(90)') 
-
-//                    .attr('y', 100)
-//                    .attr('rotate', 90)
-//                    .attr('transform', function(d, i){
-//                        return 'translate(' + (i)*100 + ',0)'
-//                      return 'translate(' + mapx(i) + ',0)'
-//                    }
-
-                console.log(sp)                   
+//                console.log(sp)                   
             }
         </script>
     </body>
