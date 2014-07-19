@@ -5,10 +5,10 @@
         
         <style>
             p {
-            font-family: monospace;
+            font-family: 'Helvetica';
             font-size: 0.7em;
-            font-weight: 100;
-            letter-spacing: 0.1em;
+            font-weight: bold;
+            letter-spacing: -0.1em;
             text-transform: uppercase;
             color: #B0B0B0;    
             }
@@ -66,7 +66,7 @@
                     .domain([0, sp.value])
                     .range([0, 10*sp.value+10])
                 
-                var midpt = 200
+                var midpt = 500
                 
                 var groups = d3.select('svg')
                     .selectAll('g')
@@ -80,7 +80,7 @@
                 groups.append('rect')
                     .attr('width', 10)
                     .attr('height', function(d, i){
-                        return d.values.avr_male_bmi
+                        return Math.pow(d.values.avr_male_bmi,2)-300
                     })
 //                    .transition()
 //                    .ease('bounce')
@@ -89,7 +89,8 @@
 //                    return i*250
 //	               })
                     .attr('y', function(d,i){
-                        return 200 - d.values.avr_male_bmi
+                        return midpt - (Math.pow(d.values.avr_male_bmi,2)-300)
+                         
                     })
                     .attr('fill', '#57DBFF')
                     .on('mouseover', function(){
@@ -114,7 +115,7 @@
                 groups.append('rect')
                     .attr('width', 10)
                     .attr('height', function(d, i){
-                        return (d.values.avr_female_bmi)*3
+                        return Math.pow(d.values.avr_female_bmi, 2)-300
                     })
                     .attr('y', midpt)
                     .style('fill', '#FF78D8')
@@ -123,6 +124,11 @@
                                 .select('.bmi_text')
                                 .text(function (d){  
                                     return d.values.avr_female_bmi
+                                })
+                            d3.select(this.parentNode)
+                                .select('.sport_text')
+                                .text(function(d){
+                                   return d.key
                                 })
                                 .transition()
                                 .style('opacity', 1)
@@ -133,21 +139,22 @@
                                 .text(function (d){  
                                     return d.values.avr_female_bmi
                                 })
+                            d3.select(this.parentNode)
+                                .select('.sport_text')
+                                .text(function(d){
+                                   return d.key
+                                })
                                 .transition()
                                 .style('opacity', 0)
                     })
-                
+                            
                 groups.append('text')
-                    .text(function(d){
-                        return d.key
-                    })
-                    .attr('x', function(d,i){
-                        return midpt + 10 +(d.values.avr_female_bmi)*3
-                    })
-                    .attr('transform', 'rotate(90)') 
+
+                    .attr('y', 300)
+                    .style('opacity', 0)
+                    .style('font-size',20)
+                    .attr('class', 'sport_text')
                     
-                    
-                
                 groups.append('text')
                     .attr('y', midpt/2)
                     .style('opacity', 0)
@@ -158,7 +165,7 @@
                     
                 
                 
-                console.log(sp)                   
+//                console.log(sp)                   
             }
         </script>
     </body>
