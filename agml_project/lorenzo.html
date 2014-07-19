@@ -82,12 +82,6 @@
                     .attr('height', function(d, i){
                         return Math.pow(d.values.avr_male_bmi,2)-300
                     })
-//                    .transition()
-//                    .ease('bounce')
-//                    .duration(1000)
-//                    .delay(function(d, i){
-//                    return i*250
-//	               })
                     .attr('y', function(d,i){
                         return midpt - (Math.pow(d.values.avr_male_bmi,2)-300)
                          
