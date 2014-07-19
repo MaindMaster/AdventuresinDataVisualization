@@ -2,13 +2,16 @@
 
     <head>
         <script src="../d3.min.js"></script>
+        <script src="http://d3js.org/topojson.v1.min.js"></script>
     </head>
     
     <body>
         <svg></svg>
         <script>
         
-        d3.json('../PDU_espaceurbain.json', function(data){
+        d3.json('../fixed.json', function(topo){
+            
+            var data = topojson.feature(topo, topo.objects.PDU_espaceurbain).features;
             
             var w = 900;
             var h = 700;
@@ -30,7 +33,7 @@
             
             svg.selectAll('path')
                 .data(function(){
-                    return data.geometries;  
+                    return data;  
                 })
                 .enter()
                 .append('path')
