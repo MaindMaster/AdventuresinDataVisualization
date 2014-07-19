@@ -31,8 +31,8 @@
                     }
                 })
             }
-            
-            
+
+
             function calc_silver(d) {
                 return d3.sum(d, function (c) {
                     if (c.medal == 'Silver') {
@@ -110,8 +110,8 @@
                 .range([0, 800])
 
             groups.append('rect')
-                .attr('x', function(d, i){
-                    return 300-mapCalc_gold(d.values.gold)
+                .attr('x', function (d, i) {
+                    return 300 - mapCalc_gold(d.values.gold)
                 })
                 .attr('y', 25)
                 .attr('width', function (d) {
