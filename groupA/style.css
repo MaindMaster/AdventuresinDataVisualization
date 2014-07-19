@@ -4,10 +4,27 @@
 	opacity: 0.3;
 }
 
+h2
+{
+	font-family: 'Impact';
+	color: #AAA;
+}
+
+h1
+{
+	font-family: 'Impact';
+	color: gray;
+}
+
 .sportIcon:hover
 {
 	opacity: 0.3 !important;
 	cursor: pointer;
+}
+
+.sportLabel
+{
+	fill: #0099ff;
 }
 
 #iconsSVG
@@ -17,11 +34,11 @@ border-width: 5px;*/
 }
 
 .Male {
-	stroke: #60f2ff;
+	stroke: #00baff;
 }
 
 .Female {
-	stroke: #ee7b7b;
+	stroke: #f000ff;
 }
 
 

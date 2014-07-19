@@ -114,7 +114,6 @@ function sportIconClicked(index)
 			.transition()
 			.duration(500)
 			.style("opacity", 0)
-			// .each('end',function(){d3.select(this).remove();});
 		}
 	}
 }
@@ -126,6 +125,25 @@ function createPieChart()
 
 	d3.csv('Olimpic_games_continent.csv', function(data)
 	{
+
+		var nameGroup=d3.select('#iconsSVG')
+		.append("g")
+		.attr('class',pieCharGroupId);
+
+		nameGroup.append("text")
+		.attr("font-family", "Arial")
+		.attr("font-size", "18px")
+		.attr('y',iconSvgHeight/2+iconSize/2+20)
+		.attr('x',width/2)
+		.attr('class','sportLabel')
+		.attr('font-weight','bold')
+		.text(sports[sportIndex])
+		.style("opacity", 0)
+		.attr('text-anchor','middle')
+		.transition()
+		.duration(500)
+		.style("opacity", 1);
+
 
 		maleData=extractData('Male');
 		femaleData=extractData('Female');
@@ -148,8 +166,8 @@ function createPieChart()
 		femaleLength/=tot;
 
 
-		createPiePerGender('Male',"Men's",maleData, maleLength,'#c9f0f3','#82eff7');
-		createPiePerGender('Female',"Women's",femaleData,femaleLength,'#f3c9c9','#ee7b7b');
+		createPiePerGender('Male',"Men's",maleData, maleLength,'#a4e6ff','#00baff');
+		createPiePerGender('Female',"Women's",femaleData,femaleLength,'#f993ff','#f000ff');
 
 
 		function extractData(gender)
@@ -254,11 +272,8 @@ function createPieChart()
 				.attr('x',sourceX)
 				.text(targetHs[i].evt)
 				.style("opacity", 0)
-				//.on('mouseover',function(){d3.select(this).attr('font-weight','bold')})
-				//.on('mouseout',function(){d3.select(this).attr('font-weight','regular')})
-
 				.attr('text-anchor',location)
-				// .attr('textLength',textOffset)
+
 				.transition()
 				.duration(500)
 				.style("opacity", 1)
@@ -266,7 +281,6 @@ function createPieChart()
 
 				group
 				.append("polygon")
-				// .data(tmp)
 				.attr("points", points0)
 				.attr("class", gender)
 				.style("opacity", 0)
@@ -282,7 +296,7 @@ function createPieChart()
 					div.html(data)  
 					.style("left", (d3.event.pageX) + "px")     
 					.style("top", (d3.event.pageY - 28) + "px"); 
-					
+
 					tmp.attr('fill',overCol); 
 				})
 				.on('mouseout',function(){
